@@ -16,8 +16,8 @@ export default {
       {label:"name2",value:0}, 
       {label:"name3",value:0}
     ]);
-    function changeValue(targetItems:item[],index:number,value:number){
-      targetItems[index].value+=value;
+    function changeValue(targetItems:any[],key:string,index:number,value:number){
+      targetItems[index][key]+=value;
     }
     onMounted(()=>{
       console.log("onMounted")
@@ -36,7 +36,7 @@ export default {
     <span v-for="(item,index) in items" :key="index" 
     class="w-5/12 m-1 flex-grow cursor-pointer select-none flex items-end justify-end h-80 m-5 p-10  rounded-sm hover:bg-blue-500 hover:rounded-xl transition-all duration-300"
     :class="[item.value>10?' bg-danger':'bg-blue-100']"
-    @click="changeValue(items,index,index+1)">
+    @click="changeValue(items,'value',index,index+1)">
     {{item.label}}:{{item.value}}
     </span>
   </div>
