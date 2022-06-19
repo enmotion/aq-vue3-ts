@@ -12,9 +12,13 @@ module.exports = {
     },
     spacing:function(){
       var obj = {}
-      for(var i =1;i<1000;i++){
-        obj[i]=5*i+'px'
+      var unit = 5;
+      for(var i=0;i<1200;i+=unit){     
+        obj[i]=i+'px';
+        unit = Math.ceil((i+1)/100) * 5 || 5;
+        console.log(i)
       }
+      console.log(obj)
       return obj
     }(),
     extend: {},

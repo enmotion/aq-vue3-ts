@@ -34,7 +34,7 @@ export default {
   <div>{{msg}}</div>
   <div class="bg-slate-500 h-auto flex items-center flex-row flex-wrap -m-1">
     <span v-for="(item,index) in items" :key="index" 
-    class="w-5/12 m-1 flex-grow cursor-pointer select-none flex items-end justify-end p-5 h-800"
+    class="w-5/12 m-1 flex-grow cursor-pointer select-none flex items-end justify-end h-80 m-5 p-10  rounded-sm hover:bg-blue-500 hover:rounded-xl transition-all duration-300"
     :class="[item.value>10?' bg-danger':'bg-blue-100']"
     @click="changeValue(items,index,index+1)">
     {{item.label}}:{{item.value}}
