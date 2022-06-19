@@ -1,36 +1,45 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-
-defineProps<{ msg: string }>()
-
-const count = ref(0)
+<script lang="ts">
+import { ref,reactive, onMounted} from 'vue'
+export default {
+  props:{
+    msg:{
+      type:String
+    }
+  },
+  setup:function(){
+    interface item{
+      label:string,
+      value:number,
+    }
+    let items:item[] = reactive([
+      {label:"name1",value:0},
+      {label:"name2",value:0}, 
+      {label:"name3",value:0}
+    ]);
+    function changeValue(targetItems:item[],index:number,value:number){
+      targetItems[index].value+=value;
+    }
+    onMounted(()=>{
+      console.log("onMounted")
+    })
+    return {
+      items,
+      changeValue
+    }
+  }
+}
 </script>
 
 <template>
-  <h1 class=" h-8 hover:font-bold hover:bg-green-500 transition-all duration-700 hover:h-60">{{ msg }}</h1>
-
-  <p>
-    Recommended IDE setup:
-    <a href="https://code.visualstudio.com/" target="_blank">VS Code</a>
-    +
-    <a href="https://github.com/johnsoncodehk/volar" target="_blank">Volar</a>
-  </p>
-
-  <p>See <code>README.md</code> for more information.</p>
-
-  <p>
-    <a href="https://vitejs.dev/guide/features.html" target="_blank">
-      Vite Docs
-    </a>
-    |
-    <a href="https://v3.vuejs.org/" target="_blank">Vue 3 Docs</a>
-  </p>
-
-  <button type="button" @click="count++">count is: {{ count }}</button>
-  <p>
-    Edit
-    <code>components/HelloWorld.vue</code> to test hot module replacement.
-  </p>
+  <div>{{msg}}</div>
+  <div class="bg-slate-500 h-auto flex items-center flex-row flex-wrap -m-1">
+    <span v-for="(item,index) in items" :key="index" 
+    class=" h-20 w-5/12 m-1 flex-grow cursor-pointer select-none flex items-end justify-end p-5"
+    :class="[item.value>10?' bg-danger':'bg-blue-100']"
+    @click="changeValue(items,index,index+1)">
+    {{item.label}}:{{item.value}}
+    </span>
+  </div>
 </template>
 
 <style scoped>
