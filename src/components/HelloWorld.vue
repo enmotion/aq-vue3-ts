@@ -7,7 +7,7 @@ const count = ref(0)
 </script>
 
 <template>
-  <h1>{{ msg }}</h1>
+  <h1 class=" h-8 hover:font-bold hover:bg-green-500 transition-all duration-700 hover:h-60">{{ msg }}</h1>
 
   <p>
     Recommended IDE setup:
