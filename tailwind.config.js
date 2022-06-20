@@ -16,9 +16,9 @@ module.exports = {
       for(var i=0;i<1200;i+=unit){     
         obj[i]=i+'px';
         unit = Math.ceil((i+1)/100) * 5 || 5;
-        console.log(i)
+        // console.log(i)
       }
-      console.log(obj)
+      // console.log(obj)
       return obj
     }(),
     extend: {},

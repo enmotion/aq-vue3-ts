@@ -1,5 +1,6 @@
 <script lang="ts">
-import { ref,reactive, onMounted} from 'vue'
+import { useStore } from 'vuex'; 
+import { ref,reactive, onMounted,computed} from 'vue'
 export default {
   props:{
     msg:{
@@ -7,6 +8,11 @@ export default {
     }
   },
   setup:function(){
+    const store = useStore();
+    console.log(store);
+    const name = computed(()=>{
+      return store.getters.getName;
+    })
     interface item{
       label:string,
       value:number,
@@ -24,6 +30,7 @@ export default {
     })
     return {
       items,
+      name,
       changeValue
     }
   }
@@ -31,13 +38,13 @@ export default {
 </script>
 
 <template>
-  <div>{{msg}}</div>
+  <div>{{msg}} | {{name}}</div>
   <div class="bg-slate-500 h-auto flex items-center flex-row flex-wrap -m-1">
     <span v-for="(item,index) in items" :key="index" 
-    class="w-5/12 m-1 flex-grow cursor-pointer select-none flex items-end justify-end h-80 m-5 p-10  rounded-sm hover:bg-blue-500 hover:rounded-xl transition-all duration-300"
-    :class="[item.value>10?' bg-danger':'bg-blue-100']"
-    @click="changeValue(items,'value',index,index+1)">
-    {{item.label}}:{{item.value}}
+      class="w-5/12 m-1 flex-grow cursor-pointer select-none flex items-end justify-end h-80 m-5 p-10 rounded-sm hover:bg-blue-500 hover:rounded-xl hover:text-blue-50 transition-all duration-300"
+      :class="[item.value>10?' bg-danger':'bg-blue-100']"
+      @click="changeValue(items,'value',index,index+1)">
+      {{item.label}}:{{item.value}}
     </span>
   </div>
 </template>

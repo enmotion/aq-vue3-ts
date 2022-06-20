@@ -11,7 +11,12 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": "./",
+    "paths":{
+      "r@": ["src"], // 必须如此配置才能在ts中沿用 vite 的 alias 配置
+      "r@/*": ["src/*"], // 两个都需要....
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
