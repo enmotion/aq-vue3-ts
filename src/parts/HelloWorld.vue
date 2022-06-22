@@ -40,10 +40,10 @@ export default {
 <template>
   <div class=" bg-d-a9">{{msg}} | {{name}}</div>
   <div class="flex flex-row h-100 bg-s">
-    <span class="h-100 w-3/12 bg-black-a2 border border-black-a3 items-center justify-center flex md:bg-s-a10">aaaa1</span>
-    <span class="h-100 w-3/12 bg-w-a10">aaaa</span>
-    <span class="h-100 w-3/12 bg-s-a10">aaaa</span>
-    <span class="h-100 w-3/12 bg-p-a10">aaaa</span>
+    <span class="h-100 w-3/12 bg-d-10 border border-black-a3 items-center justify-center flex md:bg-s-a10">aaaa1</span>
+    <span class="h-100 w-3/12 bg-p-10 flex items-center justify-center bg-w-a10">aaaa</span>
+    <span class="h-100 w-3/12 bg-s-10">aaaa</span>
+    <span class="h-100 w-3/12 bg-p-10">aaaa</span>
   </div>
   <div class="bg-slate-500 h-auto flex items-center flex-row flex-wrap -m-1">
     <span v-for="(item,index) in items" :key="index" 

@@ -1,35 +1,40 @@
 /** @type {import('tailwindcss').Config} */
 const colors = require('tailwindcss/colors');
-function ganerateAlphaStepColor(key='a',color='#FF0000',step=10){
-  var obj={}
-  for(let i=1 ; i <= step ; i++){
-    obj[key+''+i] = color + (Math.max(Math.round(256/step*i-1),0).toString(16))
+function generateAlphaColorStep(color='#FF0000',step=10){
+  var obj = {};
+  for(let i=1 ; i <= step ; i++){ obj[i] = color + (Math.max(Math.round(256/step*i-1),0).toString(16)).toUpperCase() };
+  return obj;
+}
+function generateSpacing(minstep=5,maxstep=100,limit=1200){
+  var obj = {}
+  var step = 0;
+  for(var i = 0 ; i <= limit ; i += step){
+    var step = Math.min(minstep * Math.pow(2,Math.floor(i/maxstep)),maxstep);
+    obj[i.toString()] = i + 'px';
   }
   return obj
 }
+console.log(process.env.VITE_APP_THEME)
 module.exports = {
   content: [],
   purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     colors:{
-      d:ganerateAlphaStepColor('a','#D92211',10),
-      s:ganerateAlphaStepColor('a','#59D986',10),
-      w:ganerateAlphaStepColor('a','#F2C849',10),
-      i:ganerateAlphaStepColor('a','#FF0000',10),
-      p:ganerateAlphaStepColor('a','#2C6CBF',10),
-      black:ganerateAlphaStepColor('a','#000000',24),
-      white:ganerateAlphaStepColor('a','#FFFFFF',24),
-      blue:colors.blue
+      m:process.env.VITE_APP_THEME, // 主配色
+      black:'#000000',
+      white:'#FFFFFF',
+      dark:generateAlphaColorStep('#000000',24),
+      light:generateAlphaColorStep('#FFFFFF',24),
+      d:generateAlphaColorStep('#D92211',10), // 危险色
+      s:generateAlphaColorStep('#59D986',10), // 安全色
+      w:generateAlphaColorStep('#F2C849',10), // 警告色
+      i:generateAlphaColorStep('#FF0000',10), // 信息色
+      p:generateAlphaColorStep('#2C6CBF',10), // 辅助色
     },
-    spacing:function(baseStep=5,domain=100,step=0,maxstep=100){
-      var obj = {}
-      for(var i = 0 ; i <= 1200 ; i += step){
-        var step = Math.min(baseStep * Math.pow(2,Math.floor(i/domain)),maxstep);
-        obj[i.toString()] = i + 'px';
-      }
-      return obj
-    }(),
-    extend: {},
+    spacing:generateSpacing(5,100,1200),
+    extend: {
+      xpcc:'#F0F0F0'
+    },
   },
-  plugins: [],
+  plugins:[],
 }
