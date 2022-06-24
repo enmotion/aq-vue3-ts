@@ -14,10 +14,8 @@ function generateSpacing(minstep=5,maxstep=100,limit=1200){
   }
   return obj
 }
-console.log(process.env.VITE_APP_THEME)
 module.exports = {
-  content: [],
-  purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     colors:{
       m:process.env.VITE_APP_THEME, // 主配色

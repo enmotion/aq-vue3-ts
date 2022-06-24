@@ -1,5 +1,5 @@
 <template>
-    <div @click="increse(name)" class="cursor-pointer select-none"><span ref="ser"></span> {{name}} | {{setname}} </div>
+    <div @click="increse(name)" class="cursor-pointer select-none text"><span ref="ser"></span> {{name}} | {{setname}} </div>
 </template>
 
 <script>
