@@ -1,10 +1,39 @@
 <template>
-    <div @click="increse(name)" class="cursor-pointer select-none text"><span ref="ser"></span> {{name}} | {{setname}} </div>
+aaaaa
+    <div @click="increse(name)" class="cursor-pointer h-20 bc-d select-none text"> {{$data}} | {{vdata}} </div>
 </template>
 
-<script>
-import {onMounted,ref,getCurrentInstance,nextTick} from 'vue';
+<script lang="ts">
+import { reduce } from 'ramda';
+import {onMounted,ref,reactive,getCurrentInstance,nextTick, Static} from 'vue';
+class counter{
 
+} 
+enum Color {Red='red',Blue='blue',Green='green2'};
+
+const A:Color = Color.Green;
+console.log(A,111111);
+
+interface hobbiy{
+    label:string,
+    level:number
+}
+function printHobbiy(ho:{label:string}){
+    console.log(ho.label); 
+}
+let hobbiys:hobbiy={label:'football',level:12};
+printHobbiy(hobbiys);
+
+interface user<T,K>{
+    name:string,
+    hobbiy:Array<hobbiy|string|number|{[key:string]:string|number}>,
+    action:(name:T,d:K)=>T,
+}
+const user:user<number,object>={
+    name:"mod",
+    hobbiy:[12,{label:"aa",level:2},{dd:'fdafsfasf',aa:'12313',da:12312}],
+    action:(aer)=>12
+}
 export default {
     props:{
         age:{
@@ -14,27 +43,25 @@ export default {
     },
     data:()=>{
         return {
-            name:'enmotion12'
+            name:'原始data',
+            age:0
         }
     },
-    setup(data){
-        var vm = getCurrentInstance();
-        let setname = ref('enmotion222');
-        nextTick(()=>{
-            console.log(vm.refs)
-            console.log(vm.data.name,22222)
-            setname.value = vm.data.name + 'MOD';
-            console.log(setname,123123)
-        })
+    methods:{
+
+    },
+    setup(){
+        var vm:any = getCurrentInstance();
+        let vdata = reactive({data:{name:'setup vdata',age:1}});
         onMounted(()=>{
-            console.log("test12321")
+            vdata.data = vm?.data
         })
-        function increse(sss){
-            console.log(this.name)
-            setname.value = sss
+        function increse(){
+            console.log(vm.methods)
+            vdata.data.age++
         }
         return {
-            setname,
+            vdata,
             increse
         }
     },

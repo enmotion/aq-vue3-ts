@@ -17,6 +17,9 @@ export default{
       textColor:ganerateAlphaStepColor(),
     }
   },
+  mounted(){
+    console.log("in mounted inside")
+  },
   components:{
     HelloWorld,
     Test,
