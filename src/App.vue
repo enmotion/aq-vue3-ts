@@ -28,13 +28,9 @@ export default{
 </script>
 
 <template>
-  <test></test>
-  <span class="h-800 flex bg-m">2323{{$store.getters.getName}}</span>
-  <div class="h-auto flex flex-col bg-d-10">
-    <span class=" border-d-a9 border text-5xl text-p-24 font-bold p-50">{{containerColor}}</span>
-    <span class=" text-blue-900 p-50">{{textColor}}</span>
+  <div class="h-full bg-p-1">
+    <router-view key="root_router" />
   </div>
-  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
 </template>
 
 <style>
