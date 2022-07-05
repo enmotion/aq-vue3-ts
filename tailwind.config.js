@@ -14,9 +14,18 @@ function generateSpacing(minstep=5,maxstep=100,limit=1200){
   }
   return obj
 }
+function generateGrowOrShrink(step=12){
+  let obj = {}
+  for(let i =1 ;i<=step;i++){
+    obj[i]=i
+  }
+  return obj
+}
 module.exports = {
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
+    flexGrow:generateGrowOrShrink(12),
+    flexShrink:generateGrowOrShrink(12),
     colors:{
       m:process.env.VITE_APP_THEME, // 主配色
       black:'#000000',

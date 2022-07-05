@@ -2,7 +2,7 @@
  * @ Author: enmoion
  * @ Create Time: 2022-06-20 10:12:05
  * @ Modified by: enmotion
- * @ Modified time: 2022-07-04 16:04:53
+ * @ Modified time: 2022-07-05 14:05:05
  * @ Description:
  * vue3-spa入口文件
  */
@@ -13,7 +13,7 @@ import globalComponents from "@src/parts"; // 导入全部组件
 import store from "@src/store"; // vuex 状态管理
 import router from  "@src/router"; // vue-router 路由配置
 import './assets/css/index.css'; // 引入 tailwinds 编译后的全局 css
-console.log(globalComponents)
+
 store.commit("setDevice", Bowser.getParser(window.navigator.userAgent).parse());
 window.onresize=function(){
    store.commit('updateScreenInfo', {

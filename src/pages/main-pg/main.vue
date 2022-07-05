@@ -1,5 +1,6 @@
 <template>
-  <aq-loading is-loading="false">
+  <div class="flex flex-col flex-grow-1">
+    <div>main</div>
     <router-view></router-view>
-  </aq-loading>
+  </div>
 </template>

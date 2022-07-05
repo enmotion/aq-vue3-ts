@@ -28,8 +28,10 @@
 </script> -->
 
 <template>
-  <div class="h-full bg-p-1 flex flex-col">
-    <router-view key="root_router" />
+  <div class="h-full bg-p-1 flex flex-col mask">
+    <aq-loading :is-loading="false">
+      <router-view key="root_router" />
+    </aq-loading>
   </div>
 </template>
 

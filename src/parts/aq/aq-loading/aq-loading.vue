@@ -1,13 +1,13 @@
 <template>
-    <div ref="loadingContainer" class="box-border h-auto flex flex-col flex-grow flex-shrink-0 mask">
-        <div v-if="isLoading" class="flex flex-col z-10" :class="[loadingModalCss]" :style="{width:containerSize.width+'px',height:containerSize.height+'px'}">
-            <div class="flex flex-col flex-grow items-center justify-center">
-                <SemipolarSpinner :animation-duration="duration" :size="size" color="#FF9C00" />
-                <div v-show="showTips" class=" mt-30 text-light-12 text-xs">{{ tips }}</div>
-            </div>
-        </div>
-        <div class="h-auto flex-col flex-grow">
+    <div ref="loadingContainer" class="box-border h-auto flex flex-col flex-grow-1 flex-shrink-0 mask">
+        <div class="flex flex-col flex-grow-1">
             <slot></slot>
+        </div>
+        <div v-if="isLoading" class="flex felx-col z-10 flex-grow-1 absolute w-full h-full">
+            <div class="flex flex-col flex-grow-1 items-center justify-center">
+                <SemipolarSpinner :color="color" :size="size" :animation-duration="duration"/>
+                <div v-show="showTips" class="mt-10 text-xs font-bold" :style="{color:'#888888AA'}">{{ tips }}</div>
+            </div>
         </div>
     </div>
 </template>
@@ -33,7 +33,11 @@ export default defineComponent({
         },
         showTips:{
             type:Boolean,
-            default:false,
+            default:true,
+        },
+        color:{
+            type:[String],
+            default:'#FF9C00'
         },
         size:{
             type:Number,
@@ -46,28 +50,6 @@ export default defineComponent({
     },
     components: {
         SemipolarSpinner
-    },
-    data:()=>{
-        var vm = this;
-        return {
-            $refs:{} as {[key:string]:any},
-            resizeObserver:{} as ResizeObserver,
-            containerSize:{} as any
-        }
-    },
-    mounted(){
-        var vm = this;
-        vm.$nextTick(function(){
-            vm.resizeObserver = new ResizeObserver(()=>{
-                let size:object = vm.$refs.loadingContainer.getBoundingClientRect();
-                vm.containerSize = size;
-            });
-            vm.resizeObserver.observe(vm.$refs.loadingContainer);  
-        });
-    },
-    unmounted(){
-        var vm = this;
-        vm.resizeObserver.disconnect();
     }
 })
 </script>

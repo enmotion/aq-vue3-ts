@@ -1,0 +1,176 @@
+<template>
+    <div class="containers flex flex-col flex-grow-1">
+        <div ref="paletteBox" class="palette-box"></div>
+        <div class="flex flex-row flex-grow-1">
+            <div class="flex flex-col flex-grow-1">
+                <div class="canvas border-2 border-white bg-white flex flex-col flex-grow-12" ref="canvas"></div>
+            </div>
+            <div class="flex flex-col bg-p-10 text-white" style="width:120px">
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-10 flex flex-row">
+            <a ref="svg"
+                class=" text-xs px-10 py-5 text-white font-extrabold rounded-sm cursor-pointer select-none bg-p-10 hover:contrast-200 transition-all duration-200"
+                @click="save('svg')">
+                保存图片
+            </a>
+            <a ref="file"
+                class=" text-xs px-10 py-5 text-white font-extrabold rounded-sm cursor-pointer select-none bg-d-10 hover:contrast-200 transition-all duration-200 ml-5"
+                @click="save('file')">
+                保存文件
+            </a>
+        </div>
+    </div>
+</template>
+<script>
+import { defineComponent } from 'vue';
+import BpmnModeler from 'bpmn-js/lib/Modeler'; //建模器
+// import BpmnViewer from 'bpmn-js/lib/Viewer'; //浏览器
+import 'bpmn-js/dist/assets/diagram-js.css'; // 左边工具栏以及编辑节点的样式
+import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
+
+import { xmlStr } from '@src/xml/xmlStr' // 这里是直接引用了xml字符串
+
+
+// import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css';
+// import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
+// import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css'; // 右边工具栏样式
+
+export default defineComponent({
+    name:'bpmn-editor',
+    data() {
+        return {
+            BpmnIns: null,// bpmn建模器
+        }
+    },
+    mounted() {// 生命周期 - 载入后, Vue 实例挂载到实际的 DOM 操作完成，一般在该过程进行 Ajax 交互
+        this.initBpmn(xmlStr)
+    },
+    methods: {
+        initBpmn(xmlStr) {
+            const vm = this;
+            vm.BpmnIns = new BpmnModeler({container: vm.$refs.canvas}); // 建模
+            vm.BpmnIns.importXML( xmlStr , (err) => {
+                if (err) {
+                    // console.error(err)
+                } else {
+                    this.success();// 这里是成功之后的回调, 可以在这里做一系列事情
+                }
+            })
+        //   vm.BpmnIns.on('element.changed',(event)=>{
+        //     console.log(JSON.stringify(event),'element.changed')
+        //   })
+        //   vm.BpmnIns.on('commandStack.changed',(event)=>{
+        //     console.log(JSON.stringify(event),'commandStack.changed');
+        //     vm.modeling = this.BpmnIns.get('modeling');
+        //     console.log(vm.modeling.setColor,3333434)
+        //     // vm.modeling.setColor(shapes, { stroke: 'green' })
+        //     vm.BpmnIns.saveXML({format: true}).then(res=>{
+        //         console.log(res,444)
+        //     })
+        //   })
+        //   vm.BpmnIns.on('selection.changed',  e => {
+        //         console.log(e)
+        //         const tempElement =e &&  e.newSelection &&  e.newSelection[0];
+        //         console.log(tempElement)
+        //         // if(tempElement && tempElement.type !="bpmn:Process"){
+        //         //     vm.currentElement = tempElement
+        //         // }
+        //     })
+        //   vm.createNewDiagram()
+        },
+        success() {
+            var vm = this;
+            vm.addModelerListener(); // 监听modeler并绑定事件
+            vm.addEventBusListener(); // 监听element并绑定事件
+        },
+        // 监听modeler并绑定事件
+        addModelerListener(){
+            var vm = this;
+            const events = ['shape.added','shape.move.end','shape.removed','connect.end','connect.move'];
+            events.forEach(function(event) {
+                vm.BpmnIns.on(event,(e)=>{
+                    var elementRegistry = vm.BpmnIns.get('elementRegistry');
+                    var shape = e.element ? elementRegistry.get(e.element.id) : e.shape
+                    console.log(event,e,shape,'shape addModelerListener')
+                })
+            })
+        },
+        // 监听element并绑定事件
+        addEventBusListener(){
+            let vm = this;
+            const eventBus = vm.BpmnIns.get('eventBus') // 需要使用eventBus
+            const eventTypes = ['element.click', 'element.changed'] // 需要监听的事件集合
+            eventTypes.forEach(eventType => {
+                eventBus.on(eventType, function(e) {
+                    // console.log(eventType,e,'element addEventBusListener');
+                    if(eventType == 'element.click'){
+                        var elementRegistry = vm.BpmnIns.get('elementRegistry');
+                        var modeling = vm.BpmnIns.get('modeling');
+                        // console.log(e.element.id,e.element.type,'is clicked');
+                        // console.log(elementRegistry.get(e.element.id).businessObject);
+                        console.log(vm.getBusinessObject(e.element.id));
+                        // if(e.element.type == 'bpmn:Task'){ // 改值的方法
+                        //     var shape = e.element ? elementRegistry.get(e.element.id) : e.shape
+                        //     modeling.updateProperties(shape, {
+                        //         name: '我是修改后的Task名称',
+                        //         isInterrupting: false,
+                        //         customProps:'乱'
+                        //     })
+                        // }
+                    }
+                })
+            })
+        },
+        getBusinessObject(id){
+            return this.BpmnIns.get('elementRegistry').get(id).businessObject;
+        },
+        save(type){
+            var vm = this;
+            var linkElement = vm.$refs[type];
+            switch(type){
+                case 'svg':
+                    console.log('save svg');
+                    vm.BpmnIns.saveSVG((err,svg)=>{
+                        vm.setEncoded(linkElement, 'diagram.svg', err ? null : svg);
+                    })
+                break;
+                case 'file':
+                    console.log('save file');
+                    vm.BpmnIns.saveXML({ format: true },(err,xml)=>{
+                        console.log(xml)
+                        vm.setEncoded(linkElement, 'diagram.bpmn', err ? null : xml);
+                    })
+                break;
+            }
+        },
+        setEncoded(link, name, data) {
+            // 把xml转换为URI，下载要用到的
+            const encodedData = encodeURIComponent(data)
+            // 下载图的具体操作,改变a的属性，className令a标签可点击，href令能下载，download是下载的文件的名字
+            // console.log(link, name, data)
+            let xmlFile = new File([data], 'test.bpmn')
+            // console.log(xmlFile)
+            if (data) {
+                link.href = 'data:application/bpmn20-xml;charset=UTF-8,' + encodedData
+                link.download = name
+            }
+        }
+    }
+
+})
+</script>
+
+<style scoped>
+.canvas{
+	width: 100%;
+	height: 100%;
+}
+.panel{
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 300px;
+}
+</style>
+
