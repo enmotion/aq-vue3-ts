@@ -1,11 +1,19 @@
-import {createRouter,createWebHashHistory} from 'vue-router';
+import * as R from "ramda";
 import PGS from '@src/pages/index';
-import main from "@src/pages/main";
-console.log(PGS.Main,33333)
+import { RouteRecordRaw } from "vue-router";
+import {createRouter,createWebHashHistory} from 'vue-router';
 export default createRouter({
     history:createWebHashHistory(),
     routes:[
-        PGS.Main,
-        PGS.Login
+        PGS.LoginPg,
+        R.mergeAll([
+            PGS.MainPg,
+            {
+                children:[
+                    
+                ]
+            }
+        ]) as RouteRecordRaw,
+        PGS.Erro404Pg
     ]
 })
