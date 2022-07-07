@@ -29,7 +29,7 @@ import BpmnModeler from 'bpmn-js/lib/Modeler'; //建模器
 import 'bpmn-js/dist/assets/diagram-js.css'; // 左边工具栏以及编辑节点的样式
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
 
-import { xmlStr } from '@src/xml/xmlStr' // 这里是直接引用了xml字符串
+import { xmlStr } from '@src/xml/xmlStr'; // 这里是直接引用了xml字符串
 
 
 // import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css';
@@ -57,27 +57,6 @@ export default defineComponent({
                     this.success();// 这里是成功之后的回调, 可以在这里做一系列事情
                 }
             })
-        //   vm.BpmnIns.on('element.changed',(event)=>{
-        //     console.log(JSON.stringify(event),'element.changed')
-        //   })
-        //   vm.BpmnIns.on('commandStack.changed',(event)=>{
-        //     console.log(JSON.stringify(event),'commandStack.changed');
-        //     vm.modeling = this.BpmnIns.get('modeling');
-        //     console.log(vm.modeling.setColor,3333434)
-        //     // vm.modeling.setColor(shapes, { stroke: 'green' })
-        //     vm.BpmnIns.saveXML({format: true}).then(res=>{
-        //         console.log(res,444)
-        //     })
-        //   })
-        //   vm.BpmnIns.on('selection.changed',  e => {
-        //         console.log(e)
-        //         const tempElement =e &&  e.newSelection &&  e.newSelection[0];
-        //         console.log(tempElement)
-        //         // if(tempElement && tempElement.type !="bpmn:Process"){
-        //         //     vm.currentElement = tempElement
-        //         // }
-        //     })
-        //   vm.createNewDiagram()
         },
         success() {
             var vm = this;
@@ -110,14 +89,14 @@ export default defineComponent({
                         // console.log(e.element.id,e.element.type,'is clicked');
                         // console.log(elementRegistry.get(e.element.id).businessObject);
                         console.log(vm.getBusinessObject(e.element.id));
-                        // if(e.element.type == 'bpmn:Task'){ // 改值的方法
-                        //     var shape = e.element ? elementRegistry.get(e.element.id) : e.shape
-                        //     modeling.updateProperties(shape, {
-                        //         name: '我是修改后的Task名称',
-                        //         isInterrupting: false,
-                        //         customProps:'乱'
-                        //     })
-                        // }
+                        if(e.element.type == 'bpmn:Task'){ // 改值的方法
+                            var shape = e.element ? elementRegistry.get(e.element.id) : e.shape
+                            modeling.updateProperties(shape, {
+                                name: '我是修改后的Task名称',
+                                isInterrupting: false,
+                                customProps:'乱'
+                            })
+                        }
                     }
                 })
             })
