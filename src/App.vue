@@ -28,7 +28,7 @@
 </script> -->
 
 <template>
-  <div class="h-full bg-p-1 flex flex-col mask">
+  <div class="h-full flex flex-col mask">
     <aq-loading :is-loading="false">
       <router-view key="root_router" />
     </aq-loading>

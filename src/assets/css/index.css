@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities{
+  .xcol,.xrow,.xcolr,.xrowr{
+    @apply flex
+  }
+  .xcol,.xcolr{
+    @apply flex-col
+  }
+  .xrow,.xrowr{
+    @apply flex-row
+  }
+  .xrowr{
+    @apply flex-row-reverse
+  }
+  .xcolr{
+    @apply flex-col-reverse
+  }
+}

@@ -3,10 +3,10 @@
         <div ref="paletteBox" class="palette-box"></div>
         <div class="flex flex-row flex-grow-1">
             <div class="flex flex-col flex-grow-1">
-                <div class="canvas border-2 border-white bg-white flex flex-col flex-grow-12" ref="canvas"></div>
+                <div class="canvas flex flex-col flex-grow-12" ref="canvas"></div>
             </div>
-            <div class="flex flex-col bg-p-10 text-white" style="width:120px">
-            </div>
+            <!-- <div class="flex flex-col bg-p-10 text-white" style="width:120px">
+            </div> -->
         </div>
         <div class="absolute bottom-10 left-10 flex flex-row">
             <a ref="svg"
@@ -25,12 +25,13 @@
 <script>
 import { defineComponent } from 'vue';
 import BpmnModeler from 'bpmn-js/lib/Modeler'; //建模器
+import customModule from './CustomModeler/index';
 // import BpmnViewer from 'bpmn-js/lib/Viewer'; //浏览器
 import 'bpmn-js/dist/assets/diagram-js.css'; // 左边工具栏以及编辑节点的样式
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
-
 import { xmlStr } from '@src/xml/xmlStr'; // 这里是直接引用了xml字符串
 
+// import customModule from './widgets/custom'
 
 // import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css';
 // import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
@@ -49,7 +50,13 @@ export default defineComponent({
     methods: {
         initBpmn(xmlStr) {
             const vm = this;
-            vm.BpmnIns = new BpmnModeler({container: vm.$refs.canvas}); // 建模
+            vm.BpmnIns = new BpmnModeler({
+                container: vm.$refs.canvas,
+                additionalModules: [
+                    // 自定义的节点
+                    customModule
+                ]
+            }); // 建模
             vm.BpmnIns.importXML( xmlStr , (err) => {
                 if (err) {
                     // console.error(err)
