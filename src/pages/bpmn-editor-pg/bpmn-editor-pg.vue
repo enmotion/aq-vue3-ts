@@ -2,12 +2,6 @@
   <div class="h-full w-full flex flex-col flex-grow-1">
     <div class="xrow items-center h-40 bg-white border-dark-2 border-b overflow-hidden">
         <span class="w-80 h-40 bg-p-10 items-center justify-center flex text-sm text-white font-bold uppercase">Bpmn</span>
-        <span class="flex h-40 flex-row text-xs bg-dark-1">
-            <span class="flex h-40 items-center justify-center w-60 bg-white">打开</span>
-            <span>下载</span>
-            <span>预览</span>
-            <span>模拟</span>
-        </span>
     </div>
     <div class="xrow bg-dark-1 flex-grow-1">
         <div class="w-80 bg-white border-r border-dark-2"></div>

@@ -1,14 +1,18 @@
 <template>
-    <div class="containers flex flex-col flex-grow-1">
-        <div ref="paletteBox" class="palette-box"></div>
+    <div class="containers xcol flex-grow-1">
+        <div ref="controlDashBoard" class="xrow p-5 bg-white border-b border-dark-2">
+            <div class="-mx-5 xrow">
+                <sys-menu :menu="ModuleMenus.sysMenus" @click="doFunc" class="mx-5"></sys-menu>
+                <sys-menu :menu="ModuleMenus.alignMenu" @click="doFunc" class="mx-5"></sys-menu>
+                <sys-menu :menu="ModuleMenus.historyMenu" @click="doFunc" class="mx-5"></sys-menu>
+            </div>
+        </div>
         <div class="flex flex-row flex-grow-1">
             <div class="flex flex-col flex-grow-1">
                 <div class="canvas flex flex-col flex-grow-12" ref="canvas"></div>
             </div>
-            <!-- <div class="flex flex-col bg-p-10 text-white" style="width:120px">
-            </div> -->
         </div>
-        <div class="absolute bottom-10 left-10 flex flex-row">
+        <!-- <div class="absolute bottom-10 left-10 flex flex-row">
             <a ref="svg"
                 class=" text-xs px-10 py-5 text-white font-extrabold rounded-sm cursor-pointer select-none bg-p-10 hover:contrast-200 transition-all duration-200"
                 @click="save('svg')">
@@ -19,18 +23,21 @@
                 @click="save('file')">
                 保存文件
             </a>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>
 import { defineComponent } from 'vue';
-import BpmnModeler from 'bpmn-js/lib/Modeler'; //建模器
+import BpmnModeler from 'bpmn-js/lib/Modeler'; // 建模器
 import customModule from './CustomModeler/index';
-// import BpmnViewer from 'bpmn-js/lib/Viewer'; //浏览器
+// import BpmnViewer from 'bpmn-js/lib/Viewer'; // 浏览器
 import 'bpmn-js/dist/assets/diagram-js.css'; // 左边工具栏以及编辑节点的样式
-import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css';
+import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css'; // 引入样式
+import ModuleMenus from "./config/controlDashBoardConfig"; // 系统菜单
 import { xmlStr } from '@src/xml/xmlStr'; // 这里是直接引用了xml字符串
+import { ElButton, ElTooltip, ElPopper } from "element-plus"; // 引入 element 配置
 
+import SysMenu from "./widgets/sys-menu";
 // import customModule from './widgets/custom'
 
 // import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css';
@@ -39,31 +46,47 @@ import { xmlStr } from '@src/xml/xmlStr'; // 这里是直接引用了xml字符�
 
 export default defineComponent({
     name:'bpmn-editor',
+    components: { ElButton, ElTooltip, ElPopper , SysMenu},
     data() {
+        let vm = this;
         return {
+            popoverRef:null,
+            ModuleMenus:ModuleMenus,
             BpmnIns: null,// bpmn建模器
         }
     },
     mounted() {// 生命周期 - 载入后, Vue 实例挂载到实际的 DOM 操作完成，一般在该过程进行 Ajax 交互
-        this.initBpmn(xmlStr)
+        let vm = this;
+        vm.initBpmn(xmlStr);
+        vm.popoverRef = vm.$refs.popoverRef;
+        console.log(vm.popoverRef,1111)
     },
     methods: {
+        doFunc(funcName){
+            const vm = this;
+            console.log(funcName)
+        },
         initBpmn(xmlStr) {
             const vm = this;
             vm.BpmnIns = new BpmnModeler({
                 container: vm.$refs.canvas,
                 additionalModules: [
                     // 自定义的节点
-                    customModule
+                    // customModule
                 ]
             }); // 建模
-            vm.BpmnIns.importXML( xmlStr , (err) => {
-                if (err) {
-                    // console.error(err)
-                } else {
-                    this.success();// 这里是成功之后的回调, 可以在这里做一系列事情
-                }
+            vm.BpmnIns.importXML(xmlStr).then(res=>{
+                this.success();// 这里是成功之后的回调, 可以在这里做一系列事情
+            }).catch(err=>{
+
             })
+            // vm.BpmnIns.importXML( xmlStr , (err) => {
+            //     if (err) {
+            //         // console.error(err)
+            //     } else {
+            //         this.success();// 这里是成功之后的回调, 可以在这里做一系列事情
+            //     }
+            // })
         },
         success() {
             var vm = this;
@@ -116,15 +139,14 @@ export default defineComponent({
             var linkElement = vm.$refs[type];
             switch(type){
                 case 'svg':
-                    console.log('save svg');
+                    // console.log('save svg');
                     vm.BpmnIns.saveSVG((err,svg)=>{
                         vm.setEncoded(linkElement, 'diagram.svg', err ? null : svg);
                     })
                 break;
                 case 'file':
-                    console.log('save file');
+                    // console.log('save file');
                     vm.BpmnIns.saveXML({ format: true },(err,xml)=>{
-                        console.log(xml)
                         vm.setEncoded(linkElement, 'diagram.bpmn', err ? null : xml);
                     })
                 break;

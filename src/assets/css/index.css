@@ -1,8 +1,12 @@
+@import url('../icon/iconfont.css');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer utilities{
+  .btn{
+    @apply cursor-pointer hover:contrast-75
+  }
   .xcol,.xrow,.xcolr,.xrowr{
     @apply flex
   }
