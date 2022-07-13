@@ -14,12 +14,13 @@
     "lib": ["esnext", "dom"],
     "skipLibCheck": true,
     "baseUrl": "./",
+    "types": ["vite/client"],
     "paths":{
       "@src": ["src"], // 必须如此配置才能在ts中沿用 vite 的 alias 配置
       "@src/*": ["src/*"], // 两个都需要....
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue","types/**/*.d.ts",],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
 // {

@@ -11,7 +11,7 @@ import * as R from "ramda";// 免require引入
 const requireSources = import.meta.globEager('./**/*.ts') // vite模式资源自动加载的方式 深度遍历符 **
 // let RP = require.context( './',true, /(pg)\.js$/); // webpack模式资源自动加载的方式 1
 // let RP = require.context( './',true, /(\w|\/|-|@|\.)*[^cg]\.js$/); // webpack模式资源自动加载的方式 2
-const PageNames = R.keys(requireSources).filter(name=>/(\w|\/|-|@|\.)*[^cg|^lib]\.ts$/.test(name)) // 开启正则过滤结尾非 *.pg.js的非页面文件
+const PageNames = R.keys(requireSources).filter(name=>/(\w|\/|-|@|\.)*[^cg|^lib]\.ts$/.test(name as string)) // 开启正则过滤结尾非 *.pg.js的非页面文件
 let PageRouter:{[key:string]:RouteRecordRaw}={};
 PageNames.forEach((pagename:string)=>{
     let content = requireSources[pagename]
