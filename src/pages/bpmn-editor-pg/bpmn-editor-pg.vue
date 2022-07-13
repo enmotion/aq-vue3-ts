@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue';
 // import 'bpmn-js/dist/assets/diagram-js.css';
 // import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css'
