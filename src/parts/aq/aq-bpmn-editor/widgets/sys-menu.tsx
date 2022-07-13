@@ -13,7 +13,7 @@ export default defineComponent({
   setup(props,{emit}:{emit:(event: string, ...args: unknown[]) => void}) {
     const MenuDatas:MenuItem[] = props.menu;
     function triggerClick(payload:string){
-      emit('click',payload);
+      emit('buttonClick',payload);
     }
     return () => (
       <div class='xrow'>
@@ -35,7 +35,7 @@ export default defineComponent({
                                 <span 
                                   key={item.label} 
                                   class="iconfont btn text-dark-12 text-xs p-10 rounded-md hover:text-s-10 hover:bg-s-1 transition-all duration-300"
-                                  onClick={()=>{
+                                  onClick={(e)=>{
                                     triggerClick(item.value as string);
                                   }}>
                                   <span v-show={item.icon !=''&& item.icon != undefined} class={item.icon+" iconfont text-md"}></span>
@@ -65,7 +65,7 @@ export default defineComponent({
                         size="small"
                         class="p-5 text-xs border border-dar-2 bg-dark-1 text-dark-12 hover:bg-s-1 hover:text-s-10 transition-all duration-500"
                         style="margin:0px 1px 0px 1px"
-                        onClick={()=>{
+                        onClick={(e)=>{
                           triggerClick(item.value as string);
                         }}>
                           <span v-show={item.icon !=''&& item.icon != undefined} class={item.icon+" iconfont text-md"}></span>

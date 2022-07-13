@@ -2,9 +2,9 @@
     <div class="containers xcol flex-grow-1">
         <div ref="controlDashBoard" class="xrow p-5 bg-white border-b border-dark-2">
             <div class="-mx-5 xrow">
-                <sys-menu :menu="ModuleMenus.sysMenus" @click="doFunc" class="mx-5"></sys-menu>
-                <sys-menu :menu="ModuleMenus.alignMenu" @click="doFunc" class="mx-5"></sys-menu>
-                <sys-menu :menu="ModuleMenus.historyMenu" @click="doFunc" class="mx-5"></sys-menu>
+                <sys-menu :menu="ModuleMenus.sysMenus" @buttonClick="doFunc($event)" class="mx-5"></sys-menu>
+                <sys-menu :menu="ModuleMenus.alignMenu" @buttonClick="doFunc($event)" class="mx-5"></sys-menu>
+                <sys-menu :menu="ModuleMenus.historyMenu" @buttonClick="doFunc($event)" class="mx-5"></sys-menu>
             </div>
         </div>
         <div class="flex flex-row flex-grow-1">
@@ -12,18 +12,6 @@
                 <div class="canvas flex flex-col flex-grow-12" ref="canvas"></div>
             </div>
         </div>
-        <!-- <div class="absolute bottom-10 left-10 flex flex-row">
-            <a ref="svg"
-                class=" text-xs px-10 py-5 text-white font-extrabold rounded-sm cursor-pointer select-none bg-p-10 hover:contrast-200 transition-all duration-200"
-                @click="save('svg')">
-                保存图片
-            </a>
-            <a ref="file"
-                class=" text-xs px-10 py-5 text-white font-extrabold rounded-sm cursor-pointer select-none bg-d-10 hover:contrast-200 transition-all duration-200 ml-5"
-                @click="save('file')">
-                保存文件
-            </a>
-        </div> -->
     </div>
 </template>
 <script>
@@ -62,9 +50,9 @@ export default defineComponent({
         console.log(vm.popoverRef,1111)
     },
     methods: {
-        doFunc(funcName){
+        doFunc(event){
             const vm = this;
-            console.log(funcName)
+            console.log(event,'dufunc')
         },
         initBpmn(xmlStr) {
             const vm = this;
