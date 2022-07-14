@@ -1,11 +1,16 @@
 <template>
 	<div class="containers xcol flex-grow-1">
-		<div ref="controlDashBoard" class="xrow p-5 bg-white border-b border-dark-2">
-			<div class="-mx-5 xrow">
-				<bpmn-menu :menu="ModuleMenus.sysMenus" @buttonClick="doFunc($event)" class="mx-5"></bpmn-menu>
-				<bpmn-menu :menu="ModuleMenus.alignMenu" @buttonClick="doFunc($event)" class="mx-5"></bpmn-menu>
-				<bpmn-menu :menu="ModuleMenus.historyMenu" @buttonClick="doFunc($event)" class="mx-5"></bpmn-menu>
+		<div ref="controlDashBoard" class="xrow p-5 border-b border-dark-2 bg-light-10">
+			<div class="-mx-5 xrow flex-grow-1">
+				<bpmn-menu :menu="ModuleMenus.sysMenus" @buttonClick="methodsDistribute($event)" class="mx-5 flex-grow-1"></bpmn-menu>
+				<bpmn-menu :menu="ModuleMenus.historyMenu" @buttonClick="methodsDistribute($event)" class="mx-5"></bpmn-menu>
+				<bpmn-menu :menu="ModuleMenus.alignMenu" @buttonClick="methodsDistribute($event)" class="mx-5"></bpmn-menu>
+				<bpmn-menu :menu="ModuleMenus.zoomMenu" @buttonClick="methodsDistribute($event)" class="mx-5"></bpmn-menu>
 			</div>
+			<!-- 用于打开本地文件-->
+      <input type="file" id="files" ref="LocalFileReader" class="hidden" accept=".xml, .bpmn, .jn-bpmn" @change="importLocalFile" />
+			<!-- 用于下载触发标签 -->
+			<a ref="downloadLink" class="hidden"></a>
 		</div>
 		<div class="flex flex-row flex-grow-1">
 			<div class="flex flex-col flex-grow-1">
@@ -26,8 +31,10 @@ import { xmlStr } from '@src/xml/xmlStr'; // 导入模型默认xml结构
 import { ElButton, ElTooltip, ElPopper } from "element-plus"; // 引入 element 配置
 
 import BpmnMenu from "./widgets/bpmn-menu/bpmn-menu";
-// import customModule from './widgets/custom'
-
+import ZoomControl from "./widgets/zoom-control/zoom-control.vue";
+// methods
+import DefaultEmptyXML from "./methods/defaultEmpty";
+import importLocalFile from "./methods/importLocalFile.js"; // 导入本地文件方法
 // import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css';
 // import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 // import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css'; // 右边工具栏样式
@@ -40,27 +47,101 @@ export default defineComponent({
 			default: xmlStr,
 		}
 	},
-	components: { ElButton, ElTooltip, ElPopper, BpmnMenu },
+	components: { ElButton, ElTooltip, ElPopper, BpmnMenu, ZoomControl },
 	data() {
 		let vm = this;
 		return {
-			popoverRef: null,
 			ModuleMenus: ModuleMenus,
 			BpmnIns: null,// bpmn建模器
 		}
 	},
 	mounted() {// 生命周期 - 载入后, Vue 实例挂载到实际的 DOM 操作完成，一般在该过程进行 Ajax 交互
 		let vm = this;
-		console.log()
 		vm.initBpmn(vm.xmlContent);
-		vm.popoverRef = vm.$refs.popoverRef;
-		console.log(vm.popoverRef, 1111)
 	},
 	methods: {
-		doFunc(event) {
+		// 方法分发函数
+		methodsDistribute(event) {
 			const vm = this;
-			console.log(event, 'dufunc')
+			if(vm[event.name]){
+				vm[event.name](event.params);
+			}
 		},
+		// 打开本地文件 方法块
+		open(){this.$refs.LocalFileReader.click()},
+		importLocalFile(){
+			const vm = this;
+      const file = vm.$refs.LocalFileReader.files[0];
+      const reader = new FileReader();
+      reader.readAsText(file);
+      reader.onload = function() {
+        let loadedXml = this.result;
+        vm.createNewDiagram(loadedXml);
+      };
+		},
+		async createNewDiagram(xml) {
+			const vm = this;
+      // 将字符串转换成图显示出来
+      let newId = this.processId || `Process_${new Date().getTime()}`;
+      let newName = this.processName || `业务流程_${new Date().getTime()}`;
+      let xmlString = xml || DefaultEmptyXML(newId, newName, this.prefix);
+      try {
+        let { warnings } = await vm.BpmnIns.importXML(xmlString);
+        if (warnings && warnings.length) {
+          warnings.forEach(warn => console.warn(warn));
+        }
+      } catch (e) {
+        console.error(`[Process Designer Warn]: ${e?.message || e}`);
+      }
+    },
+		// 下载流程图到本地 方法块
+    /**
+     * @param {string} type
+     * @param {*} name
+     */
+    async downloadProcess(type, name) {
+			const vm = this;
+			// 按需要类型创建文件并下载
+      try {
+        if (type === "xml" || type === "bpmn") {
+					vm.BpmnIns.saveXML().then( res => {
+						let { href, filename } = setEncoded(type.toLowerCase(), name, res.xml);
+            downloadFunc(href, filename);
+					}).catch(err=>{
+						console.error(`[Process Designer Warn ]: ${err.message || err}`);
+					});
+        } else {
+					vm.BpmnIns.saveSVG().then( res => {
+						console.log(res.svg,'111111')
+						let { href, filename } = setEncoded(type.toLowerCase(), name, res.svg);
+            downloadFunc(href, filename);
+					}).catch(err=>{
+						return console.error(err);
+					});
+        }
+      } catch (e) {
+        console.error(`[Process Designer Warn ]: ${e.message || e}`);
+      }
+			// 文件编码操纵
+			function setEncoded(type, filename = "diagram", data){
+				const encodedData = encodeURIComponent(data);
+				return {
+					filename: `${filename}.${type}`,
+					href: `data:application/${type === "svg" ? "text/xml" : "bpmn20-xml"};charset=UTF-8,${encodedData}`,
+					data: data
+				};
+			}
+      // 文件下载方法
+      function downloadFunc(href, filename) {
+        if (href && filename) {
+					let alink = vm.$refs.downloadLink;
+					alink.download = filename;
+					alink.href = href; //  URL对象
+          alink.click(); // 模拟点击
+					URL.revokeObjectURL(alink.href);
+        }
+      }
+    },
 		initBpmn(xmlStr) {
 			const vm = this;
 			vm.BpmnIns = new BpmnModeler({
@@ -71,15 +152,11 @@ export default defineComponent({
 				]
 			}); // 建模
 			vm.BpmnIns.importXML(xmlStr).then(res => {
-				this.success();// 这里是成功之后的回调, 可以在这里做一系列事情
+				vm.addModelerListener(); // 监听modeler并绑定事件
+				vm.addEventBusListener(); // 监听element并绑定事件
 			}).catch(err => {
 
 			})
-		},
-		success() {
-			var vm = this;
-			vm.addModelerListener(); // 监听modeler并绑定事件
-			vm.addEventBusListener(); // 监听element并绑定事件
 		},
 		// 监听modeler并绑定事件
 		addModelerListener() {
@@ -119,35 +196,8 @@ export default defineComponent({
 				})
 			})
 		},
-		getBusinessObject(id) {
-			return this.BpmnIns.get('elementRegistry').get(id).businessObject;
-		},
-		save(type) {
-			var vm = this;
-			var linkElement = vm.$refs[type];
-			switch (type) {
-				case 'svg':
-					// console.log('save svg');
-					vm.BpmnIns.saveSVG((err, svg) => {
-						vm.setEncoded(linkElement, 'diagram.svg', err ? null : svg);
-					})
-					break;
-				case 'file':
-					// console.log('save file');
-					vm.BpmnIns.saveXML({ format: true }, (err, xml) => {
-						vm.setEncoded(linkElement, 'diagram.bpmn', err ? null : xml);
-					})
-					break;
-			}
-		},
-		setEncoded(link, name, data) {
-			// 把xml转换为URI，下载要用到的
-			const encodedData = encodeURIComponent(data);
-			if (data) {
-				link.href = 'data:application/bpmn20-xml;charset=UTF-8,' + encodedData
-				link.download = name
-			}
-		}
+		// 获取流程节点业务对象;
+		getBusinessObject(id) {return this.BpmnIns.get('elementRegistry').get(id).businessObject;},
 	}
 })
 </script>
