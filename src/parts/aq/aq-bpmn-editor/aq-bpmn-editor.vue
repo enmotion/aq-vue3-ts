@@ -22,6 +22,7 @@
 <script>
 import { defineComponent } from 'vue';
 import BpmnModeler from 'bpmn-js/lib/Modeler'; // 建模器
+import tokenSimulation from "bpmn-js-token-simulation"; // 模拟流转流程模块
 import customModule from './CustomModeler/index';
 // import BpmnViewer from 'bpmn-js/lib/Viewer'; // 浏览器
 import 'bpmn-js/dist/assets/diagram-js.css'; // 左边工具栏以及编辑节点的样式
@@ -33,8 +34,8 @@ import { ElButton, ElTooltip, ElPopper } from "element-plus"; // 引入 element 
 import BpmnMenu from "./widgets/bpmn-menu/bpmn-menu";
 import ZoomControl from "./widgets/zoom-control/zoom-control.vue";
 // methods
-import DefaultEmptyXML from "./methods/defaultEmpty";
-import importLocalFile from "./methods/importLocalFile.js"; // 导入本地文件方法
+import DefaultEmptyXML from "./methods/defaultEmpty"; // 默认空白xml文件创建器
+
 // import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css';
 // import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 // import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css'; // 右边工具栏样式
@@ -51,6 +52,7 @@ export default defineComponent({
 	data() {
 		let vm = this;
 		return {
+			defaultZoom:1,
 			ModuleMenus: ModuleMenus,
 			BpmnIns: null,// bpmn建模器
 		}
@@ -142,11 +144,35 @@ export default defineComponent({
         }
       }
     },
+		// 触发流程模拟工具
+		processSimulation() {
+			const vm = this;
+      vm.simulationStatus = !vm.simulationStatus;
+      vm.BpmnIns.get("toggleMode").toggleMode();
+    },
+		// 流程编辑步骤跳转
+		processEditJump(FuncName){
+			this.BpmnIns.get("commandStack")[FuncName]();
+		},
+		// 重置为空流程
+		processRestart() {
+      this.createNewDiagram(null);
+    },
+		// 流程画布缩放操纵
+		processZoom(zoomStep=0.1){
+			let newZoom = Math.floor(this.defaultZoom * 100 + zoomStep * 100) / 100;
+      if (newZoom < 0.2) {
+        throw new Error("[Process Designer Warn ]: The zoom ratio cannot be less than 0.2");
+      }
+      this.defaultZoom = newZoom;
+      this.BpmnIns.get("canvas").zoom(this.defaultZoom);
+		},
 		initBpmn(xmlStr) {
 			const vm = this;
 			vm.BpmnIns = new BpmnModeler({
 				container: vm.$refs.canvas,
 				additionalModules: [
+					tokenSimulation
 					// 自定义的节点
 					// customModule
 				]
