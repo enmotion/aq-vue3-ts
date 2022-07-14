@@ -5,7 +5,7 @@
     </div>
     <div class="xrow bg-dark-1 flex-grow-1">
         <div class="w-80 bg-white border-r border-dark-2"></div>
-        <aq-bpmn-editor ref="bpmnDom"></aq-bpmn-editor>
+        <aq-bpmn-editor ref="bpmnDom" :xml-str="xmlStr"></aq-bpmn-editor>
         <div class="w-200 bg-white"></div>
     </div>
   </div>
@@ -13,6 +13,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { xmlStr } from "@src/xml/xmlStr";
 // import 'bpmn-js/dist/assets/diagram-js.css';
 // import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css'
 // import Modeler from 'bpmn-js/lib/Modeler';
@@ -20,6 +21,7 @@ import { defineComponent } from 'vue';
 export default defineComponent({
     data() {
         return {
+            xmlStr,
             options: {
                 column:[]
             },
