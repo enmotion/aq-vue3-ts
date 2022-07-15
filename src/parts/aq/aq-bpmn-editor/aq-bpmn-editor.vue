@@ -1,5 +1,5 @@
 <template>
-	<div class="containers xcol flex-grow-1">
+	<div class="containers xcol flex-grow-1 bpmn-editor">
 		<div ref="controlDashBoard" class="xrow p-5 border-b border-dark-2 bg-light-10">
 			<div class="-mx-5 xrow flex-grow-1">
 
@@ -34,22 +34,23 @@
 			<a ref="downloadLink" class="hidden"></a>
 		</div>
 		<div class="flex flex-row flex-grow-1">
-			<div class="xcol flex-grow-2 bg-dark-5">
-				<div class="xcol flex-grow-1 bg-d-10">
-					<hljs-vue-plugin code="{'a':12,'b':'sser'}" class="xcol h-full border bpmn text-sm" language="json"></hljs-vue-plugin>
-				</div>
-			</div>
 			<div class="flex flex-col flex-grow-1">
 				<div class="canvas flex flex-col flex-grow-12" ref="canvas"></div>
 			</div>
 		</div>
+		<el-dialog v-model="showPreview" width="90%">
+			<div class="h-600 overflow-y-auto">
+				<hljs-vue-plugin :code="previewCode" class="bpmn-editor text-left text-xs" :language="previewType"></hljs-vue-plugin>
+			</div>
+		</el-dialog>
 	</div>
 </template>
 
 <style>
-.bpmn .hljs{
-	display:flex !important;
-	flex-grow:1 !important;
+.bpmn-editor .hljs{
+	/* display:flex !important; */
+	/* flex-direction: column !important; */
+	/* flex-grow: 1 !important; */
 }
 </style>
 <script>
@@ -66,12 +67,15 @@ import 'highlight.js/lib/common';
 import hljsVuePlugin from "@highlightjs/vue-plugin";
 
 import { xmlStr } from '@src/xml/xmlStr'; // 导入模型默认xml结构
-import { ElButton, ElTooltip, ElPopper } from "element-plus"; // 引入 element 配置
+import { ElButton, ElTooltip, ElPopper, ElDialog } from "element-plus"; // 引入 element 配置
 import customModule from './CustomModeler/index';
 // import BpmnViewer from 'bpmn-js/lib/Viewer'; // 浏览器
 import BpmnMenu from "./widgets/bpmn-menu/bpmn-menu";
 // methods
 import DefaultEmptyXML from "./methods/defaultEmpty"; // 默认空白xml文件创建器
+
+// 引入json转换
+import X2JS from "x2js";
 
 // import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css';
 // import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
@@ -85,12 +89,15 @@ export default defineComponent({
 			default: xmlStr,
 		}
 	},
-	components: { ElButton, ElTooltip, ElPopper, BpmnMenu, hljsVuePlugin:hljsVuePlugin.component },
+	components: { ElButton, ElTooltip, ElPopper, BpmnMenu, ElDialog, hljsVuePlugin:hljsVuePlugin.component },
 	data() {
 		let vm = this;
 		return {
-			defaultZoom:1,
-			ModuleMenus: ModuleMenus,
+			showPreview:false,
+			previewType:'json',
+			previewCode:`{'a':12,'b':'sser'}`,
+			defaultZoom:1, // 默认缩放比例
+			ModuleMenus: ModuleMenus, // 模块菜单
 			BpmnIns: null,// bpmn建模器
 		}
 	},
@@ -181,6 +188,32 @@ export default defineComponent({
         }
       }
     },
+		// 预览流程数据
+		previewProcess(type){
+			const vm = this;
+			vm.BpmnIns.saveXML({ format: true }).then(({ xml }) => {
+				switch(type){
+					case 'json':
+						const newConvert = new X2JS();
+						vm.BpmnIns.saveXML({ format: true }).then(({ xml }) => {
+							const { definitions } = newConvert.xml2js(xml);
+							if (definitions) {
+								vm.previewCode = JSON.stringify(definitions, null, 4);
+							} else {
+								vm.previewCode = "";
+							}
+							vm.previewType = "json";
+							vm.showPreview = true;
+						});
+					break;
+					default:
+						vm.previewCode = xml;
+						vm.previewType = "xml";
+						vm.showPreview = true;
+					break;
+				}
+      });
+		},
 		// 触发流程模拟工具
 		processSimulation() {
 			const vm = this;
