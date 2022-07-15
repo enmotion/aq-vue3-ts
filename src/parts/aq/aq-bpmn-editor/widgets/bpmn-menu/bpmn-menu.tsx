@@ -33,16 +33,16 @@ export default defineComponent({
                     v-slots={{
                       default:() => (
                         <div class="xcol">
-                            {(item.children as MenuItem[]).map(item=>{
+                            {(item.children as MenuItem[]).map(it=>{
                               return (
                                 <span 
-                                  key={item.label} 
-                                  class="iconfont btn px-10 py-5 mb-5 last:mb-0 text-dark-12 text-xs rounded-sm hover:text-s-10 hover:bg-s-1 transition-all duration-300"
+                                  key={it.label}
+                                  class={[item.disabled?'cursor-not-allowed opacity-50':'btn hover:text-s-10 hover:bg-s-1 ',"px-10 py-5 mb-5 last:mb-0 text-dark-12 text-xs rounded-sm transition-all duration-300"]}
                                   onClick={(e)=>{
-                                    triggerClick(item.method);
+                                    !it.disabled && triggerClick(it.method);
                                   }}>
-                                  <span v-show={item.icon !=''&& item.icon != undefined} class={item.icon+" text-sm iconfont text-md"}></span>
-                                  <span v-show={item.icon =='' || item.icon == undefined}>{item.label}</span>
+                                  <span v-show={it.icon !=''&& it.icon != undefined} class={it.icon+" text-sm iconfont text-md"}></span>
+                                  <span v-show={it.icon =='' || it.icon == undefined}>{it.label}</span>
                                 </span>
                               )
                             })}
@@ -57,17 +57,18 @@ export default defineComponent({
                         </div>
                       )
                     }}>
-                  </ElPopover>:
+                  </ElPopover>
+                  :
                   <ElTooltip
                     effect="light"
                     trigger="hover" 
                     disabled={item.tips == '' || item.tips == undefined}
                     content={item.tips}>
                       <div
-                        class="flex items-center justify-center btn border border-dark-2 rounded-sm bg-dark-1 text-dark-12 hover:bg-s-1 hover:text-s-10 transition-all duration-500"
+                        class={[item.disabled?'cursor-not-allowed opacity-50':'btn hover:bg-s-1 hover:text-s-10',"flex items-center justify-center border border-dark-2 rounded-sm bg-dark-1 text-dark-12 transition-all duration-500"]}
                         style="margin:0px 1px 0px 1px;width:25px;height:25px"
                         onClick={(e)=>{
-                          triggerClick(item.method);
+                          !item.disabled && triggerClick(item.method);
                         }}>
                           <span v-show={item.icon !=''&& item.icon != undefined} class={item.icon+" text-sm iconfont text-md"}></span>
                           <span v-show={item.icon =='' || item.icon == undefined}>{item.label}</span>
