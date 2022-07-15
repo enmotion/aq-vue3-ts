@@ -167,6 +167,23 @@ export default defineComponent({
       this.defaultZoom = newZoom;
       this.BpmnIns.get("canvas").zoom(this.defaultZoom);
 		},
+		elementsAlign(align) {
+			const vm = this;
+      const Align = vm.BpmnIns.get("alignElements");
+      const Selection = vm.BpmnIns.get("selection");
+      const SelectedElements = Selection.get();
+      if (!SelectedElements || SelectedElements.length <= 1) {
+        vm.$message.warning("请按住 Ctrl 键选择多个元素对齐");
+        return;
+      }
+			Align.trigger(SelectedElements, align)
+      // vm.$confirm("自动对齐可能造成图形变形，是否继续？", "警告", {
+      //   confirmButtonText: "确定",
+      //   cancelButtonText: "取消",
+      //   type: "warning"
+      // }).then(() => Align.trigger(SelectedElements, align));
+    },
+		// 初始化流程模型
 		initBpmn(xmlStr) {
 			const vm = this;
 			vm.BpmnIns = new BpmnModeler({

@@ -16,12 +16,12 @@ const sysMenus:MenuItem[] = [
 ];
 const alignMenu:MenuItem[] = [
   {icon:'icon-align-t',children:[
-    {icon:'icon-align-l',method:{name:'align',params:'left'}},
-    {icon:'icon-align-r',method:{name:'align',params:'right'}},
-    {icon:'icon-align-t',method:{name:'align',params:'top'}},
-    {icon:'icon-align-b',method:{name:'align',params:'bottom'}},
-    {icon:'icon-align-h-c',method:{name:'align',params:'h'}},
-    {icon:'icon-align-v-c',method:{name:'align',params:'c'}},
+    {icon:'icon-align-l',method:{name:'elementsAlign',params:'left'}},
+    {icon:'icon-align-r',method:{name:'elementsAlign',params:'right'}},
+    {icon:'icon-align-t',method:{name:'elementsAlign',params:'top'}},
+    {icon:'icon-align-b',method:{name:'elementsAlign',params:'bottom'}},
+    {icon:'icon-align-h-c',method:{name:'elementsAlign',params:'middle'}},
+    {icon:'icon-align-v-c',method:{name:'elementsAlign',params:'center'}},
   ]},
 ];
 const zoomMenu:MenuItem[] = [
