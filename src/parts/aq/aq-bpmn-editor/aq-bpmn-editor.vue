@@ -47,10 +47,8 @@
 </template>
 
 <style>
-.bpmn-editor .hljs{
-	/* display:flex !important; */
-	/* flex-direction: column !important; */
-	/* flex-grow: 1 !important; */
+.bpmn-editor .djs-palette{
+	display: none;
 }
 </style>
 <script>
