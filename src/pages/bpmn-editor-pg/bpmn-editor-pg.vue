@@ -1,10 +1,12 @@
 <template>
   <div class="h-full w-full flex flex-col flex-grow-1">
     <div class="xrow items-center h-40 bg-white border-dark-2 border-b overflow-hidden">
-        <span class="w-80 h-40 bg-p-10 items-center justify-center flex text-sm text-white font-bold uppercase">Bpmn</span>
+        <span class="w-40 h-40 bg-p-10 items-center justify-center flex text-sm text-white font-bold uppercase">Bp</span>
     </div>
     <div class="xrow bg-dark-1 flex-grow-1">
-        <div class="w-80 bg-white border-r border-dark-2"></div>
+        <div class="w-40 bg-white border-r border-dark-2">
+            <element-menu :menu="elements"></element-menu>
+        </div>
         <aq-bpmn-editor ref="bpmnDom" :xml-str="xmlStr"></aq-bpmn-editor>
         <div class="w-200 bg-white"></div>
     </div>
@@ -12,16 +14,19 @@
 </template>
 
 <script lang="ts">
+import ElementMenu from './widgets/elementMenu.vue';
+// import { elementsMenu } from "@src/parts/aq/aq-bpmn-editor/config/controlDashBoardConfig";
 import { defineComponent } from 'vue';
 import { xmlStr } from "@src/xml/xmlStr";
-// import 'bpmn-js/dist/assets/diagram-js.css';
-// import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css'
-// import Modeler from 'bpmn-js/lib/Modeler';
+
+// console.log(elementsMenu,123)
 
 export default defineComponent({
+    components:{ElementMenu},
     data() {
         return {
             xmlStr,
+            elements:[],
             options: {
                 column:[]
             },
@@ -29,9 +34,7 @@ export default defineComponent({
         };
     },
     mounted() {
-        // var vm = this;
-        // vm.bpmnViewer = new Modeler({ container: '#canvas' });
-        // console.log(vm.bpmnViewer)
+        const vm = this;
     },
     methods: {},
     setup() {

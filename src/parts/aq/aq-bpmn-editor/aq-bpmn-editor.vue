@@ -2,15 +2,21 @@
 	<div class="containers xcol flex-grow-1 bpmn-editor">
 		<div ref="controlDashBoard" class="xrow p-5 border-b border-dark-2 bg-light-10">
 			<div class="-mx-5 xrow flex-grow-1">
-
-				<bpmn-menu v-if="ModuleMenus.sysMenus" 
-					:menu="ModuleMenus.sysMenus" 
+				<bpmn-menu v-if="ModuleMenus.elementsMenu" 
+					:menu="ModuleMenus.elementsMenu" 
 					@buttonClick="methodsDistribute($event)" 
 					class="mx-5 flex-grow-1">
 				</bpmn-menu>
+				
+				<bpmn-menu v-if="ModuleMenus.sysMenus" 
+					:menu="ModuleMenus.sysMenus" 
+					@buttonClick="methodsDistribute($event)" 
+					class="mx-5">
+				</bpmn-menu>
 
 				<bpmn-menu v-if="ModuleMenus.historyMenu" 
-					:menu="ModuleMenus.historyMenu" 
+					:menu="ModuleMenus.historyMenu"
+					:states="{canReDo,canUnDo}"
 					@buttonClick="methodsDistribute($event)" 
 					class="mx-5">
 				</bpmn-menu>
@@ -27,6 +33,7 @@
 					class="mx-5">
 				</bpmn-menu>
 
+				
 			</div>
 			<!-- 用于打开本地文件-->
       <input type="file" id="files" ref="LocalFileReader" class="hidden" accept=".xml, .bpmn, .jn-bpmn" @change="importLocalFile" />
@@ -47,18 +54,23 @@
 </template>
 
 <style>
+/* 隐藏左侧元素添加工具栏 */
 .bpmn-editor .djs-palette{
+	left:0px;
+	top:0px;
+	height:100%;
 	display: none;
 }
 </style>
 <script>
 import { defineComponent } from 'vue';
+import * as R from "ramda";
 import BpmnModeler from 'bpmn-js/lib/Modeler'; // 建模器
 import tokenSimulation from "bpmn-js-token-simulation"; // 模拟流转流程模块
 
 import 'bpmn-js/dist/assets/diagram-js.css'; // 左边工具栏以及编辑节点的样式
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css'; // 引入样式
-import ModuleMenus from "./config/controlDashBoardConfig"; // 系统菜单
+import * as ModuleMenus from "./config/controlDashBoardConfig"; // 系统菜单
 // heighlight-js
 import 'highlight.js/styles/stackoverflow-light.css';
 import 'highlight.js/lib/common';
@@ -91,6 +103,8 @@ export default defineComponent({
 	data() {
 		let vm = this;
 		return {
+			canUnDo:false,
+			canReDo:false,
 			showPreview:false,
 			previewType:'json',
 			previewCode:`{'a':12,'b':'sser'}`,
@@ -105,10 +119,10 @@ export default defineComponent({
 	},
 	methods: {
 		// 方法分发函数
-		methodsDistribute(event) {
+		methodsDistribute(payload) {
 			const vm = this;
-			if(vm[event.name]){
-				vm[event.name](event.params);
+			if(vm[payload.name]){
+				vm[payload.name](payload.event,payload.params);
 			}
 		},
 		// 打开本地文件 方法块
@@ -143,21 +157,20 @@ export default defineComponent({
      * @param {string} type
      * @param {*} name
      */
-    async downloadProcess(type, name) {
+    async downloadProcess(event,params) {
 			const vm = this;
 			// 按需要类型创建文件并下载
       try {
-        if (type === "xml" || type === "bpmn") {
+        if (params.type === "xml" || params.type === "bpmn") {
 					vm.BpmnIns.saveXML().then( res => {
-						let { href, filename } = setEncoded(type.toLowerCase(), name, res.xml);
+						let { href, filename } = setEncoded(params.type.toLowerCase(), name, res.xml);
             downloadFunc(href, filename);
 					}).catch(err=>{
 						console.error(`[Process Designer Warn ]: ${err.message || err}`);
 					});
         } else {
 					vm.BpmnIns.saveSVG().then( res => {
-						console.log(res.svg,'111111')
-						let { href, filename } = setEncoded(type.toLowerCase(), name, res.svg);
+						let { href, filename } = setEncoded(params.type.toLowerCase(), name, res.svg);
             downloadFunc(href, filename);
 					}).catch(err=>{
 						return console.error(err);
@@ -187,10 +200,10 @@ export default defineComponent({
       }
     },
 		// 预览流程数据
-		previewProcess(type){
+		previewProcess(event,params){
 			const vm = this;
 			vm.BpmnIns.saveXML({ format: true }).then(({ xml }) => {
-				switch(type){
+				switch(params){
 					case 'json':
 						const newConvert = new X2JS();
 						vm.BpmnIns.saveXML({ format: true }).then(({ xml }) => {
@@ -219,15 +232,15 @@ export default defineComponent({
       vm.BpmnIns.get("toggleMode").toggleMode();
     },
 		// 流程编辑步骤跳转
-		processEditJump(FuncName){
+		processEditJump(event,FuncName){
 			this.BpmnIns.get("commandStack")[FuncName]();
 		},
 		// 重置为空流程
-		processRestart() {
+		processRestart(event,params) {
       this.createNewDiagram(null);
     },
 		// 流程画布缩放操纵
-		processZoom(zoomStep=0.1){
+		processZoom(event,zoomStep=0.1){
 			let newZoom = Math.floor(this.defaultZoom * 100 + zoomStep * 100) / 100;
       if (newZoom < 0.2) {
         throw new Error("[Process Designer Warn ]: The zoom ratio cannot be less than 0.2");
@@ -236,7 +249,7 @@ export default defineComponent({
       this.BpmnIns.get("canvas").zoom(this.defaultZoom);
 		},
 		// 节点对齐操作
-		elementsAlign(align) {
+		elementsAlign(event,align) {
 			const vm = this;
       const Align = vm.BpmnIns.get("alignElements");
       const Selection = vm.BpmnIns.get("selection");
@@ -246,6 +259,31 @@ export default defineComponent({
         return;
       }
      	Align.trigger(SelectedElements, align);
+    },
+		// 流程面板自定义添加元素 方法
+		processCreateElement(event,params){
+			const vm = this;
+			const ElementFactory = vm.BpmnIns.get('elementFactory');
+      const create = vm.BpmnIns.get("create");
+			const options = params.options|{};
+      const shape = ElementFactory.createShape(R.mergeAll([{ type: `bpmn:${params.type}` }, options]));
+      if (R.isEmpty(options)) {
+        shape.businessObject.di.isExpanded = options.isExpanded;
+      }
+      create.start(event, shape);
+		},
+		// 启动面板工具
+		startTool(event, params) {
+			const vm = this;
+      if (params === "handTool") {
+        vm.BpmnIns.get("handTool").activateHand(event);
+      }
+      if (params === "lassoTool") {
+				vm.BpmnIns.get("lassoTool").activateSelection(event);
+      }
+      if (params === "connectTool") {
+        vm.BpmnIns.get("globalConnect").toggle(event);
+      }
     },
 		// 初始化流程模型
 		initBpmn(xmlStr) {
@@ -279,11 +317,13 @@ export default defineComponent({
       });
       // 监听图形改变返回xml
       EventBus.on("commandStack.changed", async event => {
-				console.log("commandStack.changed")
         try {
 					if(vm.ModuleMenus.historyMenu){
-						vm.ModuleMenus.historyMenu[0].disabled = !vm.BpmnIns.get("commandStack").canUndo();
-						vm.ModuleMenus.historyMenu[1].disabled = !vm.BpmnIns.get("commandStack").canRedo();
+						vm.canUnDo=!vm.BpmnIns.get("commandStack").canUndo();
+						vm.canReDo=!vm.BpmnIns.get("commandStack").canRedo();
+						vm.ModuleMenus.historyMenu[0].disabled = vm.canUnDo;
+						vm.ModuleMenus.historyMenu[1].disabled = vm.canReDo;
+						console.log(vm.ModuleMenus.historyMenu)
 					}
           let { xml } = await vm.BpmnIns.saveXML({ format: true });
           vm.$emit("commandStack-changed", event);

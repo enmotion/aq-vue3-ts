@@ -1,4 +1,5 @@
-import { defineComponent, PropType } from 'vue';
+import * as R from 'ramda';
+import { defineComponent, PropType, toRefs, reactive } from 'vue';
 import { MenuItem } from "types/project/bpmn-editor/controlDashBoradConfig";
 import { ElButton, ElTooltip, ElPopover } from "element-plus"; // 引入 element 配置
 import "./bpmn-menu.css";
@@ -10,16 +11,18 @@ export default defineComponent({
       type:Array as PropType<MenuItem[]>,
       default:()=>[] as PropType<MenuItem[]>
     },
-
   },
   setup(props,{emit}:{emit:(event: string, ...args: unknown[]) => void}) {
-    const MenuDatas:MenuItem[] = props.menu;
-    function triggerClick(payload:{name:string,params?:any}|undefined){
+    let MenuDatas:MenuItem[][] = reactive([props.menu]);
+    // function MenuDatas():MenuItem[]{
+    //   return props.menu
+    // }
+    function triggerClick(payload:{event?:Event,name?:string,params?:any}){
       emit('buttonClick',payload);
     }
     return () => (
       <div class='xrow'>
-        {MenuDatas.map((item:MenuItem) => {
+        {MenuDatas[0].map((item:MenuItem) => {
           return (
             <div key={item.label}>
               {
@@ -36,10 +39,11 @@ export default defineComponent({
                             {(item.children as MenuItem[]).map(it=>{
                               return (
                                 <span 
-                                  key={it.label}
-                                  class={[item.disabled?'cursor-not-allowed opacity-50':'btn hover:text-s-10 hover:bg-s-1 ',"px-10 py-5 mb-5 last:mb-0 text-dark-12 text-xs rounded-sm transition-all duration-300"]}
+                                  key={it.label+'-'+it.icon}
+                                  class={[item.disabled?'cursor-not-allowed opacity-50':'btn hover:text-s-10 hover:bg-s-1 ',"px-10 py-5 mb-5 last:mb-0 text-dark-24 text-xs rounded-sm transition-all duration-300"]}
                                   onClick={(e)=>{
-                                    !it.disabled && triggerClick(it.method);
+                                    let payload:{event?:Event,name?:string,params?:any} = R.mergeAll([{event:e},it.method||{}]);
+                                    !it.disabled && triggerClick(payload);
                                   }}>
                                   <span v-show={it.icon !=''&& it.icon != undefined} class={it.icon+" text-sm iconfont text-md"}></span>
                                   <span v-show={it.icon =='' || it.icon == undefined}>{it.label}</span>
@@ -57,6 +61,7 @@ export default defineComponent({
                         </div>
                       )
                     }}>
+                    
                   </ElPopover>
                   :
                   <ElTooltip
@@ -65,10 +70,11 @@ export default defineComponent({
                     disabled={item.tips == '' || item.tips == undefined}
                     content={item.tips}>
                       <div
-                        class={[item.disabled?'cursor-not-allowed opacity-50':'btn hover:bg-s-1 hover:text-s-10',"flex items-center justify-center border border-dark-2 rounded-sm bg-dark-1 text-dark-12 transition-all duration-500"]}
+                        class={[item.disabled?'cursor-not-allowed text-dark-4':'btn text-black',"flex items-center justify-center border border-dark-2 rounded-sm bg-dark-1"]}
                         style="margin:0px 1px 0px 1px;width:25px;height:25px"
                         onClick={(e)=>{
-                          !item.disabled && triggerClick(item.method);
+                          let payload:{event?:Event,name?:string,params?:any} = R.mergeAll([{event:e},item.method||{}]);
+                          !item.disabled && triggerClick(payload);
                         }}>
                           <span v-show={item.icon !=''&& item.icon != undefined} class={item.icon+" text-sm iconfont text-md"}></span>
                           <span v-show={item.icon =='' || item.icon == undefined}>{item.label}</span>
