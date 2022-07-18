@@ -1,15 +1,15 @@
 
 import { MenuItem } from 'types/project/bpmn-editor/controlDashBoradConfig'; // 引入流程菜单描述
 export const elementsMenu:MenuItem[]=[
-  {label:'打开',icon:'bpmn-icon-hand-tool',children:[
-    {icon:'bpmn-icon-hand-tool',method:{name:'startTool',params:'handTool'},disabled:false},   
-    {icon:'bpmn-icon-lasso-tool',method:{name:'startTool',params:'lassoTool'},disabled:false},
+  {label:'打开',icon:'icon-flow',children:[
+    {icon:'icon-hand',method:{name:'startTool',params:'handTool'},disabled:false},   
+    {icon:'icon-select',method:{name:'startTool',params:'lassoTool'},disabled:false},
     {icon:'bpmn-icon-connection-multi',method:{name:'startTool',params:'connectTool'},disabled:false},
     // {icon:'bpmn-icon-space-tool',method:{name:'startTool',params:'connectTool'},disabled:false},
-    {icon:'bpmn-icon-start-event-none',method:{name:'processCreateElement',params:{type:'StartEvent'}},disabled:false},
+    {icon:'icon-starEvent',method:{name:'processCreateElement',params:{type:'StartEvent'}},disabled:false},
     {icon:'bpmn-icon-intermediate-event-none',method:{name:'processCreateElement',params:{type:'IntermediateThrowEvent'}},disabled:false},
     {icon:'bpmn-icon-end-event-none',method:{name:'processCreateElement',params:{type:'EndEvent'}},disabled:false},
-    {icon:'bpmn-icon-gateway-none',method:{name:'processCreateElement',params:{type:'ExclusiveGateway'}},disabled:false},
+    {icon:'icon-rect',method:{name:'processCreateElement',params:{type:'ExclusiveGateway'}},disabled:false},
     {icon:'bpmn-icon-task',method:{name:'processCreateElement',params:{type:'Task'}},disabled:false},
     {icon:'bpmn-icon-subprocess-expanded',method:{name:'processCreateElement',params:{type:'SubProcess'}},disabled:false},
     {icon:'bpmn-icon-data-object',method:{name:'processCreateElement',params:{type:'DataObjectReference'}},disabled:false},

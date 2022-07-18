@@ -1,12 +1,12 @@
 <template>
 	<div class="containers xcol flex-grow-1 bpmn-editor">
 		<div ref="controlDashBoard" class="xrow p-5 border-b border-dark-2 bg-light-10">
-			<div class="-mx-5 xrow flex-grow-1">
-				<bpmn-menu v-if="ModuleMenus.elementsMenu" 
+			<div class="-mx-5 xrow flex-grow-1 justify-end">
+				<!-- <bpmn-menu v-if="ModuleMenus.elementsMenu" 
 					:menu="ModuleMenus.elementsMenu" 
 					@buttonClick="methodsDistribute($event)" 
 					class="mx-5 flex-grow-1">
-				</bpmn-menu>
+				</bpmn-menu> -->
 				
 				<bpmn-menu v-if="ModuleMenus.sysMenus" 
 					:menu="ModuleMenus.sysMenus" 

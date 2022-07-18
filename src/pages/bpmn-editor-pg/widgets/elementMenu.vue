@@ -2,9 +2,9 @@
   <div class="xcol p-5">
     <span v-for="(item,index) in menu" :key="index" 
       class="h-30 w-30 
-      font-bold flex items-center text-xl justify-center border border-dark-2 shadow-sm rounded last:mb-0 
-      hover:text-white cursor-pointer hover:font-bold hover:bg-p-8 hover:border-1 hover:border-p-10
-      bg-dark-2 text-black duration-300 transition-all"
+      flex items-center text-lg justify-center border border-dark-2 shadow-sm rounded last:mb-0 
+      hover:text-white cursor-pointer hover:bg-p-10 hover:border-1 hover:border-p-2
+      bg-dark-2 text-black duration-300 transition-all iconfont"
       @click="subClick($event,item.method)"
       :class="[item.icon]" style="margin-bottom:2px">
     </span>
