@@ -5,7 +5,7 @@
     </div>
     <div class="xrow bg-dark-1 flex-grow-1">
         <div class="w-40 bg-white border-r border-dark-2">
-            <element-menu :menu="elements"></element-menu>
+            <element-menu :menu="elementsMenu" :bpmn-ins="bpmnViewer" @buttonClick="processCreateElement($event)"></element-menu>
         </div>
         <aq-bpmn-editor ref="bpmnDom" :xml-str="xmlStr"></aq-bpmn-editor>
         <div class="w-200 bg-white"></div>
@@ -14,7 +14,10 @@
 </template>
 
 <script lang="ts">
+import { VueElement } from "vue";
 import ElementMenu from './widgets/elementMenu.vue';
+import { elementsMenu } from "@src/parts/aq/aq-bpmn-editor/config/controlDashBoardConfig";
+// import { MenuItem } from 'types/project/bpmn-editor/controlDashBoradConfig'; // 引入流程菜单描述
 // import { elementsMenu } from "@src/parts/aq/aq-bpmn-editor/config/controlDashBoardConfig";
 import { defineComponent } from 'vue';
 import { xmlStr } from "@src/xml/xmlStr";
@@ -26,17 +29,25 @@ export default defineComponent({
     data() {
         return {
             xmlStr,
+            elementsMenu:elementsMenu[0].children,
             elements:[],
             options: {
                 column:[]
             },
-            bpmnViewer:{},
+            bpmnViewer:{} as VueElement,
         };
     },
     mounted() {
         const vm = this;
     },
-    methods: {},
+    methods: {
+        processCreateElement(event:{event:Event,name:string,params?:any}){
+            const vm = this;
+            var dom  = vm.$refs.bpmnDom as any;
+            console.log(event);
+            dom.methodsDistribute(event);
+        }
+    },
     setup() {
     },
 })

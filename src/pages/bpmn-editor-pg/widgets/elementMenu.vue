@@ -1,3 +1,41 @@
 <template>
-  <div>daaa</div>
+  <div class="xcol p-5">
+    <span v-for="(item,index) in menu" :key="index" 
+      class="h-30 w-30 
+      font-bold flex items-center text-xl justify-center border border-dark-2 shadow-sm rounded last:mb-0 
+      hover:text-white cursor-pointer hover:font-bold hover:bg-p-8 hover:border-1 hover:border-p-10
+      bg-dark-2 text-black duration-300 transition-all"
+      @click="subClick($event,item.method)"
+      :class="[item.icon]" style="margin-bottom:2px">
+    </span>
+  </div>
 </template>
+
+<script lang="ts">
+import * as R from "ramda";
+import { PropType, VueElement } from "vue";
+import { elementsMenu } from "@src/parts/aq/aq-bpmn-editor/config/controlDashBoardConfig";
+import { MenuItem } from 'types/project/bpmn-editor/controlDashBoradConfig'; // 引入流程菜单描述
+import { defineComponent } from 'vue';
+export default defineComponent({
+  props:{
+    menu:{
+      type:Array as PropType<MenuItem[]>,
+      default:()=> elementsMenu[0].children
+    },
+    BpmnIns:{
+      type:Object as PropType<VueElement>,
+      default:()=>({} as PropType<VueElement>)
+    }
+  },
+  setup() {
+    
+  },
+  methods:{
+    subClick($event:Event,method?:{name:string,params?:any}){
+      const vm = this;
+      vm.$emit('buttonClick',R.mergeAll([{event:$event},method||{}]));
+    }
+  }
+})
+</script>

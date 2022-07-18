@@ -16,7 +16,7 @@
 
 				<bpmn-menu v-if="ModuleMenus.historyMenu" 
 					:menu="ModuleMenus.historyMenu"
-					:states="{canReDo,canUnDo}"
+					:disabled="{canReDo,canUnDo}"
 					@buttonClick="methodsDistribute($event)" 
 					class="mx-5">
 				</bpmn-menu>
