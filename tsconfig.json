@@ -20,7 +20,7 @@
       "@src/*": ["src/*"], // 两个都需要....
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue","types/**/*.d.ts", "src/parts/aq/aq-bpmn-editor/widgets/heighlight-js/lib"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "types/**/*.d.ts" , "src/parts/aq/aq-bpmn-editor/widgets/heighlight-js/lib"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
 // {

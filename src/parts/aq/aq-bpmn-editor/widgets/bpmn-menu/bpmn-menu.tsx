@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import { defineComponent, PropType, toRefs, reactive, watch ,onUpdated } from 'vue';
-import { MenuItem } from "types/project/bpmn-editor/controlDashBoradConfig";
+import { MenuItem } from 'types/bpmn-editor/controlDashBoradConfig'; // 引入流程菜单描述
 import { ElButton, ElTooltip, ElPopover } from "element-plus"; // 引入 element 配置
 import "./bpmn-menu.css";
 
@@ -11,23 +11,9 @@ export default defineComponent({
       type:Array as PropType<MenuItem[]>,
       default:()=>[] as PropType<MenuItem[]>
     },
-    // status:{
-    //   type:Object as PropType<{canUnDo?:Boolean,canReDo?:Boolean}>,
-    //   default:()=>{},
-    // }
   },
   setup(props,{emit}:{emit:(event: string, ...args: unknown[]) => void}) {
     let MenuDatas:MenuItem[][] = reactive([props.menu]);
-    watch(
-      ()=>props.menu,
-      (n,o)=>{
-        console.log(n,o,'watch')
-      },{
-        deep:true,
-        immediate:true,
-        flush:'sync',
-      }
-    )
     onUpdated(function(){
       console.log(props,'updated')
     })

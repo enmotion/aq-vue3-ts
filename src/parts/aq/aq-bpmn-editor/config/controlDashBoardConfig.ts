@@ -1,5 +1,5 @@
 
-import { MenuItem } from 'types/project/bpmn-editor/controlDashBoradConfig'; // 引入流程菜单描述
+import { MenuItem } from 'types/bpmn-editor/controlDashBoradConfig'; // 引入流程菜单描述
 export const elementsMenu:MenuItem[]=[
   {label:'打开',icon:'icon-flow',children:[
     {icon:'icon-hand',method:{name:'startTool',params:'handTool'},disabled:false},   
@@ -29,7 +29,7 @@ export const sysMenus:MenuItem[] = [
     {label:'预览xml',method:{name:'previewProcess',params:'xml'},disabled:false},
     {label:'预览JSON',method:{name:'previewProcess',params:'json'},disabled:false},
   ],disabled:false},
-  {label:'模拟',tips:'模拟流程',icon:'icon-sumulate',method:{name:'processSimulation'},disabled:false},
+  // {label:'模拟',tips:'模拟流程',icon:'icon-sumulate',method:{name:'processSimulation'},disabled:false},
 ];
 export const alignMenu:MenuItem[] = [
   {icon:'icon-align-t',children:[

@@ -2,37 +2,37 @@
 	<div class="containers xcol flex-grow-1 bpmn-editor">
 		<div ref="controlDashBoard" class="xrow p-5 border-b border-dark-2 bg-light-10">
 			<div class="-mx-5 xrow flex-grow-1 justify-end">
-				<bpmn-menu v-if="ModuleMenus.elementsMenu" 
-					:menu="ModuleMenus.elementsMenu" 
+
+				<bpmn-menu v-if="elementsMenu" 
+					:menu="elementsMenu" 
 					@buttonClick="methodsDistribute($event)" 
 					class="mx-5 flex-grow-1">
 				</bpmn-menu>
 				
-				<bpmn-menu v-if="ModuleMenus.sysMenus" 
-					:menu="ModuleMenus.sysMenus" 
+				<bpmn-menu v-if="sysMenus" 
+					:menu="sysMenus" 
 					@buttonClick="methodsDistribute($event)" 
 					class="mx-5">
 				</bpmn-menu>
 
-				<bpmn-menu v-if="ModuleMenus.historyMenu" 
-					:menu="ModuleMenus.historyMenu"
+				<bpmn-menu v-if="historyMenu" 
+					:menu="historyMenu"
 					@buttonClick="methodsDistribute($event)" 
 					class="mx-5">
 				</bpmn-menu>
 
-				<bpmn-menu v-if="ModuleMenus.alignMenu" 
-					:menu="ModuleMenus.alignMenu" 
+				<bpmn-menu v-if="alignMenu" 
+					:menu="alignMenu" 
 					@buttonClick="methodsDistribute($event)" 
 					class="mx-5">
 				</bpmn-menu>
 
-				<bpmn-menu v-if="ModuleMenus.zoomMenu" 
-					:menu="ModuleMenus.zoomMenu" 
+				<bpmn-menu v-if="zoomMenu" 
+					:menu="zoomMenu" 
 					@buttonClick="methodsDistribute($event)" 
 					class="mx-5">
 				</bpmn-menu>
 
-				
 			</div>
 			<!-- 用于打开本地文件-->
       <input type="file" id="files" ref="LocalFileReader" class="hidden" accept=".xml, .bpmn, .jn-bpmn" @change="importLocalFile" />
@@ -43,11 +43,6 @@
 			<div class="flex flex-col flex-grow-1">
 				<div class="canvas flex flex-col flex-grow-12" ref="bpmnCanvas"></div>
 			</div>
-		</div>
-		<div class="xcol h-200">
-			{{defaultZoom+'ss'}}aaaa
-			<!-- {{ModuleMenus.historyMenu}}<br/>
-			{{JSON.stringify(historyStatus)}} -->
 		</div>
 		<el-dialog v-model="showPreview" width="90%">
 			<div class="h-600 overflow-y-auto">
@@ -65,9 +60,12 @@
 	height:100%;
 	display: none;
 }
+.bpmn-editor .bjs-powered-by{
+	display: none !important;
+}
 </style>
 <script>
-import { defineComponent, ref, reactive, onMounted ,getCurrentInstance } from 'vue';
+import { defineComponent, ref, reactive, onMounted, watch, getCurrentInstance } from 'vue';
 import * as R from "ramda";
 import BpmnModeler from 'bpmn-js/lib/Modeler'; // 建模器
 import tokenSimulation from "bpmn-js-token-simulation"; // 模拟流转流程模块
@@ -93,15 +91,31 @@ import X2JS from "x2js";
 
 export default defineComponent({
 	name: 'bpmn-editor',
-	props: {
+	props: { // vue3 中 props 键名首字母不可大写，不可大写，不可大写！！！
 		xmlContent: {
-			type: String,
-			default: xmlStr,
+			type:[String,null],
+			default:null,
 		},
-		ModuleMenusData:{
-			type:Object,
-			default:() => ModuleMenusDefault
-		}
+		elementsMenu:{
+			type:[Array,Boolean],
+			default:() => ModuleMenusDefault.elementsMenu
+		},
+		sysMenus:{
+			type:[Array,Boolean],
+			default:() => ModuleMenusDefault.sysMenus
+		},
+		alignMenu:{
+			type:[Array,Boolean],
+			default:() => ModuleMenusDefault.alignMenu
+		},
+		zoomMenu:{
+			type:[Array,Boolean],
+			default:() => ModuleMenusDefault.zoomMenu
+		},
+		historyMenu:{
+			type:[Array,Boolean],
+			default:() => ModuleMenusDefault.historyMenu
+		},
 	},
 	components: { ElButton, ElTooltip, ElPopper, BpmnMenu, ElDialog, hljsVuePlugin:hljsVuePlugin.component },
 	setup( props, context){
@@ -113,15 +127,12 @@ export default defineComponent({
 		let previewCode = ref(``); // 默认代码
 		let previewType = ref(``); // 预览模式
 		let defaultZoom = ref(1);
-		let ModuleMenus = reactive(props.ModuleMenusData);
+		let historyMenu = reactive(R.clone(props.historyMenu));
 		let BpmnIns = reactive({});
-		const historyStatus = reactive({
-			canUndo:false,
-			canReDo:false,
-		});
 		onMounted(function(){
 			initBpmn(props.xmlContent);
 		})
+		// methods ---------------------------------------------------------------
 		function methodsDistribute(payload){
 			const vm = this ;
 			if(vm[payload.name]){
@@ -183,7 +194,7 @@ export default defineComponent({
       }
 			// 文件编码操纵
 			function setEncoded(type, data, filename = "diagram"){
-				console.log(filename)
+				// console.log(filename)
 				const encodedData = encodeURIComponent(data);
 				return {
 					filename: `${filename}.${type}`,
@@ -229,9 +240,9 @@ export default defineComponent({
 		}
 		// 触发流程模拟工具
 		function processSimulation() {
-			const vm = this;
-      vm.simulationStatus = !vm.simulationStatus;
-      vm.BpmnIns.get("toggleMode").toggleMode();
+			// const vm = this;
+      // vm.simulationStatus = !vm.simulationStatus;
+      BpmnIns.get("toggleMode").toggleMode();
     }
 		// 流程编辑步骤跳转
 		function processEditJump(event,FuncName){
@@ -256,14 +267,15 @@ export default defineComponent({
       const Selection = BpmnIns.get("selection");
       const SelectedElements = Selection.get();
       if (!SelectedElements || SelectedElements.length <= 1) {
-        // vm.$message.warning("请按住 Ctrl 键选择多个元素对齐");
+				console.log(getCurrentInstance());
+        $message.warning("请按住 Ctrl 键选择多个元素对齐");
         return;
       }
      	Align.trigger(SelectedElements, align);
     }
 		// 流程面板自定义添加元素 方法
 		function processCreateElement(event,params){
-			console.log(event,params);
+			// console.log(event,params);
 			const ElementFactory = BpmnIns.get('elementFactory');
       const create = BpmnIns.get("create");
 			const options = params.options|{};
@@ -275,7 +287,7 @@ export default defineComponent({
 		}
 		// 启动面板工具
 		function startTool(event, params) {
-			console.log(event, params)
+			// console.log(event, params)
       if (params === "handTool") {
         BpmnIns.get("handTool").activateHand(event);
       }
@@ -296,12 +308,17 @@ export default defineComponent({
 					// customModule
 				]
 			}); // 建模
-			BpmnIns.importXML(xmlStr).then(res => {
-				addEventBusListener(); // 监听element并绑定事件
-				addModelerListener(); // 监听modeler并绑定事件
-			}).catch(err => {
-				console.error(err,'xml内容加载失败！');
-			})
+			if(R.isEmpty(xmlStr)||R.isNil(xmlStr)){
+				// console.log('没有外部的构建数据，直接创建新的流程')
+				processRestart();
+			}else{
+				BpmnIns.importXML(xmlStr).then(res => {
+					addEventBusListener(); // 监听element并绑定事件
+					addModelerListener(); // 监听modeler并绑定事件
+				}).catch(err => {
+					console.error(err,'xml内容加载失败！');
+				})
+			}
 		}
 		// 监听 commandStack 事件
 		function addEventBusListener() {
@@ -311,18 +328,18 @@ export default defineComponent({
         EventBus.on(event, function(eventObj) {
           let eventName = event.replace(/\./g, "-");
           let element = eventObj ? eventObj.element : null;
-					console.log(eventName, element, eventObj);
+					// console.log(eventName, element, eventObj);
           context.emit(eventName, {element, eventObj});
         });
       });
       // 监听图形改变返回xml
       EventBus.on("commandStack.changed", async event => {
         try {
-					if(ModuleMenus.historyMenu){
+					if(historyMenu){
 						let canUnDo=!BpmnIns.get("commandStack").canUndo();
 						let canReDo=!BpmnIns.get("commandStack").canRedo();
-						ModuleMenus.historyMenu[0].disabled = canUnDo;
-						ModuleMenus.historyMenu[1].disabled = canReDo;
+						historyMenu[0].disabled = canUnDo;
+						historyMenu[1].disabled = canReDo;
 					}
           let { xml } = await BpmnIns.saveXML({ format: true });
           context.emit("commandStack-changed", event);
@@ -337,7 +354,7 @@ export default defineComponent({
         context.emit("canvas-viewbox-changed", { viewbox });
         const { scale } = viewbox;
         defaultZoom.value = Math.floor(scale * 100) / 100;
-				console.log(defaultZoom.value,'3333')
+				// console.log(defaultZoom.value,'3333')
       });
     }
 		// 监听modeler并绑定事件
@@ -361,12 +378,11 @@ export default defineComponent({
 			LocalFileReader,
 			downloadLink,
 
-			historyStatus,
 			showPreview,
 			previewCode,
 			previewType,
 			defaultZoom,
-			ModuleMenus,
+			historyMenu,
 			BpmnIns,
 
 			initBpmn,
@@ -381,296 +397,10 @@ export default defineComponent({
 			previewProcess,
 			processCreateElement,
 			processRestart,
+			processSimulation,
 			processEditJump
 		}
 	},
-	// data() {
-	// 	let vm = this;
-	// 	return {
-	// 		canUnDo:false,
-	// 		canReDo:false,
-	// 		showPreview:false,
-	// 		previewType:'json',
-	// 		previewCode:`{'a':12,'b':'sser'}`,
-	// 		defaultZoom:1, // 默认缩放比例
-	// 		ModuleMenus: ModuleMenus, // 模块菜单
-	// 		BpmnIns: null,// bpmn建模器
-	// 	}
-	// },
-	/*
-	mounted() {// 生命周期 - 载入后, Vue 实例挂载到实际的 DOM 操作完成，一般在该过程进行 Ajax 交互
-		let vm = this;
-		vm.initBpmn(vm.xmlContent);
-	},
-	methods: {
-		// 方法分发函数
-		methodsDistribute(payload) {
-			const vm = this;
-			if(vm[payload.name]){
-				vm[payload.name](payload.event,payload.params);
-			}
-		},
-		// 打开本地文件 方法块
-		open(){this.$refs.LocalFileReader.click()},
-		importLocalFile(){
-			const vm = this;
-      const file = vm.$refs.LocalFileReader.files[0];
-      const reader = new FileReader();
-      reader.readAsText(file);
-      reader.onload = function() {
-        let loadedXml = this.result;
-        vm.createNewDiagram(loadedXml);
-      };
-		},
-		async createNewDiagram(xml) {
-			const vm = this;
-      // 将字符串转换成图显示出来
-      let newId = this.processId || `Process_${new Date().getTime()}`;
-      let newName = this.processName || `业务流程_${new Date().getTime()}`;
-      let xmlString = xml || DefaultEmptyXML(newId, newName, this.prefix);
-      try {
-        let { warnings } = await vm.BpmnIns.importXML(xmlString);
-        if (warnings && warnings.length) {
-          warnings.forEach(warn => console.warn(warn));
-        }
-      } catch (e) {
-        console.error(`[Process Designer Warn]: ${e?.message || e}`);
-      }
-    },
-		// 下载流程图到本地 方法块
-    /**
-     * @param {string} type
-     * @param {*} name
-     */
-		/*
-    async downloadProcess(event,params) {
-			const vm = this;
-			// 按需要类型创建文件并下载
-      try {
-        if (params.type === "xml" || params.type === "bpmn") {
-					vm.BpmnIns.saveXML().then( res => {
-						let { href, filename } = setEncoded(params.type.toLowerCase(), name, res.xml);
-            downloadFunc(href, filename);
-					}).catch(err=>{
-						console.error(`[Process Designer Warn ]: ${err.message || err}`);
-					});
-        } else {
-					vm.BpmnIns.saveSVG().then( res => {
-						let { href, filename } = setEncoded(params.type.toLowerCase(), name, res.svg);
-            downloadFunc(href, filename);
-					}).catch(err=>{
-						return console.error(err);
-					});
-        }
-      } catch (e) {
-        console.error(`[Process Designer Warn ]: ${e.message || e}`);
-      }
-			// 文件编码操纵
-			function setEncoded(type, filename = "diagram", data){
-				const encodedData = encodeURIComponent(data);
-				return {
-					filename: `${filename}.${type}`,
-					href: `data:application/${type === "svg" ? "text/xml" : "bpmn20-xml"};charset=UTF-8,${encodedData}`,
-					data: data
-				};
-			}
-      // 文件下载方法
-      function downloadFunc(href, filename) {
-        if (href && filename) {
-					let alink = vm.$refs.downloadLink;
-					alink.download = filename;
-					alink.href = href; //  URL对象
-          alink.click(); // 模拟点击
-					URL.revokeObjectURL(alink.href);
-        }
-      }
-    },
-		// 预览流程数据
-		previewProcess(event,params){
-			const vm = this;
-			vm.BpmnIns.saveXML({ format: true }).then(({ xml }) => {
-				switch(params){
-					case 'json':
-						const newConvert = new X2JS();
-						vm.BpmnIns.saveXML({ format: true }).then(({ xml }) => {
-							const { definitions } = newConvert.xml2js(xml);
-							if (definitions) {
-								vm.previewCode = JSON.stringify(definitions, null, 4);
-							} else {
-								vm.previewCode = "";
-							}
-							vm.previewType = "json";
-							vm.showPreview = true;
-						});
-					break;
-					default:
-						vm.previewCode = xml;
-						vm.previewType = "xml";
-						vm.showPreview = true;
-					break;
-				}
-      });
-		},
-		// 触发流程模拟工具
-		processSimulation() {
-			const vm = this;
-      vm.simulationStatus = !vm.simulationStatus;
-      vm.BpmnIns.get("toggleMode").toggleMode();
-    },
-		// 流程编辑步骤跳转
-		processEditJump(event,FuncName){
-			this.BpmnIns.get("commandStack")[FuncName]();
-		},
-		// 重置为空流程
-		processRestart(event,params) {
-      this.createNewDiagram(null);
-    },
-		// 流程画布缩放操纵
-		processZoom(event,zoomStep=0.1){
-			let newZoom = Math.floor(this.defaultZoom * 100 + zoomStep * 100) / 100;
-      if (newZoom < 0.2) {
-        throw new Error("[Process Designer Warn ]: The zoom ratio cannot be less than 0.2");
-      }
-      this.defaultZoom = newZoom;
-      this.BpmnIns.get("canvas").zoom(this.defaultZoom);
-		},
-		// 节点对齐操作
-		elementsAlign(event,align) {
-			const vm = this;
-      const Align = vm.BpmnIns.get("alignElements");
-      const Selection = vm.BpmnIns.get("selection");
-      const SelectedElements = Selection.get();
-      if (!SelectedElements || SelectedElements.length <= 1) {
-        vm.$message.warning("请按住 Ctrl 键选择多个元素对齐");
-        return;
-      }
-     	Align.trigger(SelectedElements, align);
-    },
-		// 流程面板自定义添加元素 方法
-		processCreateElement(event,params){
-			const vm = this;
-			const ElementFactory = vm.BpmnIns.get('elementFactory');
-      const create = vm.BpmnIns.get("create");
-			const options = params.options|{};
-      const shape = ElementFactory.createShape(R.mergeAll([{ type: `bpmn:${params.type}` }, options]));
-      if (R.isEmpty(options)) {
-        shape.businessObject.di.isExpanded = options.isExpanded;
-      }
-      create.start(event, shape);
-		},
-		// 启动面板工具
-		startTool(event, params) {
-			const vm = this;
-      if (params === "handTool") {
-        vm.BpmnIns.get("handTool").activateHand(event);
-      }
-      if (params === "lassoTool") {
-				vm.BpmnIns.get("lassoTool").activateSelection(event);
-      }
-      if (params === "connectTool") {
-        vm.BpmnIns.get("globalConnect").toggle(event);
-      }
-    },
-		// 初始化流程模型
-		initBpmn(xmlStr) {
-			const vm = this;
-			vm.BpmnIns = new BpmnModeler({
-				container: vm.$refs.canvas,
-				additionalModules: [
-					tokenSimulation
-					// 自定义的节点
-					// customModule
-				]
-			}); // 建模
-			vm.BpmnIns.importXML(xmlStr).then(res => {
-				vm.addModelerListener(); // 监听modeler并绑定事件
-				vm.addEventBusListener(); // 监听element并绑定事件
-			}).catch(err => {
-
-			})
-		},
-		// 监听 commandStack 事件
-		addEventBusListener() {
-      const EventBus = this.BpmnIns.get("eventBus");
-      const vm = this;
-      // 注册需要的监听事件, 将. 替换为 - , 避免解析异常
-      ['element.click', 'element.changed'].forEach(event => {
-        EventBus.on(event, function(eventObj) {
-          let eventName = event.replace(/\./g, "-");
-          let element = eventObj ? eventObj.element : null;
-          vm.$emit(eventName, element, eventObj);
-        });
-      });
-      // 监听图形改变返回xml
-      EventBus.on("commandStack.changed", async event => {
-        try {
-					if(vm.ModuleMenus.historyMenu){
-						vm.canUnDo=!vm.BpmnIns.get("commandStack").canUndo();
-						vm.canReDo=!vm.BpmnIns.get("commandStack").canRedo();
-						var m = R.clone(vm.ModuleMenus.historyMenu[0]);
-						m.disabled = vm.canUnDo;
-						vm.ModuleMenus.historyMenu[0] = m;
-						console.log(vm.ModuleMenus.historyMenu[0])
-						vm.ModuleMenus.historyMenu[1].disabled = vm.canReDo;
-						console.log(vm.ModuleMenus.historyMenu)
-					}
-          let { xml } = await vm.BpmnIns.saveXML({ format: true });
-          vm.$emit("commandStack-changed", event);
-          vm.$emit("input", xml);
-          vm.$emit("change", xml);
-        } catch (e) {
-          console.error(`[Process Designer Warn]: ${e.message || e}`);
-        }
-      });
-      // 监听视图缩放变化
-      vm.bpmnModeler.on("canvas.viewbox.changed", ({ viewbox }) => {
-        vm.$emit("canvas-viewbox-changed", { viewbox });
-        const { scale } = viewbox;
-        vm.defaultZoom = Math.floor(scale * 100) / 100;
-      });
-    },
-		// 监听modeler并绑定事件
-		addModelerListener() {
-			var vm = this;
-			const events = ['shape.added', 'shape.move.end', 'shape.removed', 'connect.end', 'connect.move'];
-			events.forEach(function (event) {
-				vm.BpmnIns.on(event, (e) => {
-					var elementRegistry = vm.BpmnIns.get('elementRegistry');
-					var shape = e.element ? elementRegistry.get(e.element.id) : e.shape
-					console.log(event, e, shape, 'shape addModelerListener')
-				})
-			})
-		},
-		// // 监听element并绑定事件
-		// addEventBusListener() {
-		// 	let vm = this;
-		// 	const eventBus = vm.BpmnIns.get('eventBus') // 需要使用eventBus
-		// 	const eventTypes = ['element.click', 'element.changed'] // 需要监听的事件集合
-		// 	eventTypes.forEach(eventType => {
-		// 		eventBus.on(eventType, function (e) {
-		// 			// console.log(eventType,e,'element addEventBusListener');
-		// 			if (eventType == 'element.click') {
-		// 				var elementRegistry = vm.BpmnIns.get('elementRegistry');
-		// 				var modeling = vm.BpmnIns.get('modeling');
-		// 				// console.log(e.element.id,e.element.type,'is clicked');
-		// 				// console.log(elementRegistry.get(e.element.id).businessObject);
-		// 				console.log(vm.getBusinessObject(e.element.id));
-		// 				if (e.element.type == 'bpmn:Task') { // 改值的方法
-		// 					var shape = e.element ? elementRegistry.get(e.element.id) : e.shape
-		// 					modeling.updateProperties(shape, {
-		// 						name: '我是修改后的Task名称',
-		// 						isInterrupting: false,
-		// 						customProps: '乱'
-		// 					})
-		// 				}
-		// 			}
-		// 		})
-		// 	})
-		// },
-		// 获取流程节点业务对象;
-		getBusinessObject(id) {return this.BpmnIns.get('elementRegistry').get(id).businessObject;},
-	}
-	*/
 })
 </script>
 

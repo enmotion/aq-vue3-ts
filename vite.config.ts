@@ -19,7 +19,7 @@ export default(({ mode } : { mode : any })=>{
         // 由于 Vite 本身已经用了 @ 去做模块导入工作，如果用 @ 别名当绝对路径去使用会有问题,通过多加一个 r 来规避 @ 冲突的问题。
         // 同时注意需要修改 tsconfig.json 内的配置内容
         '@src': resolve(__dirname, 'src'),
-        '@types': resolve(__dirname, 'types')
+        '@typ': resolve(__dirname, 'types')
       }
     },
     logLevel: 'info',// 'info' | 'warn' | 'error' | 'silent' 调整控制台输出的级别，默认为 'info'

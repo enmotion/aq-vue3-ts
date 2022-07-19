@@ -7,7 +7,7 @@
         <div class="w-40 bg-white border-r border-dark-2">
             <element-menu :menu="elementsMenu" :bpmn-ins="bpmnViewer" @buttonClick="processCreateElement($event)"></element-menu>
         </div>
-        <aq-bpmn-editor ref="bpmnDom" :xml-str="xmlStr" @shapeRemoved ="trackEvent($event)"></aq-bpmn-editor>
+        <aq-bpmn-editor ref="bpmnDom" :xml-content="xmlStr" :elements-menu="false" @shape-removed = "trackEvent($event)"></aq-bpmn-editor>
         <div class="w-200 bg-white"></div>
     </div>
   </div>
