@@ -12,8 +12,6 @@
     "@highlightjs/vue-plugin": "^2.1.0",
     "@smallwei/avue": "^3.0.17",
     "@sscfaith/avue-form-design": "^3.0.0-beta.5",
-    "@types/lodash": "^4.14.182",
-    "@types/ramda": "^0.28.14",
     "bowser": "^2.11.0",
     "bpmn-js-sketchy": "^0.5.3",
     "bpmn-js-task-resize": "^1.2.0",
@@ -29,12 +27,13 @@
     "vue": "^3.2.25",
     "vue-router": "^4.0.16",
     "vuex": "^4.0.2",
-    "x2js": "^3.4.2",
-    "xml-js": "^1.6.11"
+    "x2js": "^3.4.2"
   },
   "devDependencies": {
     "@types/highlight.js": "^10.1.0",
+    "@types/lodash": "^4.14.182",
     "@types/node": "^18.0.0",
+    "@types/ramda": "^0.28.15",
     "@vitejs/plugin-vue": "^2.3.3",
     "@vitejs/plugin-vue-jsx": "^1.3.10",
     "autoprefixer": "^10.4.7",

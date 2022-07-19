@@ -1,5 +1,5 @@
 import * as R from 'ramda';
-import { defineComponent, PropType, toRefs, reactive } from 'vue';
+import { defineComponent, PropType, toRefs, reactive, watch ,onUpdated } from 'vue';
 import { MenuItem } from "types/project/bpmn-editor/controlDashBoradConfig";
 import { ElButton, ElTooltip, ElPopover } from "element-plus"; // 引入 element 配置
 import "./bpmn-menu.css";
@@ -11,17 +11,32 @@ export default defineComponent({
       type:Array as PropType<MenuItem[]>,
       default:()=>[] as PropType<MenuItem[]>
     },
+    // status:{
+    //   type:Object as PropType<{canUnDo?:Boolean,canReDo?:Boolean}>,
+    //   default:()=>{},
+    // }
   },
   setup(props,{emit}:{emit:(event: string, ...args: unknown[]) => void}) {
     let MenuDatas:MenuItem[][] = reactive([props.menu]);
-    // function MenuDatas():MenuItem[]{
-    //   return props.menu
-    // }
+    watch(
+      ()=>props.menu,
+      (n,o)=>{
+        console.log(n,o,'watch')
+      },{
+        deep:true,
+        immediate:true,
+        flush:'sync',
+      }
+    )
+    onUpdated(function(){
+      console.log(props,'updated')
+    })
     function triggerClick(payload:{event?:Event,name?:string,params?:any}){
       emit('buttonClick',payload);
     }
     return () => (
       <div class='xrow'>
+        {/* <div class=" absolute z-10 left-0 top-0 text-left">{JSON.stringify(props.menu)}</div> */}
         {MenuDatas[0].map((item:MenuItem) => {
           return (
             <div key={item.label}>

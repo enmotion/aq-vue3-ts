@@ -7,7 +7,7 @@
         <div class="w-40 bg-white border-r border-dark-2">
             <element-menu :menu="elementsMenu" :bpmn-ins="bpmnViewer" @buttonClick="processCreateElement($event)"></element-menu>
         </div>
-        <aq-bpmn-editor ref="bpmnDom" :xml-str="xmlStr"></aq-bpmn-editor>
+        <aq-bpmn-editor ref="bpmnDom" :xml-str="xmlStr" @shapeRemoved ="trackEvent($event)"></aq-bpmn-editor>
         <div class="w-200 bg-white"></div>
     </div>
   </div>
@@ -41,10 +41,12 @@ export default defineComponent({
         const vm = this;
     },
     methods: {
+        trackEvent($event:any){
+            console.log($event,'trackEvent');
+        },
         processCreateElement(event:{event:Event,name:string,params?:any}){
             const vm = this;
             var dom  = vm.$refs.bpmnDom as any;
-            console.log(event);
             dom.methodsDistribute(event);
         }
     },
