@@ -2,7 +2,7 @@
 // const plugin = require('tailwindcss/plugin')
 const colors = require('tailwindcss/colors');
 const tailWindUtils = require("./tailwind.lib/tailwind.util");
-console.log(process.env.VITE_APP_THEME)
+
 module.exports = {
   important: true,
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
