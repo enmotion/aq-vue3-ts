@@ -50,9 +50,10 @@ export default defineComponent({
     methods: {
         trackEvent($event:any){
             const vm = this;
-            console.log($event);
-            vm.selectItem = (JSON.stringify($event)).replaceAll(`\"`,`'`);
-            // console.log($event.shape.type,'trackEvent');
+            if($event.element.type != 'bpmn:Process'){
+                vm.selectItem = (JSON.stringify($event)).replaceAll(`\"`,`'`);
+                console.log($event,'trackEvent');
+            }
         },
         processCreateElement(event:{event:Event,name:string,params?:any}){
             const vm = this;
