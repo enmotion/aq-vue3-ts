@@ -35,13 +35,13 @@
 
 			</div>
 			<!-- 用于打开本地文件-->
-      <input type="file" id="files" ref="LocalFileReader" class="hidden" accept=".xml, .bpmn, .jn-bpmn" @change="importLocalFile" />
+      <input type="file" id="files" ref="LocalFileReaderDom" class="hidden" accept=".xml, .bpmn, .jn-bpmn" @change="importLocalFile" />
 			<!-- 用于下载触发标签 -->
-			<a ref="downloadLink" class="hidden"></a>
+			<a ref="downloadLinkDom" class="hidden"></a>
 		</div>
 		<div class="flex flex-row flex-grow-1">
 			<div class="flex flex-col flex-grow-1">
-				<div class="canvas flex flex-col flex-grow-12" ref="bpmnCanvas"></div>
+				<div class="canvas flex flex-col flex-grow-12" ref="bpmnCanvasDom"></div>
 			</div>
 		</div>
 		<el-dialog v-model="showPreview" width="90%">
@@ -69,6 +69,9 @@ import { defineComponent, ref, reactive, onMounted, watch, getCurrentInstance } 
 import * as R from "ramda";
 import BpmnModeler from 'bpmn-js/lib/Modeler'; // 建模器
 import tokenSimulation from "bpmn-js-token-simulation"; // 模拟流转流程模块
+
+import customTranslate from "./translate/customTranslate";
+import translationsCN from "./translate/zh";
 
 import 'bpmn-js/dist/assets/diagram-js.css'; // 左边工具栏以及编辑节点的样式
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css'; // 引入样式
@@ -119,9 +122,9 @@ export default defineComponent({
 	},
 	components: { ElButton, ElTooltip, ElPopper, BpmnMenu, ElDialog, hljsVuePlugin:hljsVuePlugin.component },
 	setup( props, context){
-		const bpmnCanvas = ref(null); // 流程画布dom对象
-		const LocalFileReader = ref(null); // 流程画布dom对象
-		const downloadLink = ref(null); // 流程画布dom对象
+		const bpmnCanvasDom = ref(null); // 流程画布dom对象
+		const LocalFileReaderDom = ref(null); // 流程画布dom对象
+		const downloadLinkDom = ref(null); // 流程画布dom对象
 
 		let showPreview = ref(false); // xml json 预览显示
 		let previewCode = ref(``); // 默认代码
@@ -129,6 +132,7 @@ export default defineComponent({
 		let defaultZoom = ref(1);
 		let historyMenu = reactive(R.clone(props.historyMenu));
 		let BpmnIns = reactive({});
+		
 		onMounted(function(){
 			initBpmn(props.xmlContent);
 		})
@@ -141,10 +145,10 @@ export default defineComponent({
 		};
 		// 打开本地文件 方法块
 		function open(){
-			LocalFileReader.value.click()
+			LocalFileReaderDom.value.click()
 		}
 		function importLocalFile(){
-      const file = LocalFileReader.value.files[0];
+      const file = LocalFileReaderDom.value.files[0];
       const reader = new FileReader();
       reader.readAsText(file);
       reader.onload = function() {
@@ -161,7 +165,10 @@ export default defineComponent({
         let { warnings } = await BpmnIns.importXML(xmlString);
         if (warnings && warnings.length) {
           warnings.forEach(warn => console.warn(warn));
+					return;
         }
+				addEventBusListener(); // 重新绑定监听element并绑定事件
+				addModelerListener(); // 监听modeler并绑定事件
       } catch (e) {
         console.error(`[Process Designer Warn]: ${e?.message || e}`);
       }
@@ -205,7 +212,7 @@ export default defineComponent({
       // 文件下载方法
       function downloadFunc(href, filename) {
         if (href && filename) {
-					let alink = downloadLink.value;
+					let alink = downloadLinkDom.value;
 					alink.download = filename;
 					alink.href = href; //  URL对象
           alink.click(); // 模拟点击
@@ -268,7 +275,7 @@ export default defineComponent({
       const SelectedElements = Selection.get();
       if (!SelectedElements || SelectedElements.length <= 1) {
 				console.log(getCurrentInstance());
-        $message.warning("请按住 Ctrl 键选择多个元素对齐");
+        //$message.warning("请按住 Ctrl 键选择多个元素对齐");
         return;
       }
      	Align.trigger(SelectedElements, align);
@@ -301,15 +308,16 @@ export default defineComponent({
 		// 初始化流程模型
 		function initBpmn(xmlStr='') {
 			BpmnIns = new BpmnModeler({
-				container: bpmnCanvas.value,
+				container: bpmnCanvasDom.value,
 				additionalModules: [
-					tokenSimulation
-					// 自定义的节点
-					// customModule
+					tokenSimulation,
+					{
+						translate: ["value", customTranslate(translationsCN)]
+					}
 				]
 			}); // 建模
 			if(R.isEmpty(xmlStr)||R.isNil(xmlStr)){
-				// console.log('没有外部的构建数据，直接创建新的流程')
+				console.warn('未能成功导入流程数据，当前工作更改为创建新的流程！')
 				processRestart();
 			}else{
 				BpmnIns.importXML(xmlStr).then(res => {
@@ -328,7 +336,7 @@ export default defineComponent({
         EventBus.on(event, function(eventObj) {
           let eventName = event.replace(/\./g, "-");
           let element = eventObj ? eventObj.element : null;
-					// console.log(eventName, element, eventObj);
+					console.log(eventName, element, eventObj);
           context.emit(eventName, {element, eventObj});
         });
       });
@@ -374,9 +382,9 @@ export default defineComponent({
 			return BpmnIns.get('elementRegistry').get(id).businessObject;
 		}
 		return {
-			bpmnCanvas,
-			LocalFileReader,
-			downloadLink,
+			bpmnCanvasDom,
+			LocalFileReaderDom,
+			downloadLinkDom,
 
 			showPreview,
 			previewCode,

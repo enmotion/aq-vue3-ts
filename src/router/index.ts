@@ -2,7 +2,7 @@ import * as R from "ramda";
 import PGS from '@src/pages/index';
 import { RouteRecordRaw } from "vue-router";
 import {createRouter,createWebHashHistory} from 'vue-router';
-console.log(PGS)
+// console.log(PGS)
 export default createRouter({
     history:createWebHashHistory(),
     routes:[

@@ -7,8 +7,14 @@
         <div class="w-40 bg-white border-r border-dark-2">
             <element-menu :menu="elementsMenu" :bpmn-ins="bpmnViewer" @buttonClick="processCreateElement($event)"></element-menu>
         </div>
-        <aq-bpmn-editor ref="bpmnDom" :xml-content="xmlStr" :elements-menu="false" @shape-removed = "trackEvent($event)"></aq-bpmn-editor>
-        <div class="w-200 bg-white"></div>
+        <aq-bpmn-editor ref="bpmnDom" :xml-content="xmlStr" :elements-menu="false"
+            @element-click=" trackEvent($event) " 
+            @shape-removed = " trackEvent($event) "></aq-bpmn-editor>
+        <div class="w-200 bg-white xcol overflow-hidden">
+            <div class="xrow p-20 text-xs text-left break-all">
+                {{JSON.stringify(selectItem)}}
+            </div>
+        </div>
     </div>
   </div>
 </template>
@@ -28,13 +34,14 @@ export default defineComponent({
     components:{ElementMenu},
     data() {
         return {
-            xmlStr,
+            xmlStr:xmlStr,
             elementsMenu:elementsMenu[0].children,
             elements:[],
             options: {
                 column:[]
             },
             bpmnViewer:{} as VueElement,
+            selectItem:"1111"
         };
     },
     mounted() {
@@ -42,7 +49,10 @@ export default defineComponent({
     },
     methods: {
         trackEvent($event:any){
-            console.log($event,'trackEvent');
+            const vm = this;
+            console.log($event);
+            vm.selectItem = (JSON.stringify($event)).replaceAll(`\"`,`'`);
+            // console.log($event.shape.type,'trackEvent');
         },
         processCreateElement(event:{event:Event,name:string,params?:any}){
             const vm = this;

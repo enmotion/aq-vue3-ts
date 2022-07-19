@@ -15,7 +15,7 @@
 import * as R from "ramda";
 import { PropType, VueElement } from "vue";
 import { elementsMenu } from "@src/parts/aq/aq-bpmn-editor/config/controlDashBoardConfig";
-import { MenuItem } from "types/bpmn-editor/controlDashBoradConfig";
+import { MenuItem } from "@typ/bpmn-editor/controlDashBoradConfig";
 import { defineComponent } from 'vue';
 
 export default defineComponent({

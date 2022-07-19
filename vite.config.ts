@@ -6,6 +6,7 @@ import Components from 'unplugin-vue-components/vite';// element-ui 按需引用
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';// element-ui 按需引用配置包
 import compressPlugin from 'vite-plugin-compression';
 import vueJsx from '@vitejs/plugin-vue-jsx'; // vue 支持 jsx
+// import legacy from '@vitejs/plugin-legacy'; // IE11 兼容方案
 
 export default(({ mode } : { mode : any })=>{
   // 获取当前模式下的环境变量
@@ -48,12 +49,17 @@ export default(({ mode } : { mode : any })=>{
       Components({
         resolvers: [ElementPlusResolver()],
       }),
+      // legacy({
+      //   targets: ['ie >= 11'],
+      //   additionalLegacyPolyfills: ['regenerator-runtime/runtime']
+      // }),
       compressPlugin({ // gzip 压缩插件配置
         ext: '.gz',// gz br 自定义扩展名，此处默认".gz"
         algorithm: 'gzip', // 采用 brotliCompress gzip 算法
         deleteOriginFile: false,// 是否删除未压缩的原始文件
         threshold: 1025// 触发压缩的文件下限大小,开启得越大,需要被压缩的文件就越多
       })
+
     ],
     build: {
       sourcemap: false,
