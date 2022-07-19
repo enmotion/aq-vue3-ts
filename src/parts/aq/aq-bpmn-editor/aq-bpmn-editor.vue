@@ -39,8 +39,8 @@
 			<!-- 用于下载触发标签 -->
 			<a ref="downloadLinkDom" class="hidden"></a>
 		</div>
-		<div class="flex flex-row flex-grow-1">
-			<div class="flex flex-col flex-grow-1">
+		<div class="flex flex-row flex-grow-1 overflow-hidden">
+			<div class="flex flex-col flex-grow-1 gird-bg">
 				<div class="canvas flex flex-col flex-grow-12" ref="bpmnCanvasDom"></div>
 			</div>
 		</div>
@@ -63,6 +63,19 @@
 .bpmn-editor .bjs-powered-by{
 	display: none !important;
 }
+.bpmn-editor .gird-bg{
+	background:
+	-webkit-linear-gradient(top, transparent 1px, #F0F0F0 1px, #cdcdcd 2px, transparent 2px, transparent 69px, #F0F0F0 60px),
+	-webkit-linear-gradient(left, transparent 1px, #F0F0F0 1px, #cdcdcd 2px, transparent 2px, transparent 69px, #F0F0F0 60px);
+	-webkit-background-size: 31px 31px;
+	-moz-background-size: 31px 31px;
+	background-size: 31px 31px;
+	margin: -3px -2px;
+	-webkit-background-size: 15px 15px;
+	-moz-background-size: 15px 15px;
+	background-size: 15px 15px;
+}
+
 </style>
 <script>
 import { defineComponent, ref, reactive, onMounted, watch, getCurrentInstance } from 'vue';

@@ -4,7 +4,7 @@
         <span class="w-40 h-40 bg-p-10 items-center justify-center flex text-sm text-white font-bold uppercase">Bp</span>
     </div>
     <div class="xrow bg-dark-1 flex-grow-1">
-        <div class="w-40 bg-white border-r border-dark-2">
+        <div class="w-40 bg-p-1 border-r border-dark-2 p-5">
             <element-menu :menu="elementsMenu" :bpmn-ins="bpmnViewer" @buttonClick="processCreateElement($event)"></element-menu>
         </div>
         <aq-bpmn-editor ref="bpmnDom" :xml-content="xmlStr" :elements-menu="false"

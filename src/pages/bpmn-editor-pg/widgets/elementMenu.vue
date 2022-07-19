@@ -1,12 +1,12 @@
 <template>
-  <div class="xcol p-5">
+  <div class="xcol w-30 rounded overflow-hidden">
     <span v-for="(item,index) in menu" :key="index" 
       class="h-30 w-30 
-      flex items-center text-lg justify-center border border-dark-2 shadow-sm rounded last:mb-0 
-      hover:text-white cursor-pointer hover:bg-p-10 hover:border-1 hover:border-p-2
-      bg-dark-2 text-black duration-300 transition-all iconfont"
+      flex items-center text-lg justify-center border-b border-dark-2 last:border-none shadow-sm last:mb-0 
+      hover:text-white cursor-pointer hover:bg-m hover:border-1 hover:border-p-2
+      bg-white text-black duration-300 transition-all iconfont"
       @click="subClick($event,item.method)"
-      :class="[item.icon]" style="margin-bottom:2px">
+      :class="[item.icon]" style="">
     </span>
   </div>
 </template>
