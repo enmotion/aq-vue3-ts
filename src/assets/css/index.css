@@ -23,3 +23,36 @@
     @apply flex-col-reverse
   }
 }
+.splitpanes__splitter {
+  width: 2px;
+  background-color: #AAAAAA33;
+  position: relative;
+}
+
+.splitpanes__splitter:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 2px !important;
+  transition: opacity 0.4s;
+  background-color: rgba(255, 255, 255, 0.03);
+  opacity: 0;
+  z-index: 1;
+}
+
+.splitpanes__splitter:hover:before {
+  opacity: 1;
+}
+
+.splitpanes--vertical > .splitpanes__splitter:before {
+  left: -5px;
+  right: -5px;
+  height: 100%;
+}
+
+.splitpanes--horizontal > .splitpanes__splitter:before {
+  top: -5px;
+  bottom: -5px;
+  width: 100%;
+}

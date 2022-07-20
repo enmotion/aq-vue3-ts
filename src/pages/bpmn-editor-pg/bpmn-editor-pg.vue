@@ -7,19 +7,26 @@
         <div class="w-40 bg-p-1 border-r border-dark-2 p-5">
             <element-menu :menu="elementsMenu" :bpmn-ins="bpmnViewer" @buttonClick="processCreateElement($event)"></element-menu>
         </div>
-        <aq-bpmn-editor ref="bpmnDom" :xml-content="xmlStr" :elements-menu="false"
-            @element-click=" trackEvent($event) " 
-            @shape-removed = " trackEvent($event) "></aq-bpmn-editor>
-        <div class="w-200 bg-white xcol overflow-hidden">
-            <div class="xrow p-20 text-xs text-left break-all">
-                {{JSON.stringify(selectItem)}}
-            </div>
-        </div>
+        <splitpanes class="xrow" :horizontal="false">
+            <pane class="h-full xcol" :min-size="10" :size="50" :max-size="90">
+                <aq-bpmn-editor ref="bpmnDom" :xml-content="xmlStr" :elements-menu="false"
+                    @element-click=" trackEvent($event) " 
+                    @shape-removed = " trackEvent($event) ">
+                </aq-bpmn-editor>
+            </pane>
+            <pane class="h-full xcol border-l border-dark-2" :min-size="10" :size="50" :max-size="90">
+                <div class="xrow p-10 text-xs text-left break-all bg-white flex-grow-1">
+                    {{JSON.stringify(selectItem)}}
+                </div>
+            </pane>
+        </splitpanes>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import { Splitpanes, Pane } from "splitpanes";
+import 'splitpanes/dist/splitpanes.css';
 import { VueElement } from "vue";
 import ElementMenu from './widgets/elementMenu.vue';
 import { elementsMenu } from "@src/parts/aq/aq-bpmn-editor/config/controlDashBoardConfig";
@@ -31,7 +38,7 @@ import { xmlStr } from "@src/xml/xmlStr";
 // console.log(elementsMenu,123)
 
 export default defineComponent({
-    components:{ElementMenu},
+    components:{ElementMenu,Splitpanes,Pane},
     data() {
         return {
             xmlStr:xmlStr,

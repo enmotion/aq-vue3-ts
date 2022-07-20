@@ -1,9 +1,9 @@
 <template>
-  <div class="xcol w-30 rounded overflow-hidden">
+  <div class="xcol w-30 rounded overflow-hidden bg-white">
     <span v-for="(item,index) in menu" :key="index" 
       class="h-30 w-30 
       flex items-center text-lg justify-center border-b border-dark-2 last:border-none shadow-sm last:mb-0 
-      hover:text-white cursor-pointer hover:bg-m hover:border-1 hover:border-p-2
+      hover:text-d-10 cursor-pointer hover:bg-w-1 hover:border-1 hover:border hover:border-d-2
       bg-white text-black duration-300 transition-all iconfont"
       @click="subClick($event,item.method)"
       :class="[item.icon]" style="">

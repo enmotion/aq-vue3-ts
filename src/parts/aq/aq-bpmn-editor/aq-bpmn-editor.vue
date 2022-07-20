@@ -53,6 +53,16 @@
 </template>
 
 <style>
+.bpmn-editor .canvas {
+	width: 100%;
+	height: 100%;
+}
+.bpmn-editor .panel {
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 300px;
+}
 /* 隐藏左侧元素添加工具栏 */
 .bpmn-editor .djs-palette{
 	left:0px;
@@ -80,7 +90,9 @@
 <script>
 import { defineComponent, ref, reactive, onMounted, watch, getCurrentInstance } from 'vue';
 import * as R from "ramda";
-import BpmnModeler from 'bpmn-js/lib/Modeler'; // 建模器
+// @ts-ignore
+import BpmnModeler from "bpmn-js/lib/Modeler"; // 建模器
+// @ts-ignore
 import tokenSimulation from "bpmn-js-token-simulation"; // 模拟流转流程模块
 
 import customTranslate from "./translate/customTranslate";
@@ -109,8 +121,8 @@ export default defineComponent({
 	name: 'bpmn-editor',
 	props: { // vue3 中 props 键名首字母不可大写，不可大写，不可大写！！！
 		xmlContent: {
-			type:[String,null],
-			default:null,
+			type:[String],
+			default:"",
 		},
 		elementsMenu:{
 			type:[Array,Boolean],
@@ -349,8 +361,10 @@ export default defineComponent({
         EventBus.on(event, function(eventObj) {
           let eventName = event.replace(/\./g, "-");
           let element = eventObj ? eventObj.element : null;
+					let businessObejct = getBusinessObject(element.id);
+					console.log(businessObejct,'businessObject');
 					console.log(eventName, element, eventObj);
-          context.emit(eventName, {element, eventObj});
+          context.emit(eventName, {element, eventObj,businessObejct});
         });
       });
       // 监听图形改变返回xml
@@ -424,18 +438,3 @@ export default defineComponent({
 	},
 })
 </script>
-
-<style scoped>
-.canvas {
-	width: 100%;
-	height: 100%;
-}
-
-.panel {
-	position: absolute;
-	right: 0;
-	top: 0;
-	width: 300px;
-}
-</style>
-
