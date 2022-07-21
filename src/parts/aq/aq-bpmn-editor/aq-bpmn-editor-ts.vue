@@ -1,8 +1,8 @@
 <template>
   <div class="containers xcol flex-grow-1 bpmn-editor">
-    <div ref="controlDashBoard" class="xrow p-5 border-b border-dark-2 bg-light-10">
+    <div ref="controlDashBoard" class="xrow p-5 border-b border-dark-1 bg-light-10">
       <div class="-mx-5 xrow flex-grow-1 justify-end">
-
+        aaaaa
         <bpmn-menu v-if="elementsMenu" 
           :menu="elementsMenu" 
           @buttonClick="methodsDistribute($event)"
@@ -81,25 +81,25 @@
 
 .bpmn-editor .gird-bg {
   background:
-    -webkit-linear-gradient(top, transparent 1px, #F0F0F0 1px, #cdcdcd 2px, transparent 2px, transparent 69px, #F0F0F0 60px),
-    -webkit-linear-gradient(left, transparent 1px, #F0F0F0 1px, #cdcdcd 2px, transparent 2px, transparent 69px, #F0F0F0 60px);
-  -webkit-background-size: 31px 31px;
-  -moz-background-size: 31px 31px;
-  background-size: 31px 31px;
-  margin: -3px -2px;
-  -webkit-background-size: 15px 15px;
-  -moz-background-size: 15px 15px;
-  background-size: 15px 15px;
+    -webkit-linear-gradient(top, #00000015 1px, transparent 1px, transparent 10px, #00000010 10px,transparent 11px, transparent 19px),
+    -webkit-linear-gradient(left, #00000015 1px, transparent 1px, transparent 10px, #00000010 10px,transparent 11px, transparent 19px);
+  -webkit-background-size: 41px 41px;
+  -moz-background-size: 41px 41px;
+  background-size: 41px 41px;
+  margin: -1px -1px;
+  -webkit-background-size: 20px 20px;
+  -moz-background-size: 20px 20px;
+  background-size: 20px 20px;
 }
 </style>
 <script lang="ts">
 import { defineComponent, ref, reactive, onMounted, watch, getCurrentInstance, PropType } from 'vue';
-import type { ComponentInternalInstance } from "vue"
-import { MenuItem } from 'types/bpmn-editor/controlDashBoradConfig'; // 引入流程菜单描述
+import type { ComponentPublicInstance } from "vue"
+import type { MenuItem } from 'types/bpmn-editor/controlDashBoradConfig'; // 引入流程菜单描述
 import * as R from "ramda";
-// @ts-ignore
+// @ts-ignore ts忽视下一行检测
 import BpmnModeler from "bpmn-js/lib/Modeler"; // 建模器
-// @ts-ignore
+// @ts-ignore ts忽视下一行检测
 import tokenSimulation from "bpmn-js-token-simulation"; // 模拟流转流程模块
 
 import customTranslate from "./translate/customTranslate";
@@ -158,21 +158,22 @@ export default defineComponent({
     const bpmnCanvasDom = ref(null as any); // 流程画布dom对象
     const LocalFileReaderDom = ref(null as any); // 流程画布dom对象
     const downloadLinkDom = ref(null as any); // 流程画布dom对象
-    const { proxy } = (getCurrentInstance() as any);
+    const { proxy } = (getCurrentInstance() as { proxy:ComponentPublicInstance });
     let showPreview = ref(false); // xml json 预览显示
     let previewCode = ref(``); // 默认代码
     let previewType = ref(``); // 预览模式
     let defaultZoom = ref(1);
     let historyMenu = reactive(R.clone(props.historyMenu));
-    let BpmnIns = reactive({});
+    let BpmnIns = reactive({} as any);
 
     onMounted(function () {
       initBpmn(props.xmlContent);
     })
     // methods ---------------------------------------------------------------
     function methodsDistribute(payload: { event?: Event, name: string, params?: any }) {
-      if (proxy && proxy[payload.name]) {
-        proxy[payload.name](payload.event, payload.params);
+      const vm = proxy as any;
+      if (vm[payload.name]) {
+        vm[payload.name](payload.event, payload.params);
       }
     };
     // 打开本地文件 方法块
@@ -188,7 +189,7 @@ export default defineComponent({
         createNewDiagram(loadedXml);
       };
     }
-    async function createNewDiagram(xml: string, processId?: string, processName?: string) {
+    async function createNewDiagram(xml?: string, processId?: string, processName?: string) {
       // 将字符串转换成图显示出来
       let newId = processId || `Process_${new Date().getTime()}`;
       let newName = processName || `业务流程_${new Date().getTime()}`;
@@ -243,7 +244,7 @@ export default defineComponent({
         };
       }
       // 文件下载方法
-      function downloadFunc(href, filename) {
+      function downloadFunc(href:string, filename:string) {
         if (href && filename) {
           let alink = downloadLinkDom.value;
           alink.download = filename;
@@ -254,12 +255,12 @@ export default defineComponent({
       }
     }
     // 预览流程数据
-    function previewProcess(event, params) {
-      BpmnIns.saveXML({ format: true }).then(({ xml }) => {
+    function previewProcess(event:PointerEvent, params:any) {
+      BpmnIns.saveXML({ format: true }).then(({ xml }:{xml:string}) => {
         switch (params) {
           case 'json':
             const newConvert = new X2JS();
-            BpmnIns.saveXML({ format: true }).then(({ xml }) => {
+            BpmnIns.saveXML({ format: true }).then(({ xml }:{xml:string}) => {
               const { definitions } = newConvert.xml2js(xml);
               if (definitions) {
                 previewCode.value = JSON.stringify(definitions, null, 4);
@@ -285,15 +286,15 @@ export default defineComponent({
       BpmnIns.get("toggleMode").toggleMode();
     }
     // 流程编辑步骤跳转
-    function processEditJump(event, FuncName) {
+    function processEditJump(event:PointerEvent, FuncName:string) {
       BpmnIns.get("commandStack")[FuncName]();
     }
     // 重置为空流程
     function processRestart(event?:PointerEvent, params?:any) {
-      createNewDiagram(null);
+      createNewDiagram();
     };
     // 流程画布缩放操纵
-    function processZoom(event, zoomStep = 0.1) {
+    function processZoom(event:PointerEvent, zoomStep:number = 0.1) {
       let newZoom = Math.floor(defaultZoom.value * 100 + zoomStep * 100) / 100;
       if (newZoom < 0.2) {
         throw new Error("[Process Designer Warn ]: The zoom ratio cannot be less than 0.2");
@@ -302,7 +303,7 @@ export default defineComponent({
       BpmnIns.get("canvas").zoom(defaultZoom.value);
     }
     // 节点对齐操作
-    function elementsAlign(event, align) {
+    function elementsAlign(event:PointerEvent, align:string) {
       const Align = BpmnIns.get("alignElements");
       const Selection = BpmnIns.get("selection");
       const SelectedElements = Selection.get();
@@ -314,11 +315,11 @@ export default defineComponent({
       Align.trigger(SelectedElements, align);
     }
     // 流程面板自定义添加元素 方法
-    function processCreateElement(event, params) {
+    function processCreateElement(event:PointerEvent, params:any) {
       // console.log(event,params);
       const ElementFactory = BpmnIns.get('elementFactory');
       const create = BpmnIns.get("create");
-      const options = params.options | {};
+      const options:any = params.options | {} as any;
       const shape = ElementFactory.createShape(R.mergeAll([{ type: `bpmn:${params.type}` }, options]));
       if (R.isEmpty(options)) {
         shape.businessObject.di.isExpanded = options.isExpanded;
@@ -326,7 +327,7 @@ export default defineComponent({
       create.start(event, shape);
     }
     // 启动面板工具
-    function startTool(event, params) {
+    function startTool(event:PointerEvent, params:any) {
       // console.log(event, params)
       if (params === "handTool") {
         BpmnIns.get("handTool").activateHand(event);
@@ -353,10 +354,10 @@ export default defineComponent({
         console.warn('未能成功导入流程数据，当前工作更改为创建新的流程！')
         processRestart();
       } else {
-        BpmnIns.importXML(xmlStr).then(res => {
+        BpmnIns.importXML(xmlStr).then(() => {
           addEventBusListener(); // 监听element并绑定事件
           addModelerListener(); // 监听modeler并绑定事件
-        }).catch(err => {
+        }).catch((err:Error) => {
           console.error(err, 'xml内容加载失败！');
         })
       }
@@ -366,36 +367,34 @@ export default defineComponent({
       const EventBus = BpmnIns.get("eventBus");
       // 注册需要的监听事件, 将. 替换为 - , 避免解析异常
       ['element.click', 'element.changed'].forEach(event => {
-        EventBus.on(event, function (eventObj) {
+        EventBus.on(event, function (e:any) {
           let eventName = event.replace(/\./g, "-");
-          let element = eventObj ? eventObj.element : null;
-          let businessObejct = getBusinessObject(element.id);
-          console.log(businessObejct, 'businessObject');
-          console.log(eventName, element, eventObj);
-          context.emit(eventName, { element, eventObj, businessObejct });
+          let element = e ? e.element : null;
+          let businessObejct = getBusinessObject(eventName,element.id);
+          context.emit(eventName, { event:eventName, element, businessObejct });
         });
       });
       // 监听图形改变返回xml
-      EventBus.on("commandStack.changed", async event => {
+      EventBus.on("commandStack.changed", async (event:any) => {
         try {
-          if (historyMenu) {
-            let canUnDo = !BpmnIns.get("commandStack").canUndo();
-            let canReDo = !BpmnIns.get("commandStack").canRedo();
-            historyMenu[0].disabled = canUnDo;
-            historyMenu[1].disabled = canReDo;
+          if (historyMenu!=false) {
+            let prevIndex:number = R.findIndex(R.propEq('tips','前进'))(historyMenu as []);
+            let backIndex:number = R.findIndex(R.propEq('tips','后退'))(historyMenu as []);
+            prevIndex >= 0 && ((historyMenu as MenuItem[])[prevIndex].disabled = !BpmnIns.get("commandStack").canUndo());
+            backIndex >= 0 && ((historyMenu as MenuItem[])[backIndex].disabled = !BpmnIns.get("commandStack").canRedo());
           }
           let { xml } = await BpmnIns.saveXML({ format: true });
           context.emit("commandStack-changed", event);
           context.emit("input", xml);
           context.emit("change", xml);
-        } catch (e) {
+        } catch (e:any) {
           console.error(`[Process Designer Warn]: ${e.message || e}`);
         }
       });
       // // 监听视图缩放变化
-      BpmnIns.on("canvas.viewbox.changed", ({ viewbox }) => {
+      BpmnIns.on("canvas.viewbox.changed", ({ viewbox }:{ viewbox:unknown }) => {
         context.emit("canvas-viewbox-changed", { viewbox });
-        const { scale } = viewbox;
+        const { scale } = viewbox as { scale:number };
         defaultZoom.value = Math.floor(scale * 100) / 100;
         // console.log(defaultZoom.value,'3333')
       });
@@ -404,17 +403,17 @@ export default defineComponent({
     function addModelerListener() {
       const events = ['shape.added', 'shape.move.end', 'shape.removed', 'connect.end', 'connect.move'];
       events.forEach(function (event) {
-        BpmnIns.on(event, (e) => {
+        BpmnIns.on(event, (e:any ) => {
+          let eventName = event.replace('.', '-');
           let elementRegistry = BpmnIns.get('elementRegistry');
           let shape = e.element ? elementRegistry.get(e.element.id) : e.shape;
-          let eventName = event.replace('.', '-');
-          // console.log(eventName, e, shape, 'shape addModelerListener');
-          context.emit(eventName, { event: e, shape: shape });
+          e.type = event;
+          context.emit(eventName, { event:eventName, shape: shape });
         })
       })
     }
-    function getBusinessObject(id) {
-      return BpmnIns.get('elementRegistry').get(id).businessObject;
+    function getBusinessObject(eventName:string,id:string) {
+      return BpmnIns.get('elementRegistry')?.get(id)?.businessObject;
     }
     return {
       bpmnCanvasDom,

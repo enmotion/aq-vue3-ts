@@ -1,74 +1,98 @@
 <template>
   <div class="h-full w-full flex flex-col flex-grow-1">
     <div class="xrow items-center h-40 bg-white border-dark-2 border-b overflow-hidden">
-        <span class="w-40 h-40 bg-p-10 items-center justify-center flex text-sm text-white font-bold uppercase">Bp</span>
+      <span class="w-40 h-40 bg-p-10 items-center justify-center flex text-sm text-white font-bold uppercase">Bp</span>
     </div>
     <div class="xrow bg-dark-1 flex-grow-1">
-        <div class="w-40 bg-p-1 border-r border-dark-2 p-5">
-            <element-menu :menu="elementsMenu" :bpmn-ins="bpmnViewer" @buttonClick="processCreateElement($event)"></element-menu>
-        </div>
-        <splitpanes class="xrow" :horizontal="false">
-            <pane class="h-full xcol" :min-size="10" :size="50" :max-size="90">
-                <aq-bpmn-editor ref="bpmnDom" :xml-content="xmlStr" :elements-menu="false"
-                    @element-click=" trackEvent($event) " 
-                    @shape-removed = " trackEvent($event) ">
-                </aq-bpmn-editor>
-            </pane>
-            <pane class="h-full xcol border-l border-dark-2" :min-size="10" :size="50" :max-size="90">
-                <div class="xrow p-10 text-xs text-left break-all bg-white flex-grow-1">
-                    {{JSON.stringify(selectItem)}}
-                </div>
-            </pane>
+      <div class="w-40 bg-p-1 border-r border-dark-2 p-5">
+        <element-menu :menu="elementsMenu" @buttonClick="processFuncHandler($event)"></element-menu>
+      </div>
+      <div ref="bpmnDesignContainer" class="xcol flex-grow-1">
+        <splitpanes :horizontal="false">
+          <pane class="xcol" :min-size="20" :size="100 - propEditorWidth" :max-size="100 - propEditorWidth">
+            <aq-bpmn-editor ref="bpmnDom" :xml-content="xmlStr" :elements-menu="false"
+              @element-click="clickEvent($event)" @shape-removed="removedEvent($event)">
+            </aq-bpmn-editor>
+          </pane>
+          <pane class="xcol" :min-size="propEditorWidth" :size="propEditorWidth" :max-size="80">
+            <div class="xrow p-10 text-xs text-left break-all bg-white flex-grow-1">
+              {{ JSON.stringify(selectItem) }}
+            </div>
+          </pane>
         </splitpanes>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import { ref, reactive, onMounted, onUnmounted, defineComponent, computed } from "vue";
 import { Splitpanes, Pane } from "splitpanes";
 import 'splitpanes/dist/splitpanes.css';
-import { VueElement } from "vue";
 import ElementMenu from './widgets/elementMenu.vue';
 import { elementsMenu } from "@src/parts/aq/aq-bpmn-editor/config/controlDashBoardConfig";
 // import { MenuItem } from 'types/project/bpmn-editor/controlDashBoradConfig'; // 引入流程菜单描述
-// import { elementsMenu } from "@src/parts/aq/aq-bpmn-editor/config/controlDashBoardConfig";
-import { defineComponent } from 'vue';
+// import { elementsMenu } from "@src/parts/aq/aq-bpmn-editor/config/controlDashBoardConfig";\
 import { xmlStr } from "@src/xml/xmlStr";
 
 // console.log(elementsMenu,123)
 
 export default defineComponent({
-    components:{ElementMenu,Splitpanes,Pane},
-    data() {
-        return {
-            xmlStr:xmlStr,
-            elementsMenu:elementsMenu[0].children,
-            elements:[],
-            options: {
-                column:[]
-            },
-            bpmnViewer:{} as VueElement,
-            selectItem:"1111"
-        };
+  components: { ElementMenu, Splitpanes, Pane },
+  setup(props, context) {
+    const bpmnDom = ref(null as any);
+    const bpmnDesignContainer = ref(null as any);
+    const bpmnPropEditorMinWidth: number = 300;
+    let bpmnDesignContainerResizeObserver = reactive({} as any);
+    let propEditorWidth = ref(0);
+    // 生命周期函数；
+    onMounted(() => {
+      bpmnDesignContainerResizeObserver = new ResizeObserver(() => {
+        propEditorWidth.value = Math.min(Math.round(bpmnPropEditorMinWidth / bpmnDesignContainer.value.clientWidth * 100), 50);
+      })
+      bpmnDesignContainerResizeObserver.observe(bpmnDesignContainer.value)
+    })
+    onUnmounted(() => {
+      bpmnDesignContainerResizeObserver.disconnect();
+    })
+    return {
+      bpmnDom,
+      bpmnDesignContainer,
+      propEditorWidth,
+      bpmnPropEditorMinWidth,
+    }
+  },
+  data() {
+    return {
+      xmlStr: xmlStr,
+      elementsMenu: elementsMenu[0].children,
+      selectItem: ""
+    };
+  },
+  mounted() {
+    const vm = this;
+  },
+  methods: {
+    clickEvent($event: any) {
+      const vm = this;
+      if ($event.element && $event.element.type != 'bpmn:Process') {
+        vm.selectItem = (JSON.stringify($event)).replaceAll(`\"`, `'`);
+        console.log($event, 'click Element Event');
+      } else {
+        console.log($event);
+        vm.selectItem = (JSON.stringify($event)).replaceAll(`\"`, `'`);
+        console.log($event, 'click Process Event');
+      }
     },
-    mounted() {
-        const vm = this;
+    removedEvent($event: any) {
+      console.log('removeEvent');
+      console.log($event)
     },
-    methods: {
-        trackEvent($event:any){
-            const vm = this;
-            if($event.element.type != 'bpmn:Process'){
-                vm.selectItem = (JSON.stringify($event)).replaceAll(`\"`,`'`);
-                console.log($event,'trackEvent');
-            }
-        },
-        processCreateElement(event:{event:Event,name:string,params?:any}){
-            const vm = this;
-            var dom  = vm.$refs.bpmnDom as any;
-            dom.methodsDistribute(event);
-        }
-    },
-    setup() {
-    },
+    processFuncHandler(event: { event: Event, name: string, params?: any }) {
+      const vm = this;
+      var dom = vm.$refs.bpmnDom as any;
+      dom.methodsDistribute(event);
+    }
+  },
 })
 </script>
