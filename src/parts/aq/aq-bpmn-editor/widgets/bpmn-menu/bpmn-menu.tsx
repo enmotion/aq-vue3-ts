@@ -8,12 +8,12 @@ export default defineComponent({
   components:{ ElButton, ElTooltip, ElPopover },
   props:{
     menu:{
-      type:Array as PropType<MenuItem[]>,
+      type:[Array,Boolean]as PropType<MenuItem[]|Boolean>,
       default:()=>[] as PropType<MenuItem[]>
     },
   },
   setup(props,{emit}:{emit:(event: string, ...args: unknown[]) => void}) {
-    let MenuDatas:MenuItem[][] = reactive([props.menu]);
+    let MenuDatas:MenuItem[] = reactive(props.menu.constructor == Array ? props.menu : [] as MenuItem[]);
     onUpdated(function(){
       console.log(props,'updated')
     })
@@ -23,7 +23,7 @@ export default defineComponent({
     return () => (
       <div class='xrow'>
         {/* <div class=" absolute z-10 left-0 top-0 text-left">{JSON.stringify(props.menu)}</div> */}
-        {MenuDatas[0].map((item:MenuItem) => {
+        {MenuDatas.map((item:MenuItem) => {
           return (
             <div key={item.label}>
               {
