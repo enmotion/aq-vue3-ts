@@ -83,10 +83,10 @@ export default defineComponent({
       const vm = this;
       console.log($event.businessObject);
       vm.selectItem = JSON.stringify($event.businessObject).replaceAll(`\"`, `'`);
-      // if($event.elementType == 'bpmn:Process'){
+      if($event.elementType == 'bpmn:Process'){
         var BpmnIns = vm.$refs.bpmnDom as any;
-        BpmnIns.setProcessElementById($event.elementId,{name:'12'})
-      // }
+        BpmnIns.setProcessElementById($event.elementId,{age:'12'})
+      }
     },
     removedEvent($event: any) {
       console.log('removeEvent');
