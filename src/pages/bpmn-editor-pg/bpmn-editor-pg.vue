@@ -47,7 +47,7 @@ export default defineComponent({
     const bpmnDom = ref(null as any);
     const bpmnDesignContainer = ref(null as any);
     const bpmnPropEditorMinWidth: number = 300;
-    const processType = ref('flowable');
+    const processType = ref('activiti');
     let bpmnDesignContainerResizeObserver = reactive({} as any);
     let propEditorWidth = ref(0);
     // 生命周期函数；
@@ -72,20 +72,21 @@ export default defineComponent({
     return {
       xmlStr: xmlStr,
       elementsMenu: elementsMenu[0].children,
-      selectItem: ""
+      selectItem: "",
     };
   },
+  mounted(){
+    const vm = this;
+  },
   methods: {
-    clickEvent($event: any) {
+    clickEvent($event:any) {
       const vm = this;
-      const processIgnoreElement:string[]=['bpmn:Process','bpmn:SequenceFlow','bpmn:TextAnnotation','bpmn:Association'];
-      if ($event.element && !processIgnoreElement.includes($event.element.type)) {
-        vm.selectItem = (JSON.stringify($event)).replaceAll(`\"`, `'`);
-        console.info($event, 'Event: click configable Element');
-      } else {
-        vm.selectItem = '流程整体';
-        console.log($event.businessObejct.$attrs, 'Event: click ProcessStage Event');
-      }
+      console.log($event.businessObject);
+      vm.selectItem = JSON.stringify($event.businessObject).replaceAll(`\"`, `'`);
+      // if($event.elementType == 'bpmn:Process'){
+        var BpmnIns = vm.$refs.bpmnDom as any;
+        BpmnIns.setProcessElementById($event.elementId,{name:'12'})
+      // }
     },
     removedEvent($event: any) {
       console.log('removeEvent');
@@ -93,8 +94,8 @@ export default defineComponent({
     },
     processFuncHandler(event: { event: Event, name: string, params?: any }) {
       const vm = this;
-      var dom = vm.$refs.bpmnDom as any;
-      dom.methodsDistribute(event);
+      var BpmnIns = vm.$refs.bpmnDom as any;
+      BpmnIns.methodsDistribute(event);
     }
   },
 })
