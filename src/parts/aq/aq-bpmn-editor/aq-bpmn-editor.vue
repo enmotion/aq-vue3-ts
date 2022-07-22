@@ -100,26 +100,29 @@ import uniqid from "uniqid";
 import type { MenuItem } from 'types/bpmn-editor/controlDashBoradConfig'; // 引入流程菜单描述
 // @ts-ignore ts忽视下一行检测
 import BpmnModeler from "bpmn-js/lib/Modeler"; // 建模器
+// import BpmnViewer from 'bpmn-js/lib/Viewer'; // 浏览器
 // @ts-ignore ts忽视下一行检测
 import tokenSimulation from "bpmn-js-token-simulation"; // 模拟流转流程模块
 import customTranslate from "./translate/customTranslate"; // 流程翻译插件
 import translationsCN from "./translate/zh"; // 流程翻译文本映射
 import 'bpmn-js/dist/assets/diagram-js.css'; // 左边工具栏以及编辑节点的样式
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css'; // 引入样式
+
+import flowableModdleDescriptor from "./descriptor/flowableDescriptor.json"; // 引入 flowable 引擎属性扩展
 // 系统菜单
+import BpmnMenu from "./widgets/bpmn-menu/bpmn-menu";
 import * as ModuleMenusDefault from "./config/controlDashBoardConfig"; // 系统菜单
 // heighlight-js 显示
 import 'highlight.js/styles/stackoverflow-light.css';
 import 'highlight.js/lib/common';
 import hljsVuePlugin from "@highlightjs/vue-plugin";
+
 // 引入json 转换
 import X2JS from "x2js";
 const newConvert = new X2JS();
 // element 组件引入
 import { ElButton, ElTooltip, ElPopper, ElDialog } from "element-plus"; // 引入 element 配置
 import customModule from './CustomModeler/index'; // 用户自定义模块
-// import BpmnViewer from 'bpmn-js/lib/Viewer'; // 浏览器
-import BpmnMenu from "./widgets/bpmn-menu/bpmn-menu";
 // methods
 import DefaultEmptyXML from "./methods/defaultEmpty"; // 默认空白xml文件创建器
 import { HeapProfiler } from 'inspector';
@@ -357,7 +360,10 @@ export default defineComponent({
           {
             translate: ["value", customTranslate(translationsCN)]
           }
-        ]
+        ],
+        moddleExtensions:{
+          flowable:flowableModdleDescriptor
+        }
       }); // 建模
       if (R.isEmpty(xmlStr) || R.isNil(xmlStr)) {
         console.warn('未能成功导入流程数据，当前工作更改为创建新的流程！')
@@ -445,9 +451,23 @@ export default defineComponent({
     // 设置流程元素
     function setProcessElementById( id:string, properties?:any, funcName:string='updateProperties' ){
       let element = getProcessElementById(id);
-      console.log(1,BpmnIns.get('modeling')[funcName],funcName);
-      // ['updateProperties','updateModdleProperties','toggleCollapse']
-      BpmnIns.get('modeling')[funcName](element,properties);
+      BpmnIns.get('modeling')[funcName]( element, properties);      
+      // console.log(0,BpmnIns.get('moddle'));
+      // console.log(1,BpmnIns.get('modeling')[funcName],funcName);
+      // // ['updateProperties','updateModdleProperties','toggleCollapse']
+      // const {name,value}={name:'mod',value:'sss'};
+      // const newPropertyObject = BpmnIns.get('moddle').create(`${props.processType}:Property`, {name,value});
+      // const propertiesObject = BpmnIns.get('moddle').create(`${props.processType}:Properties`, {
+      //     values: newPropertyObject
+      //   });
+      // console.log(propertiesObject,'propertiesObject')
+      // const extensions = BpmnIns.get('moddle').create('bpmn:ExtensionElements',{
+      //   values:propertiesObject
+      // })
+      // console.log(extensions,'extensions')
+      // BpmnIns.get('modeling')[funcName]( element, {
+      //   extensionElements:extensions
+      // });
     }
     return {
       bpmnCanvasDom,

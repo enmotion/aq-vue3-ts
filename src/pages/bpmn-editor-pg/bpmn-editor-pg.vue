@@ -30,6 +30,7 @@
 </template>
 
 <script lang="ts">
+import * as R from "ramda";
 import { ref, reactive, onMounted, onUnmounted, defineComponent, computed } from "vue";
 import { Splitpanes, Pane } from "splitpanes";
 import 'splitpanes/dist/splitpanes.css';
@@ -46,8 +47,8 @@ export default defineComponent({
   setup(props, context) {
     const bpmnDom = ref(null as any);
     const bpmnDesignContainer = ref(null as any);
-    const bpmnPropEditorMinWidth: number = 300;
-    const processType = ref('activiti');
+    const bpmnPropEditorMinWidth: number = 360;
+    const processType = ref('flowable');
     let bpmnDesignContainerResizeObserver = reactive({} as any);
     let propEditorWidth = ref(0);
     // 生命周期函数；
@@ -81,11 +82,20 @@ export default defineComponent({
   methods: {
     clickEvent($event:any) {
       const vm = this;
-      console.log($event.businessObject);
-      vm.selectItem = JSON.stringify($event.businessObject).replaceAll(`\"`, `'`);
+      const params = $event.businessObject.$attrs.params?JSON.parse($event.businessObject.$attrs.params)[0]:{};
+      console.log($event.businessObject.$attrs.params,'params');
+      vm.selectItem = JSON.stringify(R.mergeAll([R.pick(['id','name','engine'],$event.businessObject),params])).replaceAll(`\"`, `'`);
       if($event.elementType == 'bpmn:Process'){
         var BpmnIns = vm.$refs.bpmnDom as any;
-        BpmnIns.setProcessElementById($event.elementId,{age:'12'})
+        BpmnIns.setProcessElementById($event.elementId,{params:JSON.stringify(
+          [{
+            user:['admin','client','test'],
+            worker:{
+              postion:"sss"
+            },
+            news:`aaa`
+          }]
+        )})
       }
     },
     removedEvent($event: any) {
