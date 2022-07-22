@@ -2,7 +2,7 @@
   <div class="containers xcol flex-grow-1 bpmn-editor">
     <div ref="controlDashBoard" class="xrow p-5 border-b border-dark-1 bg-light-10">
       <div class="-mx-5 xrow flex-grow-1 justify-end">
-        aaaaa
+
         <bpmn-menu v-if="elementsMenu" 
           :menu="elementsMenu" 
           @buttonClick="methodsDistribute($event)"
@@ -93,37 +93,36 @@
 }
 </style>
 <script lang="ts">
-import { defineComponent, ref, reactive, onMounted, watch, getCurrentInstance, PropType } from 'vue';
-import type { ComponentPublicInstance } from "vue"
-import type { MenuItem } from 'types/bpmn-editor/controlDashBoradConfig'; // 引入流程菜单描述
+import { defineComponent, ref, reactive, onMounted, watch, getCurrentInstance, PropType, ComponentPublicInstance } from 'vue';
 import * as R from "ramda";
+// @ts-ignore ts忽视下一行检测
+import uniqid from "uniqid";
+import type { MenuItem } from 'types/bpmn-editor/controlDashBoradConfig'; // 引入流程菜单描述
 // @ts-ignore ts忽视下一行检测
 import BpmnModeler from "bpmn-js/lib/Modeler"; // 建模器
 // @ts-ignore ts忽视下一行检测
 import tokenSimulation from "bpmn-js-token-simulation"; // 模拟流转流程模块
-
-import customTranslate from "./translate/customTranslate";
-import translationsCN from "./translate/zh";
-
+import customTranslate from "./translate/customTranslate"; // 流程翻译插件
+import translationsCN from "./translate/zh"; // 流程翻译文本映射
 import 'bpmn-js/dist/assets/diagram-js.css'; // 左边工具栏以及编辑节点的样式
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css'; // 引入样式
+// 系统菜单
 import * as ModuleMenusDefault from "./config/controlDashBoardConfig"; // 系统菜单
-// heighlight-js
+// heighlight-js 显示
 import 'highlight.js/styles/stackoverflow-light.css';
 import 'highlight.js/lib/common';
 import hljsVuePlugin from "@highlightjs/vue-plugin";
-
-import { xmlStr } from '@src/xml/xmlStr'; // 导入模型默认xml结构
+// 引入json 转换
+import X2JS from "x2js";
+const newConvert = new X2JS();
+// element 组件引入
 import { ElButton, ElTooltip, ElPopper, ElDialog } from "element-plus"; // 引入 element 配置
-import customModule from './CustomModeler/index';
+import customModule from './CustomModeler/index'; // 用户自定义模块
 // import BpmnViewer from 'bpmn-js/lib/Viewer'; // 浏览器
 import BpmnMenu from "./widgets/bpmn-menu/bpmn-menu";
 // methods
 import DefaultEmptyXML from "./methods/defaultEmpty"; // 默认空白xml文件创建器
-
-// 引入json转换
-import X2JS from "x2js";
-import { ElementNode } from '@vue/compiler-core';
+import { HeapProfiler } from 'inspector';
 
 export default defineComponent({
   name: 'bpmn-editor',
@@ -131,6 +130,10 @@ export default defineComponent({
     xmlContent: {
       type: [String],
       default: "",
+    },
+    processType:{
+      type: String as PropType<'camunda'|'flowable'|'activiti'>,
+      default:"activiti"
     },
     elementsMenu: {
       type: [Array, Boolean] as PropType<MenuItem[] | Boolean>,
@@ -165,7 +168,13 @@ export default defineComponent({
     let defaultZoom = ref(1);
     let historyMenu = reactive(R.clone(props.historyMenu));
     let BpmnIns = reactive({} as any);
-
+    watch(
+      ()=>props.processType,
+      (n,o)=>{
+        console.log(n,o);
+        processRestart()
+      }
+    );
     onMounted(function () {
       initBpmn(props.xmlContent);
     })
@@ -189,11 +198,11 @@ export default defineComponent({
         createNewDiagram(loadedXml);
       };
     }
-    async function createNewDiagram(xml?: string, processId?: string, processName?: string) {
+    async function createNewDiagram( xml?:string, processId?:string, processName?:string ) {
       // 将字符串转换成图显示出来
-      let newId = processId || `Process_${new Date().getTime()}`;
-      let newName = processName || `业务流程_${new Date().getTime()}`;
-      let xmlString = xml || DefaultEmptyXML(newId, newName, 'activiti');
+      let newId = processId || uniqid('Process-').toUpperCase();
+      let newName = processName || uniqid('未命名流程-').toUpperCase();
+      let xmlString = xml || DefaultEmptyXML(newId, newName, props.processType);
       try {
         // @ts-ignore
         let { warnings } = await BpmnIns.importXML(xmlString);
@@ -215,21 +224,21 @@ export default defineComponent({
     async function downloadProcess(event:PointerEvent, params:any) {
       // 按需要类型创建文件并下载
       try {
-        if (params.type === "xml" || params.type === "bpmn") {
-          BpmnIns.saveXML().then((res:{xml:string}) => {
-            let { href, filename } = setEncoded(params.type.toLowerCase(), res.xml);
-            downloadFunc(href, filename);
-          }).catch((err:TypeError) => {
-            console.error(`[Process Designer Warn ]: ${err.message || err}`);
-          });
-        } else {
-          BpmnIns.saveSVG().then((res:{svg:string}) => {
-            let { href, filename } = setEncoded(params.type.toLowerCase(), res.svg);
-            downloadFunc(href, filename);
-          }).catch((err:any)=> {
-            return console.error(err);
-          });
-        }
+        BpmnIns.saveXML().then((res:{xml:string}) => {
+          const { definitions } = newConvert.xml2js(res.xml);
+          let saveData : {href:string, filename:string} = {href:'',filename:''};
+          if (params.type === "xml" || params.type === "bpmn") {
+            saveData = setEncoded(params.type.toLowerCase(), res.xml, definitions.process._name);
+            downloadFunc(saveData.href, saveData.filename);
+          }else{
+            BpmnIns.saveSVG().then((res:{svg:string}) => {
+              saveData = setEncoded(params.type.toLowerCase(), res.svg, definitions.process._name);
+              downloadFunc(saveData.href, saveData.filename);
+            })
+          }
+        }).catch((err:TypeError) => {
+          console.error(`[Process Designer Warn ]: ${err.message || err}`);
+        });
       } catch (e:any) {
         console.error(`[Process Designer Warn ]: ${e.message || e}`);
       }
@@ -259,7 +268,6 @@ export default defineComponent({
       BpmnIns.saveXML({ format: true }).then(({ xml }:{xml:string}) => {
         switch (params) {
           case 'json':
-            const newConvert = new X2JS();
             BpmnIns.saveXML({ format: true }).then(({ xml }:{xml:string}) => {
               const { definitions } = newConvert.xml2js(xml);
               if (definitions) {
@@ -370,8 +378,9 @@ export default defineComponent({
         EventBus.on(event, function (e:any) {
           let eventName = event.replace(/\./g, "-");
           let element = e ? e.element : null;
+          e.type = eventName;
           let businessObejct = getBusinessObject(eventName,element.id);
-          context.emit(eventName, { event:eventName, element, businessObejct });
+          context.emit(eventName, { event:R.clone(e), element, businessObejct });
         });
       });
       // 监听图形改变返回xml
@@ -408,7 +417,7 @@ export default defineComponent({
           let elementRegistry = BpmnIns.get('elementRegistry');
           let shape = e.element ? elementRegistry.get(e.element.id) : e.shape;
           e.type = event;
-          context.emit(eventName, { event:eventName, shape: shape });
+          context.emit(eventName, { event:R.clone(e), shape: shape });
         })
       })
     }

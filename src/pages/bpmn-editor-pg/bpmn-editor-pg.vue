@@ -10,8 +10,12 @@
       <div ref="bpmnDesignContainer" class="xcol flex-grow-1">
         <splitpanes :horizontal="false">
           <pane class="xcol" :min-size="20" :size="100 - propEditorWidth" :max-size="100 - propEditorWidth">
-            <aq-bpmn-editor ref="bpmnDom" :xml-content="xmlStr" :elements-menu="false"
-              @element-click="clickEvent($event)" @shape-removed="removedEvent($event)">
+            <aq-bpmn-editor ref="bpmnDom" 
+              :xml-content="xmlStr"
+              :process-type="processType" 
+              :elements-menu="false"
+              @element-click="clickEvent($event)" 
+              @shape-removed="removedEvent($event)">
             </aq-bpmn-editor>
           </pane>
           <pane class="xcol" :min-size="propEditorWidth" :size="propEditorWidth" :max-size="80">
@@ -43,6 +47,7 @@ export default defineComponent({
     const bpmnDom = ref(null as any);
     const bpmnDesignContainer = ref(null as any);
     const bpmnPropEditorMinWidth: number = 300;
+    const processType = ref('flowable');
     let bpmnDesignContainerResizeObserver = reactive({} as any);
     let propEditorWidth = ref(0);
     // 生命周期函数；
@@ -60,6 +65,7 @@ export default defineComponent({
       bpmnDesignContainer,
       propEditorWidth,
       bpmnPropEditorMinWidth,
+      processType,
     }
   },
   data() {
@@ -69,19 +75,16 @@ export default defineComponent({
       selectItem: ""
     };
   },
-  mounted() {
-    const vm = this;
-  },
   methods: {
     clickEvent($event: any) {
       const vm = this;
-      if ($event.element && $event.element.type != 'bpmn:Process') {
+      const processIgnoreElement:string[]=['bpmn:Process','bpmn:SequenceFlow','bpmn:TextAnnotation','bpmn:Association'];
+      if ($event.element && !processIgnoreElement.includes($event.element.type)) {
         vm.selectItem = (JSON.stringify($event)).replaceAll(`\"`, `'`);
-        console.log($event, 'click Element Event');
+        console.info($event, 'Event: click configable Element');
       } else {
-        console.log($event);
-        vm.selectItem = (JSON.stringify($event)).replaceAll(`\"`, `'`);
-        console.log($event, 'click Process Event');
+        vm.selectItem = '流程整体';
+        console.log($event.businessObejct.$attrs, 'Event: click ProcessStage Event');
       }
     },
     removedEvent($event: any) {
