@@ -50,12 +50,13 @@
                   {{currentItem.businessObject?.name}}
                 </span>
                 <aq-scroll-view :disabled="false" 
-                  class="flex-grow-1 flex-shrink-1" 
-                  :scrollBarProps="{ always:true, minSize:50}"
+                  class="flex-grow-1 flex-shrink-1 -mr-10 mt-10" 
+                  :scrollBarProps="{ wrapClass:'pr-10',viewClass:'bg-white', always:true, minSize:50}"
                   @on-scroll-to-top="onscroll"
                   @on-scroll-to-bottom="onscroll">
-                  <div class="bg-dark-1" style="height:1600px;width:3000px">aa</div>
-                  <div style="width:5000px">bbb</div>
+                  <div class=" flex flex-col p-10" style="height:1000px;">
+                    <span class="h-20 ">ddd</span>
+                  </div>
                 </aq-scroll-view>
               </div>
             </div>
