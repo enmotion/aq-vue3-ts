@@ -179,7 +179,6 @@ export default defineComponent({
     watch(
       ()=>props.processType,
       (n,o)=>{
-        console.log(n,o);
         processRestart()
       }
     );
@@ -275,7 +274,7 @@ export default defineComponent({
             BpmnIns.saveXML({ format: true }).then(({ xml }:{xml:string}) => {
               const { definitions } = newConvert.xml2js(xml);
               if (definitions) {
-                previewCode.value = JSON.stringify(definitions, null, 4);
+                previewCode.value = JSON.stringify(transProcessJsonToCustome(definitions), null, 2);
               } else {
                 previewCode.value = "";
               }
@@ -290,6 +289,14 @@ export default defineComponent({
             break;
         }
       });
+    }
+    function transProcessJsonToCustome( definitions:any):any{
+      let obj:{[key:string]:any} = {};
+      obj.global = {
+        key:definitions.process._id,
+        name:definitions.process._name
+      }
+      return obj;
     }
     // 触发流程模拟工具
     function processSimulation() {
@@ -412,8 +419,8 @@ export default defineComponent({
           if (historyMenu!=false) {
             let prevIndex:number = R.findIndex(R.propEq('tips','前进'))(historyMenu as []);
             let backIndex:number = R.findIndex(R.propEq('tips','后退'))(historyMenu as []);
-            prevIndex >= 0 && ((historyMenu as MenuItem[])[prevIndex].disabled = !BpmnIns.get("commandStack").canUndo());
-            backIndex >= 0 && ((historyMenu as MenuItem[])[backIndex].disabled = !BpmnIns.get("commandStack").canRedo());
+            prevIndex >= 0 && ((historyMenu as MenuItem[])[prevIndex].disabled = !BpmnIns.get("commandStack").canRedo());
+            backIndex >= 0 && ((historyMenu as MenuItem[])[backIndex].disabled = !BpmnIns.get("commandStack").canUndo());
           }
           let { xml } = await BpmnIns.saveXML({ format: true });
           context.emit("commandStack-changed", event);
@@ -449,25 +456,9 @@ export default defineComponent({
       return BpmnIns.get('elementRegistry')?.get(id);
     }
     // 设置流程元素
-    function setProcessElementById( id:string, properties?:any, funcName:string='updateProperties' ){
+    function setProcessElementById( id:string, properties?:any){
       let element = getProcessElementById(id);
-      BpmnIns.get('modeling')[funcName]( element, properties);      
-      // console.log(0,BpmnIns.get('moddle'));
-      // console.log(1,BpmnIns.get('modeling')[funcName],funcName);
-      // // ['updateProperties','updateModdleProperties','toggleCollapse']
-      // const {name,value}={name:'mod',value:'sss'};
-      // const newPropertyObject = BpmnIns.get('moddle').create(`${props.processType}:Property`, {name,value});
-      // const propertiesObject = BpmnIns.get('moddle').create(`${props.processType}:Properties`, {
-      //     values: newPropertyObject
-      //   });
-      // console.log(propertiesObject,'propertiesObject')
-      // const extensions = BpmnIns.get('moddle').create('bpmn:ExtensionElements',{
-      //   values:propertiesObject
-      // })
-      // console.log(extensions,'extensions')
-      // BpmnIns.get('modeling')[funcName]( element, {
-      //   extensionElements:extensions
-      // });
+      BpmnIns.get('modeling')?.updateProperties( element, properties);      
     }
     return {
       bpmnCanvasDom,
@@ -492,6 +483,7 @@ export default defineComponent({
       processZoom,
       startTool,
       previewProcess,
+      transProcessJsonToCustome,
       processCreateElement,
       processRestart,
       processSimulation,

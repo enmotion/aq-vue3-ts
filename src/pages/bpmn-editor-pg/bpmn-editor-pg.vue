@@ -5,7 +5,7 @@
     </div>
     <div class="xrow bg-dark-1 flex-grow-1">
       <div class="w-40 bg-p-1 border-r border-dark-2 p-5">
-        <element-menu :menu="elementsMenu" @buttonClick="processFuncHandler($event)"></element-menu>
+        <element-menu :menu="elementsMenu" :processType="'aaa'" @buttonClick="processFuncHandler($event)"></element-menu>
       </div>
       <div ref="bpmnDesignContainer" class="xcol flex-grow-1">
         <splitpanes :horizontal="false">
@@ -20,7 +20,7 @@
           </pane>
           <pane class="xcol" :min-size="propEditorWidth" :size="propEditorWidth" :max-size="80">
             <div class="xrow p-10 text-xs text-left break-all bg-white flex-grow-1">
-              {{ JSON.stringify(selectItem) }}
+              {{ currentBusinessObject }}
             </div>
           </pane>
         </splitpanes>
@@ -36,6 +36,7 @@ import { Splitpanes, Pane } from "splitpanes";
 import 'splitpanes/dist/splitpanes.css';
 import ElementMenu from './widgets/elementMenu.vue';
 import { elementsMenu } from "@src/parts/aq/aq-bpmn-editor/config/controlDashBoardConfig";
+import { global } from "./config/processJsonData-base";
 // import { MenuItem } from 'types/project/bpmn-editor/controlDashBoradConfig'; // 引入流程菜单描述
 // import { elementsMenu } from "@src/parts/aq/aq-bpmn-editor/config/controlDashBoardConfig";\
 import { xmlStr } from "@src/xml/xmlStr";
@@ -73,7 +74,7 @@ export default defineComponent({
     return {
       xmlStr: xmlStr,
       elementsMenu: elementsMenu[0].children,
-      selectItem: "",
+      currentBusinessObject: {} as any,
     };
   },
   mounted(){
@@ -83,20 +84,26 @@ export default defineComponent({
     clickEvent($event:any) {
       const vm = this;
       const params = $event.businessObject.$attrs.params?JSON.parse($event.businessObject.$attrs.params)[0]:{};
-      console.log($event.businessObject.$attrs.params,'params');
-      vm.selectItem = JSON.stringify(R.mergeAll([R.pick(['id','name','engine'],$event.businessObject),params])).replaceAll(`\"`, `'`);
-      if($event.elementType == 'bpmn:Process'){
-        var BpmnIns = vm.$refs.bpmnDom as any;
-        BpmnIns.setProcessElementById($event.elementId,{params:JSON.stringify(
-          [{
-            user:['admin','client','test'],
-            worker:{
-              postion:"sss"
-            },
-            news:`aaa`
-          }]
-        )})
-      }
+      const currentBusinessObject = R.mergeAll([global,$event.businessObject.$attrs.params||{},{
+        id:$event.businessObject.id,
+        name:$event.businessObject.name,
+        type:$event.businessObject.$type
+      }])
+      vm.currentBusinessObject = JSON.stringify(currentBusinessObject).replaceAll(`\"`, `'`);
+      // if($event.elementType == 'bpmn:Process'){
+      var BpmnIns = vm.$refs.bpmnDom as any;
+        // BpmnIns.setProcessElementById($event.elementId,{
+        //   name:"aaaa",
+        //   params:JSON.stringify(
+        //   [{
+        //     user:['admin','client','test'],
+        //     worker:{
+        //       postion:"sss"
+        //     },
+        //     news:`aaa`
+        //   }]
+        // )})
+      // }
     },
     removedEvent($event: any) {
       console.log('removeEvent');

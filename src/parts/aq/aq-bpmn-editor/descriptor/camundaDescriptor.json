@@ -273,6 +273,11 @@
       ],
       "properties": [
         {
+          "name": "engine",
+          "isAttr": false,
+          "type": "String"
+        },
+        {
           "name": "candidateStarterGroups",
           "isAttr": true,
           "type": "String"

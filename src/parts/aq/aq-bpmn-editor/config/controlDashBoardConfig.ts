@@ -46,7 +46,7 @@ export const zoomMenu:MenuItem[] = [
   {tips:'缩小',icon:'icon-zoomout',method:{name:'processZoom',params:-0.1},disabled:false},
 ];
 export const historyMenu:MenuItem[] = [
-  // {tips:'后退',icon:'icon-arrowL',method:{name:'processEditJump',params:'undo'},disabled:true},
-  // {tips:'前进',icon:'icon-arrowR',method:{name:'processEditJump',params:'redo'},disabled:true},
+  {tips:'后退',icon:'icon-arrowL',method:{name:'processEditJump',params:'undo'},disabled:true},
+  {tips:'前进',icon:'icon-arrowR',method:{name:'processEditJump',params:'redo'},disabled:true},
   {tips:'重绘',icon:'icon-refresh',method:{name:'processRestart'},disabled:false},
 ];
