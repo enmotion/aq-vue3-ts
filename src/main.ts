@@ -31,7 +31,7 @@ const app = createApp(App).use(store).use(router); // 构建应用
 app.config.globalProperties.$message = ElMessage; // 全局引入element-ui弹窗
 app.provide('$message', ElMessage);
 const confirm = function(params:ElMessageBoxOptions,appContext?:AppContext|null){
-   ElMessageBox(params,appContext);
+   return ElMessageBox(params,appContext);
 } // 全局引入element-ui确认组件
 app.config.globalProperties.$confirm = confirm
 app.provide('$confirm', confirm);

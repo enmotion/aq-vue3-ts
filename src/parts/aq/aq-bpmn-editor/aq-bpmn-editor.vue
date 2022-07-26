@@ -332,8 +332,17 @@ export default defineComponent({
         vm.$message.warning("请按住 Shift 键选择多个元素对齐");
         return;
       }
-      vm.$confirm('您确认要进行对齐操作吗？该操作有可能影响当前布局！','操作确认',)
-      Align.trigger(SelectedElements, align);
+      vm.$confirm({
+        title:"操作警告",
+        message:"是否继续操作？",
+        showCancelButton: true,
+        confirmButtonText:'确定',
+        cancelButtonText:'取消',
+      }).then(()=>{
+        Align.trigger(SelectedElements, align);
+      }).catch(()=>{
+        vm.$message.warning("操作已取消！");
+      })
     }
     // 流程面板自定义添加元素 方法
     function processCreateElement(event:PointerEvent, params:any) {

@@ -68,7 +68,7 @@
 
 <script lang="ts">
 import * as R from "ramda";
-import { ref, reactive, onMounted, onUnmounted, defineComponent, inject, computed } from "vue";
+import { ref, reactive, onMounted, onUnmounted, defineComponent, inject, computed, getCurrentInstance, ComponentPublicInstance } from "vue";
 import { Splitpanes, Pane } from "splitpanes";
 import 'splitpanes/dist/splitpanes.css';
 import ElementMenu from './widgets/elementMenu.vue';
@@ -86,6 +86,7 @@ export default defineComponent({
     // 组件配置数据 
     const screen = inject("screen"); // 引入屏幕
     const processType = ref('flowable' as 'camunda'|'flowable'|'activiti'); // 流程引擎类型
+    const { proxy } = (getCurrentInstance() as { proxy:ComponentPublicInstance });
     // 组件嵌套实例
     const bpmnDom = ref(null as any); // bpmn-editor 组件实例 Dom
     const bpmnDesignDom = ref(null as any); // bpmn-editor + prop-editor 组件实例 Dom
@@ -115,8 +116,19 @@ export default defineComponent({
       window.removeEventListener('popstate', preventBrowserBack); // 关闭侦听
       bpmnDesignContainerResizeObserver.disconnect(); // 关闭侦听
     })
-    function preventBrowserBack(){
-      history.pushState({title:"",url:""}, "", document.URL);
+    function preventBrowserBack(e:Event){
+      let vm  = proxy as any;
+      vm.$confirm({
+        title:"操作警告",
+        message:"您当前的操作尚未保存，是否确认返回？返回后，当前所编辑内容都将丢失！",
+        showCancelButton: true,
+        confirmButtonText:'立即返回',
+        cancelButtonText:'稍后返回',
+      }).then(()=>{
+        history.go(-1);
+      }).catch(()=>{
+        history.pushState({title:"",url:""}, "", document.URL);
+      })
     }
     function clickEvent($event:any) {
       const businessObject = R.clone( $event.businessObject );
