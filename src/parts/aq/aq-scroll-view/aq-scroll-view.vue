@@ -1,11 +1,11 @@
 <template>
   <div class="flex flex-col flex-grow-1 flex-shrink-1 overflow-hidden">
     <div ref="ScrollContainerDom" class="relative h-full overflow-hidden">
-      <div class="absolute h-full w-full overflow-hidden">
+      <div class="absolute h-full w-full">
         <el-scrollbar v-if="!disabled" v-bind="scrollBarProps" :height="ScrollContainerDomSize.h" @scroll="scroll">
-        <div ref="ContentContainerDom" class="flex flex-col">
-          <slot></slot>
-        </div>
+          <div ref="SlotContainerDom" class="h-auto w-auto flex-grow-0 flex-shrink-0">
+            <slot></slot>
+          </div>
         </el-scrollbar>
         <div v-if="disabled" class="flex flex-col">
           <slot></slot>
@@ -43,11 +43,16 @@ export default defineComponent({
     }
   },
   components:{ ElScrollbar },
+  emits: ['onScrollToTop','onScrollToBottom'],
   setup(props,context) {
     const ScrollContainerDom = ref(null as any);
+    const SlotContainerDom = ref(null as any);
     const ScrollContainerDomSize = reactive({w:0,h:0});
+    const isAlreadyTrigged = reactive({
+      top:false,
+      bottom:false,
+    })
     let ScrollContainerDomResizeObserver = reactive({} as any); // bpmnDesignDom 容器监听器
-    console.log(props,123)
     const scrollBarProps = computed(()=>props.scrollBarProps)
     onMounted(() => {
       // 计算属性面板所需宽度
@@ -61,13 +66,30 @@ export default defineComponent({
       ScrollContainerDomResizeObserver.disconnect(); // 关闭侦听
     })
     function scroll(data:any){
-      console.log(data)
+      if(data.scrollTop <= 0 ){
+        if(!isAlreadyTrigged.top){
+          isAlreadyTrigged.top = true;
+          context.emit('onScrollToTop','top');
+        }
+      }else{
+        isAlreadyTrigged.top = false;
+      }
+      if(data.scrollTop >= SlotContainerDom.value.clientHeight-ScrollContainerDomSize.h){
+        if(!isAlreadyTrigged.bottom){
+          isAlreadyTrigged.bottom = true;
+          context.emit('onScrollToBottom','bottom');
+        }
+      }else{
+        isAlreadyTrigged.bottom = false;
+      }
     }
     return {
       scrollBarProps,
       ScrollContainerDom,
+      SlotContainerDom,
       ScrollContainerDomResizeObserver,
       ScrollContainerDomSize,
+      isAlreadyTrigged,
       scroll
     }
   },

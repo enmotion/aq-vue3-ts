@@ -49,8 +49,13 @@
                 <span class="h-50 border border-dark-2 rounded-md bg-white p-10 overflow-hidden items-center text-xs xrow">
                   {{currentItem.businessObject?.name}}
                 </span>
-                <aq-scroll-view :disabled="false" class="flex-grow-1 flex-shrink-1" :scrollBarProps="{ viewClass:'pr-5', always:true, minSize:50}">
-                  <div class="bg-dark-1" style="height:1600px">aa</div>
+                <aq-scroll-view :disabled="false" 
+                  class="flex-grow-1 flex-shrink-1" 
+                  :scrollBarProps="{ always:true, minSize:50}"
+                  @on-scroll-to-top="onscroll"
+                  @on-scroll-to-bottom="onscroll">
+                  <div class="bg-dark-1" style="height:1600px;width:3000px">aa</div>
+                  <div style="width:5000px">bbb</div>
                 </aq-scroll-view>
               </div>
             </div>
@@ -118,6 +123,9 @@ export default defineComponent({
     function processFuncHandler(event: { event: Event, name: string, params?: any }) {
       bpmnDom.methodsDistribute(event);
     }
+    function onscroll(value:string){
+      console.log(value)
+    }
     return {
       screen,
       processType,
@@ -130,7 +138,8 @@ export default defineComponent({
 
       clickEvent,
       removedEvent,
-      processFuncHandler
+      processFuncHandler,
+      onscroll
     }
   }
 })
