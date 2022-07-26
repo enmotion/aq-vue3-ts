@@ -20,11 +20,11 @@
     </div>
     <div class="xrow bg-dark-1 flex-grow-1">
       <div class="w-40 bg-p-1 border-r border-dark-2 p-5">
-        <!-- <element-menu 
+        <element-menu 
           :menu="elementsMenus" 
           :processType="'aaa'" 
           @buttonClick="processFuncHandler($event)">
-        </element-menu> -->
+        </element-menu>
       </div>
       <div ref="bpmnDesignDom" class="xcol flex-grow-1">
         <splitpanes :horizontal="false">
@@ -102,6 +102,9 @@ export default defineComponent({
     }); // 当前属性配置
     // 生命周期函数；
     onMounted(() => {
+      // 阻止浏览器跳转
+      history.pushState({title:"",url:""}, "", document.URL); // 塞空值
+      window.addEventListener('popstate', preventBrowserBack); // 绑侦听
       // 计算属性面板所需宽度
       bpmnDesignContainerResizeObserver = new ResizeObserver(() => {
         propEditorWidthPercent.value = Math.min(Math.round(bpmnPropEditorMinWidth / bpmnDesignDom.value.clientWidth * 100), 50);
@@ -109,8 +112,12 @@ export default defineComponent({
       bpmnDesignContainerResizeObserver.observe(bpmnDesignDom.value); // 添加侦听
     })
     onUnmounted(() => {
+      window.removeEventListener('popstate', preventBrowserBack); // 关闭侦听
       bpmnDesignContainerResizeObserver.disconnect(); // 关闭侦听
     })
+    function preventBrowserBack(){
+      history.pushState({title:"",url:""}, "", document.URL);
+    }
     function clickEvent($event:any) {
       const businessObject = R.clone( $event.businessObject );
       const currentBusinessObjects = R.mergeAll([global,$event.businessObject.$attrs.params||{},businessObject]);
@@ -121,7 +128,7 @@ export default defineComponent({
       console.log($event)
     }
     function processFuncHandler(event: { event: Event, name: string, params?: any }) {
-      bpmnDom.methodsDistribute(event);
+      bpmnDom.value.methodsDistribute(event);
     }
     function onscroll(value:string){
       console.log(value)

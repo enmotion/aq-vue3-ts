@@ -5,7 +5,7 @@
         </div>
         <div v-if="isLoading" class="flex felx-col z-10 flex-grow-1 absolute w-full h-full">
             <div class="flex flex-col flex-grow-1 items-center justify-center">
-                <SemipolarSpinner :color="color" :size="size" :animation-duration="duration"/>
+                <!-- <SemipolarSpinner :color="color" :size="size" :animation-duration="duration"/> -->
                 <div v-show="showTips" class="mt-10 text-xs font-bold" :style="{color:'#888888AA'}">{{ tips }}</div>
             </div>
         </div>
@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { SemipolarSpinner } from 'epic-spinners';
+// import { SemipolarSpinner } from 'epic-spinners';
 
 export default defineComponent({
     name: "loading",
@@ -49,7 +49,7 @@ export default defineComponent({
         }
     },
     components: {
-        SemipolarSpinner
+        // SemipolarSpinner
     }
 })
 </script>

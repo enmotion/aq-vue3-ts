@@ -93,7 +93,7 @@
 }
 </style>
 <script lang="ts">
-import { defineComponent, ref, reactive, onMounted, watch, getCurrentInstance, PropType, ComponentPublicInstance } from 'vue';
+import { defineComponent, ref, reactive, onMounted, watch, getCurrentInstance, PropType, ComponentPublicInstance, inject } from 'vue';
 import * as R from "ramda";
 // @ts-ignore ts忽视下一行检测
 import uniqid from "uniqid";
@@ -323,14 +323,16 @@ export default defineComponent({
     }
     // 节点对齐操作
     function elementsAlign(event:PointerEvent, align:string) {
+      const vm = proxy as any;
       const Align = BpmnIns.get("alignElements");
       const Selection = BpmnIns.get("selection");
       const SelectedElements = Selection.get();
       if (!SelectedElements || SelectedElements.length <= 1) {
         console.log(getCurrentInstance());
-        //$message.warning("请按住 Ctrl 键选择多个元素对齐");
+        vm.$message.warning("请按住 Shift 键选择多个元素对齐");
         return;
       }
+      vm.$confirm('您确认要进行对齐操作吗？该操作有可能影响当前布局！','操作确认')
       Align.trigger(SelectedElements, align);
     }
     // 流程面板自定义添加元素 方法
