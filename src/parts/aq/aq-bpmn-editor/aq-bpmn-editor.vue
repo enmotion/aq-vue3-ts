@@ -332,7 +332,7 @@ export default defineComponent({
         vm.$message.warning("请按住 Shift 键选择多个元素对齐");
         return;
       }
-      vm.$confirm('您确认要进行对齐操作吗？该操作有可能影响当前布局！','操作确认')
+      vm.$confirm('您确认要进行对齐操作吗？该操作有可能影响当前布局！','操作确认',)
       Align.trigger(SelectedElements, align);
     }
     // 流程面板自定义添加元素 方法
