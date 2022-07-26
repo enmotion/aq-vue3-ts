@@ -2,7 +2,7 @@
  * @ Author: enmoion
  * @ Create Time: 2022-06-20 10:12:05
  * @ Modified by: enmotion
- * @ Modified time: 2022-07-15 15:00:35
+ * @ Modified time: 2022-07-26 11:28:29
  * @ Description:
  * vue3-spa入口文件
  */
@@ -28,10 +28,10 @@ window.onresize=function(){
   })
 }; // 屏幕自适配侦测
 const app = createApp(App).use(store).use(router); // 构建应用
-app.config.globalProperties.$message = ElMessage;
-app.provide('$message', ElMessage)
-app.config.globalProperties.$confirm = ElMessageBox;
-app.provide('$confirm', ElMessageBox)
+app.config.globalProperties.$message = ElMessage; // 全局引入element-ui弹窗
+app.provide('$message', ElMessage);
+app.config.globalProperties.$confirm = ElMessageBox; // 全局引入element-ui确认组件
+app.provide('$confirm', ElMessageBox);
 globalComponents.map(item=>{
    app.component(item.name,item.config);
 }); // 全局引入公共组件

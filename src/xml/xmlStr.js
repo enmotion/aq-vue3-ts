@@ -1,4 +1,4 @@
-export var xmlStr = `<?xml version="1.0" encoding="UTF-8"?>
+export var sample = `<?xml version="1.0" encoding="UTF-8"?>
 <bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="diagram_PROCESS-L5VX75KF" targetNamespace="http://activiti.org/bpmn">
   <bpmn2:process id="PROCESS-L5VX75KF" name="未命名流程-L5VX75KG" isExecutable="true" engine="activiti">
     <bpmn2:startEvent id="Event_1b546j4" name="流程开始">

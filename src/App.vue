@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full flex flex-col mask">
+  <div class="h-full flex flex-col mask text-xs">
     <aq-loading :is-loading="false">
       <router-view key="root_router" />
     </aq-loading>
@@ -7,11 +7,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { useStore } from "vuex";
+import { defineComponent, provide, computed } from 'vue'
 
 export default defineComponent({
   setup(props:any,context:any) {
-    
+    const store = useStore();
+    provide('screen',computed(()=>store.getters.screen));
   },
 })
 </script>

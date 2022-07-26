@@ -13,8 +13,8 @@ module.exports = {
       m:process.env.VITE_APP_THEME, // 主配色
       black:'#000000',
       white:'#FFFFFF',
-      dark:tailWindUtils.generateAlphaColorStep('#000000',24),
-      light:tailWindUtils.generateAlphaColorStep('#FFFFFF',24),
+      dark:tailWindUtils.generateAlphaColorStep('#000000',48),
+      light:tailWindUtils.generateAlphaColorStep('#FFFFFF',48),
       d:tailWindUtils.generateAlphaColorStep('#D92211',10), // 危险色
       s:tailWindUtils.generateAlphaColorStep('#59D986',10), // 安全色
       w:tailWindUtils.generateAlphaColorStep('#F2C849',10), // 警告色
