@@ -32,13 +32,13 @@
           <span class="h-20 flex items-end font-bold text-dark-24" style="font-size:20px">系统登录</span>
           <span class="h-20 flex items-end ml-10 uppercase font-bold text-dark-18" style="font-size:14px;margin-top:3px">reg/login</span>
         </span>
-        <span class="flex-grow-2 text-xs text-dark-24 flex items-center text-justify"
+        <span class="flex-grow-1 text-xs text-dark-24 flex items-center text-justify py-15"
           :class="[screen.isWS?'px-50':'px-20']"
           style="line-height:20px !important;">
-          欢迎登录WORKFLOW系统，请在下方输入您的账号和密码。
+          欢迎登录WORKFLOW系统。
         </span>
         <span class="xcol"
-          :class="[screen.isWS?'px-50 py-30':'p-20 h-4/6']">
+          :class="[screen.isWS?'px-50 py-10':'p-20 h-4/6']">
           <el-input v-model="reqdata.username" class="text-xs mb-10 last:mb-0" type="text" placeholder="账号/用户名" clearable>
             <template v-slot:prepend class="px-5">账号</template>
           </el-input>
