@@ -23,6 +23,18 @@
     @apply flex-col-reverse
   }
 }
+/* background-img */
+.bg-base{
+  background-image: url('../img/bg-base.jpeg');
+  background-repeat: no-repeat;
+  background-position: 0% 100%;
+}
+.bg-blue{
+  background-image: url('../img/bg-blue.jpeg');
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: cover;
+}
 /* messagebox */
 /* light */
 .msg-light{
