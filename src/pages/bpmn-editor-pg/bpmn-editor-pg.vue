@@ -74,13 +74,13 @@ import { ref, reactive, onMounted, onUnmounted, defineComponent, inject, compute
 import { Splitpanes, Pane } from "splitpanes";
 import 'splitpanes/dist/splitpanes.css';
 import ElementMenu from './widgets/elementMenu.vue';
-import { elementsMenu } from "@src/parts/aq/aq-bpmn-editor/config/controlDashBoardConfig";
+import { elementsMenu } from "@src/parts/aq-componets/aq-bpmn-editor/config/controlDashBoardConfig";
 import { global } from "./config/processJsonData-base";
 import { ElButton, ElSwitch } from "element-plus";
 import { sample } from "@src/xml/xmlStr";
 import { MenuItem } from "@typ/bpmn-editor/controlDashBoradConfig";
-import AqScrollView from "@src/parts/aq/aq-scroll-view/aq-scroll-view.vue";
-import aqBpmnEditor from "@src/parts/aq/aq-bpmn-editor/aq-bpmn-editor.vue";
+import AqScrollView from "@src/parts/aq-componets/aq-scroll-view/aq-scroll-view.vue";
+import aqBpmnEditor from "@src/parts/aq-componets/aq-bpmn-editor/aq-bpmn-editor.vue";
 
 export default defineComponent({
   components: { ElementMenu, ElSwitch, Splitpanes, Pane, ElButton, AqScrollView, aqBpmnEditor },
