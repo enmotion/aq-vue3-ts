@@ -15,6 +15,7 @@
     "@types/splitpanes": "^2.2.1",
     "bowser": "^2.11.0",
     "bpmn-js-token-simulation": "^0.10.0",
+    "diagram-js": "^8.7.1",
     "element-plus": "^2.2.9",
     "highlight.js": "^11.0.1",
     "lodash": "^4.17.21",

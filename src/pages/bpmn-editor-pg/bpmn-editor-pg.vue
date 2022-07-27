@@ -48,6 +48,7 @@
               <div class="xcol p-10 text-xs text-left break-all flex-grow-1 bg-dark-2 flex-col">
                 <span class="h-50 border border-dark-2 rounded-md bg-white p-10 overflow-hidden items-center text-xs xrow">
                   {{currentItem.businessObject?.name}}
+                  <el-switch v-model="isSaved" size="small"></el-switch>
                 </span>
                 <aq-scroll-view :disabled="false" 
                   class="flex-grow-1 flex-shrink-1 -mr-10 mt-10" 
@@ -75,19 +76,21 @@ import 'splitpanes/dist/splitpanes.css';
 import ElementMenu from './widgets/elementMenu.vue';
 import { elementsMenu } from "@src/parts/aq/aq-bpmn-editor/config/controlDashBoardConfig";
 import { global } from "./config/processJsonData-base";
-import { ElButton } from "element-plus";
+import { ElButton, ElSwitch } from "element-plus";
 import { sample } from "@src/xml/xmlStr";
 import { MenuItem } from "@typ/bpmn-editor/controlDashBoradConfig";
 import AqScrollView from "@src/parts/aq/aq-scroll-view/aq-scroll-view.vue";
 import aqBpmnEditor from "@src/parts/aq/aq-bpmn-editor/aq-bpmn-editor.vue";
 
 export default defineComponent({
-  components: { ElementMenu, Splitpanes, Pane, ElButton, AqScrollView, aqBpmnEditor },
+  components: { ElementMenu, ElSwitch, Splitpanes, Pane, ElButton, AqScrollView, aqBpmnEditor },
   setup(props, context){
     // 组件配置数据 
     const screen = inject("screen"); // 引入屏幕
     const processType = ref('flowable' as 'camunda'|'flowable'|'activiti'); // 流程引擎类型
     const { proxy } = (getCurrentInstance() as { proxy:ComponentPublicInstance });
+    const isMessageBoxActived = ref(false); // 避免重复弹窗
+    const isSaved = ref(false); // 是否已保存
     // 组件嵌套实例
     const bpmnDom = ref(null as any); // bpmn-editor 组件实例 Dom
     const bpmnDesignDom = ref(null as any); // bpmn-editor + prop-editor 组件实例 Dom
@@ -117,19 +120,26 @@ export default defineComponent({
       window.removeEventListener('popstate', preventBrowserBack); // 关闭侦听
       bpmnDesignContainerResizeObserver.disconnect(); // 关闭侦听
     })
-    function preventBrowserBack(e:Event){
+    function preventBrowserBack(event:Event){
       let vm  = proxy as any;
-      vm.$confirm({
-        title:"操作警告",
-        message:"您当前的操作尚未保存，是否确认返回？返回后，当前所编辑内容都将丢失！",
-        showCancelButton: true,
-        confirmButtonText:'立即返回',
-        cancelButtonText:'稍后返回',
-      }).then(()=>{
-        history.go(-1);
-      }).catch(()=>{
+      if(!isSaved.value){
+        event.preventDefault();
         history.pushState({title:"",url:""}, "", document.URL);
-      })
+        if(!isMessageBoxActived.value){
+          isMessageBoxActived.value = true;
+          vm.$confirm({
+            message:`您当前的操作尚未保存，是否确认返回？返回后，当前未保存的编辑内容都将丢弃！`,
+            showInput:true,
+            customClass:'msg-dark'
+          }).then(()=>{
+            history.go(-2);
+          }).catch(()=>{
+            isMessageBoxActived.value = false;
+          })
+        }
+      }else{
+        history.go(-2);
+      }
     }
     function clickEvent($event:any) {
       const businessObject = R.clone( $event.businessObject );
@@ -155,6 +165,7 @@ export default defineComponent({
       xmlStr,
       elementsMenus,
       currentItem,
+      isSaved,
 
       clickEvent,
       removedEvent,

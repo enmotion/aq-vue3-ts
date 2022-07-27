@@ -41,7 +41,7 @@ export default defineComponent({
                               return (
                                 <span 
                                   key={it.label+'-'+it.icon}
-                                  class={[item.disabled?'cursor-not-allowed opacity-50':'btn hover:text-s-10 hover:bg-s-1 ',"px-10 py-5 mb-5 last:mb-0 text-dark-24 text-xs rounded-sm transition-all duration-300"]}
+                                  class={[item.disabled?'cursor-not-allowed':'btn hover:text-s-10 hover:bg-s-1 ',"px-10 py-5 mb-5 last:mb-0 text-dark-32 text-xs rounded-sm transition-all duration-300"]}
                                   onClick={(e)=>{
                                     let payload:{event?:Event,name?:string,params?:any} = R.mergeAll([{event:e},it.method||{}]);
                                     !it.disabled && triggerClick(payload);
@@ -55,7 +55,7 @@ export default defineComponent({
                       ),
                       reference:()=> (
                         <div
-                          class="flex items-center justify-center btn border border-dark-2 rounded-sm bg-dark-1 text-dark-18 hover:bg-s-1 hover:text-s-10 transition-all duration-500"
+                          class="flex items-center justify-center btn border border-dark-2 rounded-sm bg-dark-1 text-dark-32 hover:bg-s-1 hover:text-s-10 transition-all duration-500"
                           style="margin:0px 1px 0px 1px;width:25px;height:25px">
                             <span v-show={item.icon !=''&& item.icon != undefined} class={item.icon+" text-sm iconfont text-md"}></span>
                             <span v-show={item.icon =='' || item.icon == undefined}>{item.label}</span>
@@ -71,7 +71,7 @@ export default defineComponent({
                     disabled={item.tips == '' || item.tips == undefined}
                     content={item.tips}>
                       <div
-                        class={[item.disabled?'cursor-not-allowed text-dark-4':'btn text-black',"flex items-center justify-center border border-dark-2 rounded-sm bg-dark-1"]}
+                        class={[item.disabled?'cursor-not-allowed text-dark-12':'btn text-dark-32 font-bold',"flex items-center justify-center border border-dark-2 rounded-sm bg-dark-1"]}
                         style="margin:0px 1px 0px 1px;width:25px;height:25px"
                         onClick={(e)=>{
                           let payload:{event?:Event,name?:string,params?:any} = R.mergeAll([{event:e},item.method||{}]);

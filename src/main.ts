@@ -2,11 +2,12 @@
  * @ Author: enmoion
  * @ Create Time: 2022-06-20 10:12:05
  * @ Modified by: enmotion
- * @ Modified time: 2022-07-26 11:28:29
+ * @ Modified time: 2022-07-27 13:36:16
  * @ Description:
  * vue3-spa入口文件
  */
 import Bowser from "bowser"; // 引入浏览器侦测模块
+import * as R from "ramda";
 import { createApp,AppContext } from 'vue'; // 创建 vue 实例方法
 import App from '@src/App.vue'; // 根节 vue 组件文件
 
@@ -31,7 +32,17 @@ const app = createApp(App).use(store).use(router); // 构建应用
 app.config.globalProperties.$message = ElMessage; // 全局引入element-ui弹窗
 app.provide('$message', ElMessage);
 const confirm = function(params:ElMessageBoxOptions,appContext?:AppContext|null){
-   return ElMessageBox(params,appContext);
+   const defaultParams = {
+      title:'操作提示:',
+      showCancelButton: true,
+      dangerouslyUseHTMLString:true,
+      confirmButtonText:'确定',
+      cancelButtonText:'取消',
+      customClass:'msg-light',
+      inputPlaceholder:'请输入...'
+   }
+   let mergedParams = R.mergeAll([defaultParams,params]);
+   return ElMessageBox(mergedParams,appContext);
 } // 全局引入element-ui确认组件
 app.config.globalProperties.$confirm = confirm
 app.provide('$confirm', confirm);
