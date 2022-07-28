@@ -2,7 +2,7 @@
  * @ Author: enmoion
  * @ Create Time: 2022-06-20 10:12:05
  * @ Modified by: enmotion
- * @ Modified time: 2022-07-27 13:36:16
+ * @ Modified time: 2022-07-28 17:42:46
  * @ Description:
  * vue3-spa入口文件
  */
@@ -15,6 +15,7 @@ import 'element-plus/dist/index.css';
 import 'element-plus/theme-chalk/dark/css-vars.css'; // 引入element-ui 
 import './assets/css/index.css'; // 引入 tailwinds 编译后的全局 css
 import store from "@src/store"; // vuex 状态管理
+import { RouteLocationRaw } from "vue-router";
 import router from  "@src/router"; // vue-router 路由配置
 import globalComponents from "@src/parts"; // 导入全部自定义公共组件
 
@@ -46,6 +47,10 @@ const confirm = function(params:ElMessageBoxOptions,appContext?:AppContext|null)
 } // 全局引入element-ui确认组件
 app.config.globalProperties.$confirm = confirm
 app.provide('$confirm', confirm);
+const push = function(routerData:RouteLocationRaw){
+   router.push(routerData);
+ }
+app.config.globalProperties.$push = push
 globalComponents.map(item=>{
    app.component(item.name,item.config);
 }); // 全局引入公共组件

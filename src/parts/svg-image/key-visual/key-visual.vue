@@ -1,17 +1,17 @@
 <template>
-	<img width="500" :src="svgURL" />
+	<img width="500" :src="svgUrl" />
 </template>
 
 <script lang="ts">
-import svg from  "@src/assets/img/design.svg";
+import svg from  "@src/assets/img/svg/design.svg";
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  setup() {
-    const svgURL = svg;
-		return {
-			svgURL
+	props:{
+		svgUrl:{
+			type:String,
+			default:svg
 		}
-  },
+	},
 })
 </script>

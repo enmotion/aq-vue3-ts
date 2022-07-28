@@ -1,15 +1,15 @@
 <template>
   <div class="h-full bg-p-1 xcol items-center justify-center">
     <div class="w-2/12 xcol p-40 rounded-md border-dark-4 border shadow-md bg-white" style="min-width:320px">
-      <div class="bg-d-4 rounded-md h-50 xrow items-center px-10 font-bold text-white" style="font-size:20px">
-        <span class="p-10 bg-d-6 mr-5 rounded-md">Error:</span>
-        <span>404</span>
+      <div class="bg-w-4 rounded-md h-50 xrow items-center px-10 font-bold text-white" style="font-size:20px">
+        <span class="p-10 bg-w-6 mr-5 rounded-md">Error:</span>
+        <span>303</span>
       </div>
       <div class="p-40">
         <key-visual :svg-url="svgURL"></key-visual>
       </div>
       <div class="text-sm text-dark-24">
-        抱歉 ! 您当前访问的路径不存在！
+        抱歉 ! 您未获得授权访问当前页面！
       </div>
       <div class="mt-20 xrow justify-center">
         <el-button size="default" 
@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import router from "@src/router";
-import svg from "@src/assets/img/svg/404.svg";
+import svg from "@src/assets/img/svg/303.svg";
 import { ElButton } from "element-plus";
 import { defineComponent, ref } from 'vue'
 

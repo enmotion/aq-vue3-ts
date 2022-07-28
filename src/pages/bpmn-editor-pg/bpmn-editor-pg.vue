@@ -7,13 +7,13 @@
         <el-button 
           size="small" 
           type="danger" 
-          class=" mx-0 mr-5 last:mr-0">
+          class="mx-0 mr-5 last:mr-0">
           发布
         </el-button>
         <el-button 
           size="small" 
           type="success" 
-          class=" mx-0 mr-5 last:mr-0">
+          class="mx-0 mr-5 last:mr-0">
           保存
         </el-button>
       </span>
@@ -128,9 +128,8 @@ export default defineComponent({
         if(!isMessageBoxActived.value){
           isMessageBoxActived.value = true;
           vm.$confirm({
-            message:`您当前的操作尚未保存，是否确认返回？返回后，当前未保存的编辑内容都将丢弃！`,
-            showInput:true,
-            customClass:'msg-dark'
+            message:`您当前的操作尚未保存，是否确认返回上一页并放弃保存`,
+            customClass:'msg-light'
           }).then(()=>{
             history.go(-2);
           }).catch(()=>{

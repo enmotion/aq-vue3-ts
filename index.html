@@ -9,10 +9,15 @@
       html{
         height:100%;
       }
+      .app-container{
+        display:flex;
+        flex-direction:column;
+        height:100%;
+      }
     </style>
   </head>
-  <body class="h-full flex flex-col dark">
-    <div id="app" class="flex flex-col flex-grow-1"></div>
+  <body class="app-container">
+    <div id="app" class="app-container"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
