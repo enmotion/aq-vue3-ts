@@ -19,19 +19,18 @@ const router = createRouter({
   ]
 });
 router.beforeEach(async (to, from ) => {
-  console.log(to,from,store.getters.screen.isWS);
+  const token = store.getters['user/getToken'];
+  console.log(token.refresh_token,token.access_token);
   // 1.如果匹配不上的页面，则直接404
   if (to.matched.length == 0) {
     return { name: 'erro404' };
   }
   // 2.如果路由包含登录验证，则需通过登录检测，否则直接转登录页面
   if (to.meta.tokenRequire) { //需要token校验时
-    console.log('token is required redirect to login');
-    return { name:'login' };
-    // if (R.isEmpty(token.refresh_token) || R.isEmpty(token.access_token)) { //token为空或为null值时
-    //   next({ name: 'login' }) //跳转至登录页面
-    //   return
-    // }
+    if (R.isNil(token.refresh_token) || R.isNil(token.access_token)) { //token为空或为null值时
+      console.log('token is required redirect to login');
+      return { name:'login' };
+    }
   }
   //2.检测路由访问权限问题
   if (!R.isEmpty(to.meta.powerRequire) && !R.isNil(to.meta.powerRequire)) { //路由配置信息的权限需求不为空且不为null值时

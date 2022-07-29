@@ -19,6 +19,7 @@
     "element-plus": "^2.2.9",
     "highlight.js": "^11.0.1",
     "lodash": "^4.17.21",
+    "mod-store": "^1.1.0",
     "ramda": "^0.28.0",
     "simple-web-worker": "^1.2.0",
     "splitpanes": "^3.1.1",

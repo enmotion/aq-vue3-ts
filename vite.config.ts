@@ -18,7 +18,7 @@ export default(({ mode } : { mode : any })=>{
       // 当使用文件系统路径的别名时，请始终使用绝对路径。相对路径作别名值将按原样使用导致不会解析到文件系统路径中。
       alias: {
         // 由于 Vite 本身已经用了 @ 去做模块导入工作，如果用 @ 别名当绝对路径去使用会有问题,通过多加一个 r 来规避 @ 冲突的问题。
-        // 同时注意需要修改 tsconfig.json 内的配置内容
+        // 同时注意需要配合修改 tsconfig.json 内的别名配置内容
         '@src': resolve(__dirname, 'src'),
         '@typ': resolve(__dirname, 'types')
       }

@@ -8,7 +8,7 @@
       <div class="relative text-white items-start flex bg-blue transition-all duration-700"
         :class="[screen.isWS?'w-7/12 ':' xcol flex-grow-1 h-2/6']">
         <div class="absolute z-10 h-full w-full xcol transition-all duration-700"
-          :class="[screen.isWS?'p-40':'p-20 justify-center items-cente']"
+          :class="[screen.isWS?'p-30':'p-20 justify-center items-cente']"
           style="font-size:18px">
           <span class="flex items-start font-bold iconfont icon-logo-vk"
             :class="[screen.isWS?'items-start xrow':'xcol h-40 items-center justify-center']"
@@ -60,7 +60,7 @@
         <!-- buttons -->
         <span class="h-auto flex-shrink-0 xcol pb-30 pt-20 bg-dark-1 border-t border-dark-2"
           :class="[screen.isWS?'px-50':'px-20']">
-          <el-button type="primary" @click="push({name:'bpmn-editor'})">登录</el-button>
+          <el-button type="primary" @click="login">登录</el-button>
           <span class="overflow-hidden flex-grow-1 xcol">
             <span class="xrow justify-between items-center flex-grow-1 my-10">
               <span class="px-10 py-5 rounded bg-dark-1 border border-dark-2 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
@@ -84,6 +84,7 @@
 
 <script lang="ts">
 import { RouteLocationRaw } from "vue-router";
+import { useStore } from "vuex";
 import router from "@src/router";
 import { ElInput, ElButton } from "element-plus";
 import { defineComponent, reactive, inject, getCurrentInstance, ComponentPublicInstance } from 'vue';
@@ -91,6 +92,7 @@ import { defineComponent, reactive, inject, getCurrentInstance, ComponentPublicI
 export default defineComponent({
   components:{ElInput, ElButton},
   setup(props,context) {
+    const store = useStore();
     const reqdata = reactive({
       username:'',
       userpassword:"",
@@ -98,11 +100,13 @@ export default defineComponent({
     })
     const screen = inject('screen') as {isWS:boolean,w:number,h:number};
     const push = ( getCurrentInstance() as { proxy:any } ).proxy?.$push;
-    // function routerJumpTo(routerData:RouteLocationRaw){
-    //   router.push(routerData);
-    // }
+    function login (){
+      store.commit('user/setToken',{ access_token:"111",refresh_token:"222",});
+      push({name:'bpmn-editor'})
+    }
     return {
       // routerJumpTo,
+      login,
       push,
       reqdata,
       screen

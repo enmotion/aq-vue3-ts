@@ -2,13 +2,14 @@
  * @ Author: enmoion
  * @ Create Time: 2022-06-20 14:48:07
  * @ Modified by: enmotion
- * @ Modified time: 2022-07-01 15:26:05
+ * @ Modified time: 2022-07-29 11:42:40
  * @ Description:
  * 根级vuex模型对象
  */
 import * as R from "ramda"; // 引入ramda
 import { createStore } from 'vuex'; // 引入vuex/4.x的createStore方法
-import { State , AppInfo , Screen , Device , KeepAlivePage , PluginKeys } from "./types"
+import user from "./modules/user";
+import { State , AppInfo , Screen , Device , KeepAlivePage , PluginKeys } from "./types";
 
 export default createStore({
     state:():State=>{
@@ -19,19 +20,19 @@ export default createStore({
                 version: import.meta.env.VITE_APP_VERSION,
                 powerd: import.meta.env.VITE_APP_POWERD,
                 copyright: import.meta.env.VITE_APP_POWERD,
-            },
+            } as AppInfo,
             screen: {
                 isWS: document.body.clientWidth > 1024, // iswS:是否宽屏
                 w: document.body.clientWidth, // width:屏幕宽度
                 h: document.body.clientHeight, // height:屏幕高度
-            },
-            device:{},
-            keepAlivePage: [], //缓存路由物件池
+            } as Screen,
+            device:{} as Device,
+            keepAlivePage: [] as KeepAlivePage, //缓存路由物件池
             isLoadingPage: false,
             pluginKeys: { //应用所需相关KEY
                 tmapKey: "RWPBZ-QA73S-7Z7OZ-6WHXL-ZAQDO-QMFTT",
                 tmapSK: "1DSEGlQhl5FOrbrCXf02KzsVuLp7cwmA",
-            },
+            } as PluginKeys,
         }
     },
     getters: {
@@ -78,4 +79,7 @@ export default createStore({
             state.screen = R.mergeAll([state.screen, obj]);
         },
     },
+    modules:{
+        user
+    }
 })
