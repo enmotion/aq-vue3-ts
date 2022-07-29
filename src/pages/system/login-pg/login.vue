@@ -23,7 +23,7 @@
             <span class="mt-5 text-light-32 font-bold" style="font-size:12px">copyright : yanjun-mad-lab.com</span>
           </span>
         </div>
-        <key-visual v-if="screen.isWS" class="w-full h-full backdrop-blur-sm"
+        <key-visual v-if="screen.isWS" class="w-full h-full"
           :class="[screen.isWS?'p-80':'p-40']">
         </key-visual>
       </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full bg-p-1 xcol items-center justify-center">
+  <div class="h-full bg-base xcol items-center justify-center">
     <div class="w-2/12 xcol p-40 rounded-md border-dark-4 border shadow-md bg-white" style="min-width:320px">
       <div class="bg-w-4 rounded-md h-50 xrow items-center px-10 font-bold text-white" style="font-size:20px">
         <span class="p-10 bg-w-6 mr-5 rounded-md">Error:</span>
@@ -14,7 +14,7 @@
       <div class="mt-20 xrow justify-center">
         <el-button size="default" 
           class="px-30 bg-s-1 border border-s-2 text-xs hover:text-white hover:bg-s-8 duration-300"
-          @click="routers.go(-1)">
+          @click="routers.back()">
           返回
         </el-button>
       </div>

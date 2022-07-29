@@ -137,7 +137,7 @@ export default defineComponent({
           })
         }
       }else{
-        history.go(-2);
+        history.go(-1);
       }
     }
     function clickEvent($event:any) {

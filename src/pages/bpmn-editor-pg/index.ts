@@ -4,7 +4,7 @@ const router : RouteRecordRaw ={
   name: 'bpmn-editor',
   meta:{
     tokenRequire: false,
-    powerRequire: [],
+    powerRequire: ['ddd'],
     title:"bpmn-editor",
     keepAlive:false,
   },
