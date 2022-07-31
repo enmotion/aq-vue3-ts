@@ -36,7 +36,7 @@ export default defineComponent({
                     popper-class='bpmn-menu-el-popover'
                     v-slots={{
                       default:() => (
-                        <div class="xcol">
+                        <div class="flex flex-col">
                             {(item.children as MenuItem[]).map(it=>{
                               return (
                                 <span 

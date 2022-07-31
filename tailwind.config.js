@@ -4,7 +4,7 @@ const colors = require('tailwindcss/colors');
 const tailWindUtils = require("./tailwind.lib/tailwind.util");
 
 module.exports = {
-  important: '#app',
+  important: '#root',
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     flexGrow:tailWindUtils.generateStepUint(12),
