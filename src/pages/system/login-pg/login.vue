@@ -39,38 +39,97 @@
             <span class="h-15 mr-5 xcol" style="width:4px;margin-top:-1px">
               <span class="flex-grow-1 bg-s-10 rounded"></span>
             </span>
-            <span class="h-15 flex items-end font-bold text-dark-24" style="font-size:16px">系统登录</span>
-            <span class="h-15 flex items-end ml-5 uppercase font-bold text-dark-18" style="font-size:14px;margin-top:4px">reg/login</span>
+            <span class="h-15 flex items-end font-bold text-dark-24" style="font-size:16px">
+              {{'系统登录'}}
+            </span>
+            <span class="h-15 flex items-end ml-5 font-bold text-dark-18 uppercase" style="font-size:12px;margin-top:4px">
+              {{pageStatus}}
+            </span>
           </span>
-          <span class="xcol flex-grow-1 justify-center">
-            <el-input v-model="reqdata.username" class="text-xs mb-10 last:mb-0" type="text" placeholder="用户名/邮箱..." clearable>
-              <template v-slot:prepend class="px-5">账号</template>
-            </el-input>
-            <el-input v-model="reqdata.userpassword" class="text-xs mb-10 last:mb-0" type="password" placeholder="清输入密码..." clearable show-password>
-              <template v-slot:prepend>密码</template>
-            </el-input>
-            <el-input v-model="reqdata.code" class="text-xs mb-10 last:mb-0" placeholder="请输入验证码..." clearable>
-              <template v-slot:prepend>验证</template>
-              <template v-slot:append>
-                <el-button type="success">发送验证码</el-button>
-              </template>
-            </el-input>
-          </span>
+          <!-- 登录 -->
+          <div v-if="pageStatus == 'login'" class="xcol flex-grow-1 justify-center">
+            <el-form ref="ruleFormRef" :model="reqdata" :rules="rules" :show-message="false">
+              <el-form-item prop="email" class="mb-10 last:mb-0">
+                <el-input v-model="reqdata.email" class="text-xs" type="text" placeholder="账号邮箱..." clearable>
+                  <template v-slot:prepend class="px-5">账号</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item prop="userpassword" class="mb-10 last:mb-0">
+                <el-input v-model="reqdata.userpassword" class="text-xs" type="password" placeholder="密码..." clearable show-password>
+                  <template v-slot:prepend>密码</template>
+                </el-input>
+              </el-form-item>
+              <span class="xrow mb-10 last:mb-0" >
+                <el-form-item prop="code">
+                  <el-input v-model="reqdata.code" class="text-xs" placeholder="验证码..." clearable>
+                    <template v-slot:prepend>验证</template>
+                  </el-input>
+                </el-form-item>
+                <span class="w-140 bg-dark-2 rounded overflow-hidden ml-5 flex items-center justify-center" style="height:32px">
+                  image
+                </span>
+              </span>
+            </el-form>
+          </div>
+          <!-- 注册 -->
+          <div v-if="pageStatus == 'reg'" class="xcol flex-grow-1 justify-center">
+            <el-form ref="ruleFormRef" :model="reqdata" :rules="rules" :show-message="false">
+              <el-form-item prop="email" class="mb-10 last:mb-0">
+                <el-input v-model="reqdata.email" class="text-xs" type="text" placeholder="账号邮箱..." clearable>
+                  <template v-slot:prepend class="px-5">账号</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item prop="userpassword" class="mb-10 last:mb-0">
+                <el-input v-model="reqdata.userpassword" class="text-xs" type="password" placeholder="输入密码..." clearable show-password>
+                  <template v-slot:prepend>密码</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item prop="reuserpassword" class="mb-10 last:mb-0">
+                <el-input v-model="reqdata.reuserpassword" class="text-xs" type="password" placeholder="重复密码..." clearable show-password>
+                  <template v-slot:prepend>密码</template>
+                </el-input>
+              </el-form-item>
+              <span class="xrow mb-10 last:mb-0" >
+                <el-form-item prop="code">
+                  <el-input v-model="reqdata.code" class="text-xs" placeholder="验证码..." clearable>
+                    <template v-slot:prepend>验证</template>
+                  </el-input>
+                </el-form-item>
+                <span class="w-140 bg-dark-2 rounded overflow-hidden ml-5 flex items-center justify-center" style="height:32px">
+                  image
+                </span>
+              </span>
+            </el-form>
+          </div>
         </span>
         <!-- buttons -->
         <span class="h-auto flex-shrink-0 xcol pb-30 pt-20 bg-dark-1 border-t border-dark-2"
           :class="[screen.isWS?'px-50':'px-20']">
-          <el-button type="primary" @click="login">登录</el-button>
           <span class="overflow-hidden flex-grow-1 xcol">
-            <span class="xrow justify-between items-center flex-grow-1 my-10">
-              <span class="px-10 py-5 rounded bg-dark-1 border border-dark-2 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
-                @click="push({path:'erro404s'})">
-                注册账户
+            <!-- 登录 -->
+            <div v-if="pageStatus == 'login'" class="xcol">
+              <el-button type="primary" @click="login">登录</el-button>
+              <span class="xrow justify-between items-center flex-grow-1 my-10">
+                <span class="px-10 py-5 rounded bg-dark-1 border border-dark-2 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
+                  @click="pageStatus = 'reg'">
+                  注册账户
+                </span>
+                <span class="px-10 py-5 rounded bg-dark-1 border border-dark-2 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
+                  @click="pageStatus = 'resetpw'">
+                  忘记密码
+                </span>
               </span>
-              <span class="px-10 py-5 rounded bg-dark-1 border border-dark-2 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300">
-                忘记密码
+            </div>
+            <!-- 注册 -->
+            <div v-if="pageStatus == 'reg'" class="xcol">
+              <el-button type="success" @click="login">注册</el-button>
+              <span class="xrow justify-center items-center flex-grow-1 my-10">
+                <span class="px-10 py-5 rounded bg-dark-1 border border-dark-2 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
+                  @click="pageStatus = 'login'">
+                  返回登录
+                </span>
               </span>
-            </span>
+            </div>
             <span class="text-center break-all xcol text-dark-12 font-medium uppercase" style="line-height:18px">
               POWERED BY yanjun-lab<br/>
               2022.08
@@ -83,31 +142,60 @@
 </template>
 
 <script lang="ts">
-import { RouteLocationRaw } from "vue-router";
+import { RouteLocationRaw, useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
-import router from "@src/router";
-import { ElInput, ElButton } from "element-plus";
-import { defineComponent, reactive, inject, getCurrentInstance, ComponentPublicInstance } from 'vue';
+import { ElInput, ElButton, ElForm, ElFormItem } from "element-plus";
+import { defineComponent, ref, reactive, inject, PropType, Ref, UnwrapNestedRefs } from 'vue';
 
 export default defineComponent({
-  components:{ElInput, ElButton},
+  components:{ElInput, ElButton, ElForm, ElFormItem},
   setup(props,context) {
+    const router = useRouter();
+    // const route = useRoute();
     const store = useStore();
-    const reqdata = reactive({
-      username:'',
-      userpassword:"",
-      code:""
+    let pageStatus:Ref<'login'|'reg'|'resetpw'> = ref('login');
+    const reqdata:UnwrapNestedRefs<{
+      nickname?:string,
+      email:string,
+      userpassword:string,
+      code:string,
+      reuserpassword?:string,
+      account?:string,
+    }> = reactive({
+      email:'',
+      userpassword:'',
+      code:''
+    })
+    const rules = reactive({
+      email: [
+        { required: true, message: '请输入账号邮箱', trigger: 'blur' },
+        { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' },
+      ],
+      userpassword: [
+        {
+          required: true,
+          message: 'Please select Activity zone',
+          trigger: 'change',
+        },
+      ],
+      code: [
+        {
+          required: true,
+          message: 'Please select Activity count',
+          trigger: 'change',
+        },
+      ],
     })
     const screen = inject('screen') as {isWS:boolean,w:number,h:number};
-    const push = ( getCurrentInstance() as { proxy:any } ).proxy?.$push;
     function login (){
       store.commit('user/setToken',{ access_token:"111",refresh_token:"222",});
-      push({name:'bpmn-editor'})
+      router.push({name:'bpmn-editor'});
     }
     return {
-      // routerJumpTo,
       login,
-      push,
+      pageStatus,
+      push:router.push,
+      rules,
       reqdata,
       screen
     }

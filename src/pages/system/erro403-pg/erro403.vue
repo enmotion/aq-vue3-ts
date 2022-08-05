@@ -14,7 +14,7 @@
       <div class="mt-20 xrow justify-center">
         <el-button size="default" 
           class="px-30 bg-s-1 border border-s-2 text-xs hover:text-white hover:bg-s-8 duration-300"
-          @click="routers.back()">
+          @click="router.back()">
           返回
         </el-button>
       </div>
@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import router from "@src/router";
+import { useRouter } from "vue-router";
 import svg from "@src/assets/img/svg/303.svg";
 import { ElButton } from "element-plus";
 import { defineComponent, ref } from 'vue'
@@ -31,12 +31,12 @@ import { defineComponent, ref } from 'vue'
 export default defineComponent({
   components:{ ElButton },
   setup(props,context) {
-    let routers = router;
+    let router = useRouter();
     const svgURL:string = svg;
     const url = ref(window.location.href as string);
     return {
       svgURL,
-      routers,
+      router,
       url
     }
   },

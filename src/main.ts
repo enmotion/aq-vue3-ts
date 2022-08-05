@@ -2,7 +2,7 @@
  * @ Author: enmoion
  * @ Create Time: 2022-06-20 10:12:05
  * @ Modified by: enmotion
- * @ Modified time: 2022-07-28 17:42:46
+ * @ Modified time: 2022-08-05 15:40:33
  * @ Description:
  * vue3-spa入口文件
  */
@@ -47,10 +47,6 @@ const confirm = function(params:ElMessageBoxOptions,appContext?:AppContext|null)
 } // 全局引入element-ui确认组件
 app.config.globalProperties.$confirm = confirm
 app.provide('$confirm', confirm);
-const push = function(routerData:RouteLocationRaw){
-   router.push(routerData);
- }
-app.config.globalProperties.$push = push
 globalComponents.map(item=>{
    app.component(item.name,item.config);
 }); // 全局引入公共组件
