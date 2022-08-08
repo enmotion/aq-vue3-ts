@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col flex-grow-1 select-none dark:bg-d-10"
+  <div class="flex flex-col flex-grow-1 select-none"
     :class="[screen.isWS?'justify-center items-center bg-base':' bg-p-2']">
     <!-- login board -->
     <div class="overflow-hidden border border-dark-4 "

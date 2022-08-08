@@ -6,6 +6,7 @@ const tailWindUtils = require("./tailwind.lib/tailwind.util");
 module.exports = {
   important: '#root',
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  darkMode: 'class',
   theme: {
     flexGrow:tailWindUtils.generateStepUint(12),
     flexShrink:tailWindUtils.generateStepUint(12),
