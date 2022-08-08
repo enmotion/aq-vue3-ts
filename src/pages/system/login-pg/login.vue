@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col flex-grow-1 select-none"
+  <div class="flex flex-col flex-grow-1 select-none dark:bg-d-10"
     :class="[screen.isWS?'justify-center items-center bg-base':' bg-p-2']">
     <!-- login board -->
     <div class="overflow-hidden border border-dark-4 "
@@ -66,7 +66,7 @@
                 </el-input>
               </el-form-item>
               <span class="xrow mb-10 last:mb-0" >
-                <el-form-item prop="code">
+                <el-form-item prop="code" class="flex-grow-1">
                   <el-input v-model="reqdata.code" class="text-sm" placeholder="验证码..." clearable>
                     <template v-slot:prepend>验证</template>
                   </el-input>
