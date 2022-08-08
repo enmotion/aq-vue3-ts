@@ -19,8 +19,8 @@ const router = createRouter({
   ]
 });
 router.beforeEach(async (to, from ) => {
-  const token = store.getters['user/getToken'];
-  console.log(token.refresh_token,token.access_token);
+  const userInfo = store.getters['user/getInfo']||{}; // 取出user状态
+  const token = store.getters['user/getToken']||{}; // 取出token
   // 1.如果匹配不上的页面，则直接404
   if (to.matched.length == 0) {
     return { name: 'erro404' };
@@ -28,23 +28,16 @@ router.beforeEach(async (to, from ) => {
   // 2.如果路由包含登录验证，则需通过登录检测，否则直接转登录页面
   if (to.meta.tokenRequire) { //需要token校验时
     if (R.isNil(token.refresh_token) || R.isNil(token.access_token)) { //token为空或为null值时
-      console.log('token is required redirect to login');
+      console.warn('尚未登录，现返回登录页面...');
       return { name:'login' };
     }
   }
-  //2.检测路由访问权限问题
+  //2.检测路由访问权限,如有权限约束，但用户未获得权限，则会直接跳转至403
   if (!R.isEmpty(to.meta.powerRequire) && !R.isNil(to.meta.powerRequire)) { //路由配置信息的权限需求不为空且不为null值时
-    console.log('power is required')
-    return { name:'erro403'};
-    // if (R.intersection(userInfo.power, to.meta.powerRequire).length < 1) { //权限交集长度<1时，即用户权限点不满路由配置条件
-    //   next({ name: 'error-403' }) //跳转至403页面
-    //   return
-    // }
+    if (R.intersection(userInfo.power||[], to.meta.powerRequire as readonly (string|number)[]).length < 1) { //权限交集长度<1时，即用户权限点不满路由配置条件
+      console.warn('用户权限不符，该页面禁止访问。')
+      return { name:'erro403'};
+    }
   }
 });
-// router.afterEach((to, from, failure) => {
-//   if(to.name === "erro404" && to.redirectedFrom != undefined){
-//     console.log('这次不是直接跳转到404的')
-//   }
-// });
 export default router;

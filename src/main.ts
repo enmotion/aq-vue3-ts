@@ -2,7 +2,7 @@
  * @ Author: enmoion
  * @ Create Time: 2022-06-20 10:12:05
  * @ Modified by: enmotion
- * @ Modified time: 2022-08-05 15:40:33
+ * @ Modified time: 2022-08-08 16:42:05
  * @ Description:
  * vue3-spa入口文件
  */
@@ -18,8 +18,8 @@ import store from "@src/store"; // vuex 状态管理
 import { RouteLocationRaw } from "vue-router";
 import router from  "@src/router"; // vue-router 路由配置
 import globalComponents from "@src/parts"; // 导入全部自定义公共组件
-
-import { ElMessage, ElMessageBox, ElMessageBoxOptions } from 'element-plus'
+import type { ElMessageBoxOptions, MessageParams } from "element-plus";
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 store.commit("setDevice", Bowser.getParser(window.navigator.userAgent).parse()); //提交设备硬件系统环境数据至全局缓存
 window.onresize=function(){
@@ -30,7 +30,12 @@ window.onresize=function(){
   })
 }; // 屏幕自适配侦测
 const app = createApp(App).use(store).use(router); // 构建应用
-app.config.globalProperties.$message = ElMessage; // 全局引入element-ui弹窗
+app.config.globalProperties.$message =function(msgParams:MessageParams & {message:string}){
+   let duration = (msgParams.message?.length||0) * 150 + 1000;
+   if(msgParams){
+      ElMessage(R.mergeAll([ {duration:duration}, msgParams ]));
+   }
+}; // 全局引入element-ui弹窗
 app.provide('$message', ElMessage);
 const confirm = function(params:ElMessageBoxOptions,appContext?:AppContext|null){
    const defaultParams = {

@@ -13,8 +13,14 @@
           <span class="flex items-start font-bold iconfont icon-logo-vk"
             :class="[screen.isWS?'items-start xrow':'xcol h-40 items-center justify-center']"
             :style="{fontSize:screen.isWS?'40px':'80px'}">
-            <span :class="[screen.isWS?'ml-10':'mt-40']" :style="{fontSize:screen.isWS?'16px':'20px'}">
-              {{screen.isWS?'立规矩 创纬业':'纬业流程'}}
+            <span 
+              :class="[screen.isWS?'ml-10':'mt-40']" 
+              :style="{fontSize:screen.isWS?'16px':'20px'}">
+              <span v-show="screen.isWS">立规矩 创纬业</span>
+              <div v-show="!screen.isWS" class="xcol">
+                <span>纬业流程</span>
+                <span class="text-sm mt-10 text-light-32">立规矩 创纬业</span>
+              </div>
             </span>
           </span>
           <div :class="[screen.isWS?'flex-grow-1':'h-15']"></div>
@@ -30,38 +36,38 @@
       <!-- form -->
       <div class="xcol flex-grow-1 bg-white" :class="[screen.isWS?'w-5/12':'mx-10 -mt-50 mb-10 z-40 rounded-lg overflow-hidden']">
         <!-- logo -->
-        <span class="xcol flex-grow-5 font-bold bg-white"
+        <span class="xcol flex-grow-5 bg-white"
           :class="[screen.isWS?'px-50 pt-30':'p-20 h-4/6']">
           <span v-show="screen.isWS" style="font-size:40px" class="text-left mb-20 flex-grow-1 xrow items-center text-p-10 iconfont icon-logo-vk">
             <span class="ml-10 text-dark-24" style="font-size:20px">纬业流程</span>
           </span>
           <span class="xrow items-center" :class="[screen.isWS?'':'my-20']">
-            <span class="h-15 mr-5 xcol" style="width:4px;margin-top:-1px">
+            <span class="h-15 mr-5 xcol" style="width:4px;margin-top:-3px">
               <span class="flex-grow-1 bg-s-10 rounded"></span>
             </span>
-            <span class="h-15 flex items-end font-bold text-dark-24" style="font-size:16px">
-              {{'系统登录'}}
+            <span class="h-15 flex items-end font-bold text-dark-32" style="font-size:16px">
+              {{ruleConfig.cn}}
             </span>
-            <span class="h-15 flex items-end ml-5 font-bold text-dark-18 uppercase" style="font-size:12px;margin-top:4px">
-              {{pageStatus}}
+            <span class="h-15 flex items-end ml-5 text-dark-18 uppercase font-bold" style="font-size:12px;margin-top:4px">
+              {{ruleConfig.en}}
             </span>
           </span>
           <!-- 登录 -->
-          <div v-if="pageStatus == 'login'" class="xcol flex-grow-1 justify-center">
-            <el-form ref="ruleFormRef" :model="reqdata" :rules="rules" :show-message="false">
+          <div v-if="pageStatus == 'Login'" class="xcol flex-grow-1 justify-center">
+            <el-form ref="LoginFormRef" :model="reqdata" :rules="ruleConfig.rule" :show-message="false">
               <el-form-item prop="email" class="mb-10 last:mb-0">
-                <el-input v-model="reqdata.email" class="text-xs" type="text" placeholder="账号邮箱..." clearable>
+                <el-input v-model="reqdata.email" class="text-sm" type="text" placeholder="账号邮箱..." clearable>
                   <template v-slot:prepend class="px-5">账号</template>
                 </el-input>
               </el-form-item>
               <el-form-item prop="userpassword" class="mb-10 last:mb-0">
-                <el-input v-model="reqdata.userpassword" class="text-xs" type="password" placeholder="密码..." clearable show-password>
+                <el-input v-model="reqdata.userpassword" class="text-sm" type="password" placeholder="密码..." clearable show-password>
                   <template v-slot:prepend>密码</template>
                 </el-input>
               </el-form-item>
               <span class="xrow mb-10 last:mb-0" >
                 <el-form-item prop="code">
-                  <el-input v-model="reqdata.code" class="text-xs" placeholder="验证码..." clearable>
+                  <el-input v-model="reqdata.code" class="text-sm" placeholder="验证码..." clearable>
                     <template v-slot:prepend>验证</template>
                   </el-input>
                 </el-form-item>
@@ -72,20 +78,20 @@
             </el-form>
           </div>
           <!-- 注册 -->
-          <div v-if="pageStatus == 'reg'" class="xcol flex-grow-1 justify-center">
-            <el-form ref="ruleFormRef" :model="reqdata" :rules="rules" :show-message="false">
+          <div v-if="pageStatus == 'Register'" class="xcol flex-grow-1 justify-center font-bold">
+            <el-form ref="RegisterFormRef" :model="reqdata" :rules="ruleConfig.rule" :show-message="false">
               <el-form-item prop="email" class="mb-10 last:mb-0">
-                <el-input v-model="reqdata.email" class="text-xs" type="text" placeholder="账号邮箱..." clearable>
+                <el-input v-model="reqdata.email" class="text-sm" type="text" placeholder="账号邮箱..." clearable>
                   <template v-slot:prepend class="px-5">账号</template>
                 </el-input>
               </el-form-item>
               <el-form-item prop="userpassword" class="mb-10 last:mb-0">
-                <el-input v-model="reqdata.userpassword" class="text-xs" type="password" placeholder="输入密码..." clearable show-password>
+                <el-input v-model="reqdata.userpassword" class="text-sm" type="password" placeholder="输入密码..." clearable show-password>
                   <template v-slot:prepend>密码</template>
                 </el-input>
               </el-form-item>
               <el-form-item prop="reuserpassword" class="mb-10 last:mb-0">
-                <el-input v-model="reqdata.reuserpassword" class="text-xs" type="password" placeholder="重复密码..." clearable show-password>
+                <el-input v-model="reqdata.reuserpassword" class="text-sm" type="password" placeholder="重复密码..." clearable show-password>
                   <template v-slot:prepend>密码</template>
                 </el-input>
               </el-form-item>
@@ -101,31 +107,67 @@
               </span>
             </el-form>
           </div>
+          <!-- 忘记密码 -->
+          <div v-if="pageStatus == 'ResetPassword'" class="xcol flex-grow-1 justify-center font-bold">
+            <el-form ref="ResetPasswordFormRef" :model="reqdata" :rules="ruleConfig.rule" :show-message="false">
+              <el-form-item prop="email" class="mb-10 last:mb-0">
+                <el-input v-model="reqdata.email" class="text-xs" type="text" placeholder="账号邮箱..." clearable>
+                  <template v-slot:prepend class="px-5">账号</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item prop="userpassword" class="mb-10 last:mb-0">
+                <el-input v-model="reqdata.userpassword" class="text-xs" type="password" placeholder="重置新密码..." clearable show-password>
+                  <template v-slot:prepend>密码</template>
+                </el-input>
+              </el-form-item>
+              <span class="xrow mb-10 last:mb-0" >
+                <el-form-item prop="code">
+                  <el-input v-model="reqdata.code" class="text-xs" placeholder="重置验证码..." clearable>
+                    <template v-slot:prepend>验证</template>
+                    <template v-slot:append>发送验证码</template>
+                  </el-input>
+                </el-form-item>
+                <!-- <span class="w-140 bg-dark-2 rounded overflow-hidden ml-5 flex items-center justify-center" style="height:32px">
+                  发送验证码
+                </span> -->
+              </span>
+            </el-form>
+          </div>
         </span>
         <!-- buttons -->
         <span class="h-auto flex-shrink-0 xcol pb-30 pt-20 bg-dark-1 border-t border-dark-2"
           :class="[screen.isWS?'px-50':'px-20']">
           <span class="overflow-hidden flex-grow-1 xcol">
             <!-- 登录 -->
-            <div v-if="pageStatus == 'login'" class="xcol">
-              <el-button type="primary" @click="login">登录</el-button>
+            <div v-if="pageStatus == 'Login'" class="xcol">
+              <el-button type="primary" @click="loginAction(LoginFormRef)">登录</el-button>
               <span class="xrow justify-between items-center flex-grow-1 my-10">
                 <span class="px-10 py-5 rounded bg-dark-1 border border-dark-2 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
-                  @click="pageStatus = 'reg'">
-                  注册账户
+                  @click="pageStatus = 'Register'">
+                  用户注册
                 </span>
                 <span class="px-10 py-5 rounded bg-dark-1 border border-dark-2 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
-                  @click="pageStatus = 'resetpw'">
+                  @click="pageStatus = 'ResetPassword'">
                   忘记密码
                 </span>
               </span>
             </div>
             <!-- 注册 -->
-            <div v-if="pageStatus == 'reg'" class="xcol">
-              <el-button type="success" @click="login">注册</el-button>
+            <div v-if="pageStatus == 'Register'" class="xcol">
+              <el-button type="success" @click="regAction(RegisterFormRef)">注册</el-button>
               <span class="xrow justify-center items-center flex-grow-1 my-10">
-                <span class="px-10 py-5 rounded bg-dark-1 border border-dark-2 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
-                  @click="pageStatus = 'login'">
+                <span class="px-10 py-5 rounded bg-dark-1 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
+                  @click="pageStatus = 'Login'">
+                  返回登录
+                </span>
+              </span>
+            </div>
+            <!-- 忘记密码 -->
+            <div v-if="pageStatus == 'ResetPassword'" class="xcol">
+              <el-button type="danger" @click="resetPwAction(ResetPasswordFormRef)">重置密码</el-button>
+              <span class="xrow justify-center items-center flex-grow-1 my-10">
+                <span class="px-10 py-5 rounded bg-dark-1 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
+                  @click="pageStatus = 'Login'">
                   返回登录
                 </span>
               </span>
@@ -142,18 +184,27 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, ref, reactive, inject, computed, PropType, Ref, getCurrentInstance } from 'vue';
+import type { UnwrapNestedRefs, ComponentPublicInstance } from 'vue';
 import { RouteLocationRaw, useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { ElInput, ElButton, ElForm, ElFormItem } from "element-plus";
-import { defineComponent, ref, reactive, inject, PropType, Ref, UnwrapNestedRefs } from 'vue';
+import type { FormInstance, FormValidateCallback} from 'element-plus';
+import type { RuleItem, ValidateError, ValidateFieldsError } from 'async-validator';
+import * as R from "ramda";
+import PageConfig from "./config/page-config";
 
 export default defineComponent({
   components:{ElInput, ElButton, ElForm, ElFormItem},
   setup(props,context) {
+    const LoginFormRef = ref<FormInstance>(); // 流程画布dom对象
+    const RegisterFormRef = ref<FormInstance>(); // 流程画布dom对象
+    const ResetPasswordFormRef = ref<FormInstance>(); // 流程画布dom对象
     const router = useRouter();
+    const { proxy } = (getCurrentInstance() as { proxy : any });
     // const route = useRoute();
     const store = useStore();
-    let pageStatus:Ref<'login'|'reg'|'resetpw'> = ref('login');
+    let pageStatus:Ref<'Login'|'Register'|'ResetPassword'> = ref('Login');
     const reqdata:UnwrapNestedRefs<{
       nickname?:string,
       email:string,
@@ -166,38 +217,75 @@ export default defineComponent({
       userpassword:'',
       code:''
     })
-    const rules = reactive({
-      email: [
-        { required: true, message: '请输入账号邮箱', trigger: 'blur' },
-        { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' },
-      ],
-      userpassword: [
-        {
-          required: true,
-          message: 'Please select Activity zone',
-          trigger: 'change',
-        },
-      ],
-      code: [
-        {
-          required: true,
-          message: 'Please select Activity count',
-          trigger: 'change',
-        },
-      ],
-    })
-    const screen = inject('screen') as {isWS:boolean,w:number,h:number};
-    function login (){
-      store.commit('user/setToken',{ access_token:"111",refresh_token:"222",});
-      router.push({name:'bpmn-editor'});
+    const pageConfig = PageConfig;
+    const ruleConfig = computed(()=>{
+      return pageConfig[pageStatus.value]; // 注册账号
+    });
+    const screen = inject('screen') as { isWS:boolean,w:number,h:number };
+    // 弹出表单错误提示
+    function toastFormErrors(fields:ValidateFieldsError){
+      let vm = proxy;
+      let errors =R.pluck('message',R.flatten(R.values(fields||{})));
+      console.log(errors)
+      vm.$message({
+        message:errors[0]|| '未知错误',
+        dangerouslyUseHTMLString:true,
+        type:'error'
+      })
+    };
+    function loginAction ( formRef:FormInstance|undefined ){
+      if (!formRef) return;
+      let vm = proxy;
+      formRef.validate((valid, fields) => {
+        if (valid) {
+          console.log('do login!');
+          store.commit('user/setToken',{ access_token:"111",refresh_token:"222" });
+          router.push({name:'bpmn-editor'});
+        } else {
+          toastFormErrors(fields as ValidateFieldsError);
+        }
+      })
+    };
+    function regAction ( formRef:FormInstance|undefined ){
+      if (!formRef) return;
+      let vm = proxy;
+      formRef.validate((valid, fields) => {
+        if (valid) {
+          console.log('do register!');
+          store.commit('user/setToken',{ access_token:"111",refresh_token:"222" });
+          router.push({name:'bpmn-editor'});
+        } else {
+          toastFormErrors(fields as ValidateFieldsError);
+        }
+      });
+    }
+    function resetPwAction ( formRef:FormInstance|undefined ){
+      if (!formRef) return;
+      let vm = proxy;
+      formRef.validate((valid, fields) => {
+        if (valid) {
+          console.log('do ResetPassword!');
+          store.commit('user/setToken',{ access_token:"111",refresh_token:"222" });
+          router.push({name:'bpmn-editor'});
+        } else {
+          toastFormErrors(fields as ValidateFieldsError);
+        }
+      })
     }
     return {
-      login,
+      LoginFormRef,
+      RegisterFormRef,
+      ResetPasswordFormRef,
+
       pageStatus,
       push:router.push,
-      rules,
+      ruleConfig,
       reqdata,
-      screen
+      screen,
+      // 方法
+      loginAction,
+      regAction,
+      resetPwAction,
     }
   },
 })
