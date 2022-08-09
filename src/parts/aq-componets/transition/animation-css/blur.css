@@ -1,0 +1,53 @@
+.blur,.blur-col{
+  position: relative !important;
+}
+.blur > *{
+  display: inline-block;
+  transition: all .4s;
+}
+.blur-col > *{
+  display: block;
+  transition: all .4s;
+}
+.blur-enter,.blur-leave-to,.blur-col-enter,.blur-col-leave-to{
+  opacity: 0;
+}
+.blur-enter-to,.blur-leave,.blur-col-enter-to,.blur-col-leave{
+  opacity: 1;
+}
+@keyframes blur-in {
+  0% {
+    opacity: 0;
+    filter:blur(20px)
+  }
+  100% {
+    opacity: 1;
+    filter:blur(0px)
+  }
+}
+@keyframes blur-out {
+  0% {
+    opacity: 1;
+    filter:blur(0px)
+  }
+  100% {
+    opacity: 0;
+    filter:blur(20px)
+  }
+}
+.blur-move,.blur-col-move{
+  transition: transform .6s;
+}
+.blur-enter-active,.blur-col-enter-active{
+  animation: blur-in .3s cubic-bezier(.5,-0,.5,1);
+  /* position:absolute; */
+}
+.blur-leave-active{
+  animation: blur-out .5s cubic-bezier(.5,-0,.5,1);
+  position:absolute;
+}
+.blur-col-leave-active{
+  animation: blur-out .5s cubic-bezier(.5,-0,.5,1);
+  display:flex;
+  position:absolute;
+}

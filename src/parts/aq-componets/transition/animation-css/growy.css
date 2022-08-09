@@ -1,0 +1,6 @@
+
+.growy,.growy-col{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}

@@ -1,0 +1,53 @@
+.scrollLeft,.scrollLeft-col{
+  position: relative !important;
+}
+.scrollLeft > * {
+  display: inline-block;
+  transition: all .3s;
+}
+.scrollLeft-col > *{
+  display: block;
+  transition: all .3s;
+}
+.scrollLeft-enter,.scrollLeft-leave-to,.scrollLeft-col-enter,.scrollLeft-col-leave-to{
+  opacity: 0;
+}
+.scrollLeft-enter-to,.scrollLeft-leave,.scrollLeft-col-enter-to,.scrollLeft-col-leave{
+  opacity: 1;
+}
+@keyframes scrollLeft-in {
+  0% {
+    opacity: 1;
+    transform:translateX(-100%)
+  }
+  100% {
+    opacity: 1;
+    transform:translateX(0%)
+  }
+}
+@keyframes scrollLeft-out {
+  0% {
+    opacity: 1;
+    transform:translateX(0%);
+  }
+  100% {
+    opacity: 1;
+    transform:translateX(100%);
+  }
+}
+.scrollLeft-move,.scrollLeft-col-move{
+  transition: transform .3s;
+}
+.scrollLeft-enter-active,.scrollLeft-col-enter-active{
+  animation: scrollLeft-in .4s cubic-bezier(.5,-0,.5,1);
+  /* position:absolute; */
+}
+.scrollLeft-leave-active{
+  animation: scrollLeft-out .4s cubic-bezier(.5,-0,.5,1);
+  position:absolute;
+}
+.scrollLeft-col-leave-active{
+  animation: scrollLeft-out .4s cubic-bezier(.5,-0,.5,1);
+  display: flex;
+  position:absolute;
+}

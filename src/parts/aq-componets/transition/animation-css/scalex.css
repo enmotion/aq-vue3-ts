@@ -1,0 +1,55 @@
+.scalex,.scalex-col {
+  position: relative;
+}
+.scalex > *{
+  display: inline-block;
+  transition: all .4s;
+}
+.scalex-col > *{
+  display: block;
+  transition: all .4s;
+}
+.scalex-enter,.scalex-leave-to,.scalex-col-enter,.scalex-col-leave-to{
+    opacity: 0;
+}
+@keyframes scalex-in {
+  0% {
+    opacity: 0;
+    transform: scaleX(0.1);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+@keyframes scalex-out {
+  0% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(0.1);
+  }
+}
+.scalex-enter-active,.scalex-col-enter-active{
+    animation: scalex-in .2s cubic-bezier(.5,-0,.5,1);
+    /* position:absolute; */
+}
+.scalex-leave-active{
+    animation: scalex-out .3s cubic-bezier(.5,-0,.5,1);
+    position:absolute;
+}
+.scalex-col-leave-active{
+  animation: scalex-out .3s cubic-bezier(.5,-0,.5,1);
+  display: flex;
+  position:absolute;
+}

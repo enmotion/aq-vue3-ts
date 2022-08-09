@@ -1,0 +1,58 @@
+.zoombounce,.zoombounce-col{
+  position: relative;
+}
+.zoombounce > *{
+  display : inline-block;
+  transition: transform .6s;
+}
+.zoombounce-col > *{
+  display : block;
+  transition: transform .6s;
+}
+.zoombounce-enter,.zoombounce-leave-to,.zoombounce-col-enter,.zoombounce-col-leave-to{
+  opacity: 0;
+}
+.zoombounce-enter-to,.zoombounce-leave,.zoombounce-col-enter-to,.zoombounce-col-leave{
+  opacity: 1;
+}
+@keyframes zoombounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes zoombounce-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.01);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+.zoombounce-enter-active,.zoombounce-col-enter-active{
+  animation: zoombounce-in .2s;
+  /* position:absolute; */
+}
+.zoombounce-leave-active{
+  animation: zoombounce-out .2s;
+  position: absolute;
+}
+.zoombounce-col-leave-active{
+  animation: zoombounce-out .2s;
+  display:flex;
+  position: absolute;
+}

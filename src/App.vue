@@ -1,8 +1,12 @@
 <template>
   <div class="h-full flex flex-col mask text-xs dark" style="pop">
-    <aq-loading :is-loading="false">
-      <router-view key="root_router" />
-    </aq-loading>
+    <router-view key="root_router" v-slot="{ Component }">
+      <aq-transition name="zoomin" mode="out-in">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </aq-transition>
+    </router-view>
   </div>
 </template>
 

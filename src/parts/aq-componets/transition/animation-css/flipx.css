@@ -1,0 +1,9 @@
+
+.flipx,.flipx-col{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.flipy-move,.flipx-col-move{
+  transition: all 2s;
+}

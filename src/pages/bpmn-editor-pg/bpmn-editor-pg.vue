@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full w-full flex flex-col flex-grow-1">
+  <div class="h-full w-full flex flex-col flex-grow-1 bg-white">
     <div class="xrow items-center h-40 bg-white border-dark-2 border-b overflow-hidden">
       <span class="w-40 h-40 bg-p-10 items-center justify-center flex text-sm text-white font-bold uppercase">Bp</span>
       <span class="h-40 xrow items-center justify-end flex-grow-1 p-10">
@@ -71,6 +71,7 @@
 <script lang="ts">
 import * as R from "ramda";
 import { ref, reactive, onMounted, onUnmounted, defineComponent, inject, computed, getCurrentInstance, ComponentPublicInstance } from "vue";
+import type { Ref }  from "vue";
 import { Splitpanes, Pane } from "splitpanes";
 import 'splitpanes/dist/splitpanes.css';
 import ElementMenu from './widgets/elementMenu.vue';
@@ -87,7 +88,7 @@ export default defineComponent({
   setup(props, context){
     // 组件配置数据 
     const screen = inject("screen"); // 引入屏幕
-    const processType = ref('flowable' as 'camunda'|'flowable'|'activiti'); // 流程引擎类型
+    const processType:Ref<'camunda'|'flowable'|'activiti'> = ref('flowable'); // 流程引擎类型
     const { proxy } = (getCurrentInstance() as { proxy:ComponentPublicInstance });
     const isMessageBoxActived = ref(false); // 避免重复弹窗
     const isSaved = ref(false); // 是否已保存

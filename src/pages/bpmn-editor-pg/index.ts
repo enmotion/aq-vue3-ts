@@ -7,6 +7,7 @@ const router : RouteRecordRaw ={
     powerRequire: [],
     title:"bpmn-editor",
     keepAlive:false,
+    onlyWS:true,
   },
   component: () => import('./bpmn-editor-pg.vue')
 }

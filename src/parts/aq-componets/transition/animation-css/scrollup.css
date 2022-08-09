@@ -1,0 +1,53 @@
+.scrollUp,.scrollUp-col{
+  position: relative !important;
+}
+.scrollUp > * {
+  display: inline-block;
+  transition: all .3s;
+}
+.scrollUp-col > * {
+  display: block;
+  transition: all .3s;
+}
+.scrollUp-enter,.scrollUp-leave-to,.scrollUp-col-enter,.scrollUp-col-leave-to{
+  opacity: 0;
+}
+.scrollUp-enter-to,.scrollUp-leave,.scrollUp-col-enter-to,.scrollUp-col-leave{
+  opacity: 1;
+}
+@keyframes scrollUp-in {
+  0% {
+    opacity: 1;
+    transform:translateY(100%)
+  }
+  100% {
+    opacity: 1;
+    transform:translateY(0%)
+  }
+}
+@keyframes scrollUp-out {
+  0% {
+    opacity: 1;
+    transform:translateY(0%);
+  }
+  100% {
+    opacity: 1;
+    transform:translateY(-100%);
+  }
+}
+.scrollUp-move,.scrollUp-col-move{
+  transition: transform .3s;
+}
+.scrollUp-enter-active,.scrollUp-col-enter-active{
+  animation: scrollUp-in .4s cubic-bezier(.5,-0,.5,1);
+  /* position:absolute; */
+}
+.scrollUp-leave-active{
+  animation: scrollUp-out .4s cubic-bezier(.5,-0,.5,1);
+  position:absolute;
+}
+.scrollUp-col-leave-active{
+  animation: scrollUp-out .4s cubic-bezier(.5,-0,.5,1);
+  display: flex;
+  position:absolute;
+}

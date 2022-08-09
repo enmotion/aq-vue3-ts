@@ -1,0 +1,53 @@
+.scrollDown,.scrollDown-col{
+  position: relative !important;
+}
+.scrollDown > * {
+  display: inline-block;
+  transition: all .3s;
+}
+.scrollDown-col > *{
+  display: block;
+  transition: all .3s;
+}
+.scrollDown-enter,.scrollDown-leave-to,.scrollDown-col-enter,.scrollDown-col-leave-to{
+  opacity: 0;
+}
+.scrollDown-enter-to,.scrollDown-leave,.scrollDown-col-enter-to,.scrollDown-col-leave{
+  opacity: 1;
+}
+@keyframes scrollDown-in {
+  0% {
+    opacity: 1;
+    transform:translateY(-100%)
+  }
+  100% {
+    opacity: 1;
+    transform:translateY(0%)
+  }
+}
+@keyframes scrollDown-out {
+  0% {
+    opacity: 1;
+    transform:translateY(0%);
+  }
+  100% {
+    opacity: 1;
+    transform:translateY(100%);
+  }
+}
+.scrollDown-move,.scrollDown-col-move{
+  transition: transform .3s;
+}
+.scrollDown-enter-active,.scrollDown-col-enter-active{
+  animation: scrollDown-in .4s cubic-bezier(.5,-0,.5,1);
+  /* position:absolute; */
+}
+.scrollDown-leave-active{
+  animation: scrollDown-out .4s cubic-bezier(.5,-0,.5,1);
+  position:absolute;
+}
+.scrollDown-col-leave-active{
+  animation: scrollDown-out .4s cubic-bezier(.5,-0,.5,1);
+  display: flex;
+  position:absolute;
+}

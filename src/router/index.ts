@@ -11,8 +11,10 @@ const router = createRouter({
     {
       children: [
         PGS.BpmnEditorPg,
-        PGS.Erro404Pg,
+        
         PGS.Erro403Pg,
+        PGS.ErroDevPg,
+        PGS.Erro404Pg,
       ]
     }
     ]) as RouteRecordRaw,
@@ -21,6 +23,10 @@ const router = createRouter({
 router.beforeEach(async (to, from ) => {
   const userInfo = store.getters['user/getInfo']||{}; // 取出user状态
   const token = store.getters['user/getToken']||{}; // 取出token
+  // 0.屏宽检测，部分页面不可在窄屏模式下显示
+  if ( to.meta.onlyWS &&  !store.getters.screen.isWS) {
+    return { name: 'erroDev' };
+  }
   // 1.如果匹配不上的页面，则直接404
   if (to.matched.length == 0) {
     return { name: 'erro404' };

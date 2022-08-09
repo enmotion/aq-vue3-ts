@@ -1,0 +1,9 @@
+
+.flipy,.flipy-col{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.flipy-move,.flipy-col-move{
+  transition: transform 0.4s;
+}

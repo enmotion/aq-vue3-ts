@@ -2,7 +2,7 @@
  * @ Author: enmoion
  * @ Create Time: 2022-06-20 10:12:05
  * @ Modified by: enmotion
- * @ Modified time: 2022-08-08 16:42:05
+ * @ Modified time: 2022-08-09 17:29:20
  * @ Description:
  * vue3-spa入口文件
  */
@@ -29,7 +29,7 @@ window.onresize=function(){
       w: document.body.clientWidth,
   })
 }; // 屏幕自适配侦测
-const app = createApp(App).use(store).use(router); // 构建应用
+const app = createApp(App).use(store).use(router); // 构建应用添加 store, router
 app.config.globalProperties.$message =function(msgParams:MessageParams & {message:string}){
    let duration = (msgParams.message?.length||0) * 150 + 1000;
    if(msgParams){

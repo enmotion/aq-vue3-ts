@@ -1,0 +1,61 @@
+.pushy,.pushy-col{
+  position: relative !important;
+}
+.pushy > * {
+  display: inline-block;
+  transition: all .4s;
+}
+.pushy-col > *{
+  display: block;
+  transition: all .4s;
+}
+.pushy-enter,.pushy-leave-to,.pushy-col-enter,.pushy-col-leave-to{
+  opacity: 0;
+}
+.pushy-enter-to,.pushy-leave,.pushy-col-enter-to,.pushy-col-leave{
+  opacity: 1;
+}
+@keyframes pushy-in {
+  0% {
+    opacity: 0;
+    transform:translateY(100%)
+  }
+  60% {
+    opacity: 1;
+    transform:translateY(-4px)
+  }
+  100% {
+    opacity: 1;
+    transform:translateY(0px);
+  }
+}
+@keyframes pushy-out {
+  0% {
+    opacity: 1;
+    transform:translateY(0px);
+  }
+  60% {
+    opacity: 1;
+    transform:translateY(-4px);
+  }
+  100% {
+    opacity: 0;
+    transform:translateY(100%)
+  }
+}
+.pushy-move,.pushy-col-move{
+  transition: transform .6s;
+}
+.pushy-enter-active,.pushy-col-enter-active{
+  animation: pushy-in .4s cubic-bezier(.5,-0,.5,1);
+  /* position:absolute; */
+}
+.pushy-leave-active{
+  animation: pushy-out .4s cubic-bezier(.5,-0,.5,1);
+  position:absolute;
+}
+.pushy-col-leave-active{
+  animation: pushy-out .4s cubic-bezier(.5,-0,.5,1);
+  display:flex;
+  position:absolute;
+}

@@ -17,6 +17,7 @@
     "bpmn-js-token-simulation": "^0.10.0",
     "diagram-js": "^8.7.1",
     "element-plus": "^2.2.9",
+    "gsap": "^3.10.4",
     "highlight.js": "^11.0.1",
     "lodash": "^4.17.21",
     "mod-store": "^1.1.0",
@@ -32,6 +33,7 @@
     "x2js": "^3.4.2"
   },
   "devDependencies": {
+    "@types/gsap": "^3.0.0",
     "@types/highlight.js": "^10.1.0",
     "@types/lodash": "^4.14.182",
     "@types/node": "^18.0.0",
