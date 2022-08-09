@@ -30,8 +30,8 @@ export default defineComponent({
       type: String,
       default: ""
     },
-    mode: {
-      type: [String, null],
+    mode:{
+      type:[String],
       default: null
     },
     align: {
@@ -46,23 +46,22 @@ export default defineComponent({
     onUnmounted(() => {
       console.log('aq-transition is Destroy');
     });
-    const alignMode:ComputedRef<'col'|''> = computed(()=>{
-      return ['col', ''].includes(props.align) ? proxy.align : ''
+    const alignMode = computed(()=>{
+      return ['col', ''].includes(props.align) ? props.align : ''
     });
-    const aniMode:ComputedRef<'out-in'|'in-out'|null> = computed(()=>{
-      return ['out-in', 'in-out'].includes(proxy.mode) ? proxy.mode : null;
+    const aniMode = computed(()=>{
+      return ['out-in', 'in-out'].includes(props.mode) ? props.mode : null;
     });
-    const aniName:ComputedRef<string> = computed(()=> {
+    const aniName = computed(()=> {
       var aniNames = ['zoomin', 'zoombounce', 'scalex', 'scaley', 'pushx', 'pushy', 'growy', 'growx', 'flipx', 'flipy', 'scrollUp', 'scrollDown', 'scrollLeft', 'scrollRight', 'falling', 'blur'];
-      var name:string = aniNames.includes(proxy.name) ? proxy.name : aniNames[0];
+      var name:string = aniNames.includes(props.name) ? props.name : aniNames[0];
       return name;
-    });
-    const aniCssName:ComputedRef<string> = computed(()=> {
-      return proxy.alignMode ? proxy.aniName + '-' + proxy.alignMode : proxy.aniName;
+    }); 
+    const aniCssName = computed(()=> {
+      return alignMode ? aniName + '-' + alignMode : aniName;
     });
     const aniMethods:ComputedRef<{[key:string]:any}> = computed(()=>{
-      let aniNames:string = proxy.aniName as string;
-      var methods:{[key:string]:any} = jsAnimationType[aniNames];
+      var methods:{[key:string]:any} = jsAnimationType[aniName];
       var methodsNames = ['beforeEnter', 'enter', 'afterEnter', 'enterCancelled', 'beforeLeave', 'leave', 'afterLeave', 'leaveCancelled'];
       methodsNames.map(item => {
         methods[item] = methods[item] ? methods[item].bind(proxy) : function(){}; //赋值一个空函数就行
