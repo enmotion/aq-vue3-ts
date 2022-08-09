@@ -78,7 +78,7 @@
             </el-form>
           </div>
           <!-- 注册 -->
-          <div v-if="pageStatus == 'Register'" class="xcol flex-grow-1 justify-center font-bold">
+          <div v-if="pageStatus == 'Register'" class="xcol flex-grow-1 justify-center">
             <el-form ref="RegisterFormRef" :model="reqdata" :rules="ruleConfig.rule" :show-message="false">
               <el-form-item prop="email" class="mb-10 last:mb-0">
                 <el-input v-model="reqdata.email" class="text-sm" type="text" placeholder="账号邮箱..." clearable>
@@ -90,14 +90,14 @@
                   <template v-slot:prepend>密码</template>
                 </el-input>
               </el-form-item>
-              <el-form-item prop="reuserpassword" class="mb-10 last:mb-0">
-                <el-input v-model="reqdata.reuserpassword" class="text-sm" type="password" placeholder="重复密码..." clearable show-password>
+              <el-form-item prop="repeatpassword" class="mb-10 last:mb-0">
+                <el-input v-model="reqdata.repeatpassword" class="text-sm" type="password" placeholder="重复密码..." clearable show-password>
                   <template v-slot:prepend>密码</template>
                 </el-input>
               </el-form-item>
               <span class="xrow mb-10 last:mb-0" >
                 <el-form-item prop="code">
-                  <el-input v-model="reqdata.code" class="text-xs" placeholder="验证码..." clearable>
+                  <el-input v-model="reqdata.code" class="text-sm" placeholder="验证码..." clearable>
                     <template v-slot:prepend>验证</template>
                   </el-input>
                 </el-form-item>
@@ -108,21 +108,21 @@
             </el-form>
           </div>
           <!-- 忘记密码 -->
-          <div v-if="pageStatus == 'ResetPassword'" class="xcol flex-grow-1 justify-center font-bold">
+          <div v-if="pageStatus == 'ResetPassword'" class="xcol flex-grow-1 justify-center">
             <el-form ref="ResetPasswordFormRef" :model="reqdata" :rules="ruleConfig.rule" :show-message="false">
               <el-form-item prop="email" class="mb-10 last:mb-0">
-                <el-input v-model="reqdata.email" class="text-xs" type="text" placeholder="账号邮箱..." clearable>
+                <el-input v-model="reqdata.email" class="text-sm" type="text" placeholder="账号邮箱..." clearable>
                   <template v-slot:prepend class="px-5">账号</template>
                 </el-input>
               </el-form-item>
               <el-form-item prop="userpassword" class="mb-10 last:mb-0">
-                <el-input v-model="reqdata.userpassword" class="text-xs" type="password" placeholder="重置新密码..." clearable show-password>
+                <el-input v-model="reqdata.userpassword" class="text-sm" type="password" placeholder="重置新密码..." clearable show-password>
                   <template v-slot:prepend>密码</template>
                 </el-input>
               </el-form-item>
               <span class="xrow mb-10 last:mb-0" >
                 <el-form-item prop="code">
-                  <el-input v-model="reqdata.code" class="text-xs" placeholder="重置验证码..." clearable>
+                  <el-input v-model="reqdata.code" class="text-sm" placeholder="重置验证码..." clearable>
                     <template v-slot:prepend>验证</template>
                     <template v-slot:append>发送验证码</template>
                   </el-input>
@@ -210,7 +210,7 @@ export default defineComponent({
       email:string,
       userpassword:string,
       code:string,
-      reuserpassword?:string,
+      repeatpassword?:string,
       account?:string,
     }> = reactive({
       email:'',
@@ -226,7 +226,7 @@ export default defineComponent({
     function toastFormErrors(fields:ValidateFieldsError){
       let vm = proxy;
       let errors =R.pluck('message',R.flatten(R.values(fields||{})));
-      console.log(errors)
+      // console.log(errors)
       vm.$message({
         message:errors[0]|| '未知错误',
         dangerouslyUseHTMLString:true,
