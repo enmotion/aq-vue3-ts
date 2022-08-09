@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col flex-grow-1 select-none"
-    :class="[screen.isWS?'justify-center items-center bg-base':' bg-p-2']">
+    :class="[screen.isWS?'justify-center items-center bg-base':' bg-white']">
     <!-- login board -->
-    <div class="overflow-hidden border border-dark-4 "
+    <div class="overflow-hidden bg-p-2"
       :class="[screen.isWS?'xrow w-8/12 rounded-md shadow-xl':'xcol flex-grow-1']" style="min-height:540px">
       <!-- kv -->
       <div class="relative text-white items-start flex bg-blue transition-all duration-700"

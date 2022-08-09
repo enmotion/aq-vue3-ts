@@ -1,7 +1,7 @@
 <template>
   <transition 
-    :name="aniCssName" 
-    :mode="aniMode" 
+    :name="name" 
+    :mode="mode" 
     @before-enter="aniMethods.beforeEnter" 
     @enter="aniMethods.enter"
     @after-enter="aniMethods.afterEnter" 
@@ -16,10 +16,10 @@
 
 <script lang="ts">
 
-import { defineComponent, ref, getCurrentInstance, Transition, onUnmounted, computed, ComponentInternalInstance} from "vue";
+import { defineComponent, ref, getCurrentInstance, Transition, onUnmounted, computed, ComponentInternalInstance, PropType} from "vue";
 import type { Ref, ComputedRef } from "vue";
 import jsAnimationType from "../animation-js/index";
-
+import transtionTypes from "../types/transtion";
 
 export default defineComponent({
   components: {
@@ -27,15 +27,15 @@ export default defineComponent({
   },
   props: {
     name: {
-      type: String,
-      default: ""
+      type: String as PropType<transtionTypes.name>,
+      default: "zoomin"
     },
     mode:{
-      type:[String],
-      default: null
+      type:String as PropType<transtionTypes.mode>,
+      default: 'default'
     },
     align: {
-      type: String,
+      type: String as PropType<transtionTypes.align>,
       default: 'col', // 由于transition absolute的定位问题，导致纵向排列时，消失动画会出现定位问题，因此需通过col来修正样式
     }
   },
@@ -45,23 +45,9 @@ export default defineComponent({
     let { proxy } = getCurrentInstance() as ComponentInternalInstance;
     onUnmounted(() => {
       console.log('aq-transition is Destroy');
-    });
-    const alignMode = computed(()=>{
-      return ['col', ''].includes(props.align) ? props.align : ''
-    });
-    const aniMode = computed(()=>{
-      return ['out-in', 'in-out'].includes(props.mode) ? props.mode : null;
-    });
-    const aniName = computed(()=> {
-      var aniNames = ['zoomin', 'zoombounce', 'scalex', 'scaley', 'pushx', 'pushy', 'growy', 'growx', 'flipx', 'flipy', 'scrollUp', 'scrollDown', 'scrollLeft', 'scrollRight', 'falling', 'blur'];
-      var name:string = aniNames.includes(props.name) ? props.name : aniNames[0];
-      return name;
-    }); 
-    const aniCssName = computed(()=> {
-      return alignMode ? aniName + '-' + alignMode : aniName;
-    });
+    });    
     const aniMethods:ComputedRef<{[key:string]:any}> = computed(()=>{
-      var methods:{[key:string]:any} = jsAnimationType[aniName];
+      var methods:{[key:string]:any} = jsAnimationType[props.name]||{};
       var methodsNames = ['beforeEnter', 'enter', 'afterEnter', 'enterCancelled', 'beforeLeave', 'leave', 'afterLeave', 'leaveCancelled'];
       methodsNames.map(item => {
         methods[item] = methods[item] ? methods[item].bind(proxy) : function(){}; //赋值一个空函数就行
@@ -72,12 +58,7 @@ export default defineComponent({
       lastWidth,
       lastHeight,
       proxy,
-
-      alignMode,
-      aniMode,
       aniMethods,
-      aniName,
-      aniCssName
     }
   }
 })

@@ -5,16 +5,16 @@ export default {
     cn:'用户登录',
     en:'Login',
     rule:{
-      email: [
-        { required: true, message: '请输入账号邮箱', trigger: 'blur' },
-        { validator:Validator.email, trigger: 'blur' },
-      ],
-      userpassword: [
-        { required: true, message: '请输入密码', trigger: 'change', },
-      ],
-      code: [
-        { required: true, message: '请输入验证码', trigger: 'change', },
-      ],
+      // email: [
+      //   { required: true, message: '请输入账号邮箱', trigger: 'blur' },
+      //   { validator:Validator.email, trigger: 'blur' },
+      // ],
+      // userpassword: [
+      //   { required: true, message: '请输入密码', trigger: 'change', },
+      // ],
+      // code: [
+      //   { required: true, message: '请输入验证码', trigger: 'change', },
+      // ],
     }
   },
   Register:{

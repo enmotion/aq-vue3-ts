@@ -24,7 +24,7 @@
   },
   "exclude": ["bpmn-js","bpmn-js-token-simulation"],
   // "exclude": ["splitpanes","bpmn-js/**/*","bpmn-js-token-simulation"],
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "types/**/*.d.ts" , "src/parts/aq/aq-bpmn-editor/widgets/heighlight-js/lib", "src/parts/aq-componets/transition/animation-js/libs/flipx.lib.js"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "types/**/*.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
 // {

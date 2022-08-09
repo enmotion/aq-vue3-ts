@@ -4,6 +4,7 @@ const ani={
         var vm = this;
         var orgh=el.offsetHeight;
         var orgw=el.offsetWidth;
+        console.log(vm.lastHeight,vm.lastWidth,orgh,orgw,'enter')
         gsap.set(el,{
             rotationX:90,
             z:-300,
@@ -50,6 +51,7 @@ const ani={
         var vm = this;
         var orgh=el.offsetHeight;
         var orgw=el.offsetWidth;
+        console.log(vm.lastHeight,vm.lastWidth,orgh,orgw,'leave')
         gsap.set(el,{rotationX:0,z:0,height:orgh,opacity:1,transformPerspective:1000});
         gsap.to(el,0.1,{rotationX:5,z:5,height:orgh,opacity:1,delay:0.1,ease:Power1.easeOut});
         gsap.to(el,0.15,{rotationX:-90,z:-30,height:orgh,opacity:0.2,delay:0.1,ease:Power1.easeOut});  

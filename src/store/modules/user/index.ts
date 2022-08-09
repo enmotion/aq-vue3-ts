@@ -1,8 +1,6 @@
 import * as R from "ramda"; // 引入ramda
 import UserStore from "./types"; //引入用户模型描述
 import store from "@src/store/persistent";
-import { ActionContext, } from "vuex";
-import { TcpSocketConnectOpts } from "net";
 
 export default {
   namespaced: true,
