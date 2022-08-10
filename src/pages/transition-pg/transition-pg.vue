@@ -62,16 +62,26 @@
       <span class="h-40 bg-p-10 xrow items-center p-10 text-white text-sm font-bold uppercase rounded select-none">
         transition-group
       </span>
+      <div class="xrow my-10 bg-dark-2 border border-dark-2 rounded-md p-10 items-center">
+        <el-button size="small" type="success" @click="addGroupItems">新增</el-button>
+      </div>
+      <div class="xrow flex-wrap">
+        <aq-transition-group>
+          <div v-for="(item,index) in TransitionGroupItems" :key="item.key" class="h-100 w-2/12 p-5 xcol">
+            <span @click="removeGroupItem(index)" class="flex-grow-1 btn bg-p-10 text-lg font-bold text-white items-center justify-center flex rounded-md">{{item.name}}</span>
+          </div>
+        </aq-transition-group>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, reactive } from 'vue';
-import { ElSwitch, ElSelect, ElOption, ElInputNumber } from "element-plus";
+import { ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton } from "element-plus";
 
 export default defineComponent({
-  components:{ ElSwitch, ElSelect, ElOption, ElInputNumber },
+  components:{ ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton },
   setup(props,context) {
     let transitionSwitch = ref(true);
     let transitionAbsoluteCell = ref(true);
@@ -106,6 +116,13 @@ export default defineComponent({
       {name:'growy'},
       {name:'growx'},
     ])
+    let TransitionGroupItems = reactive([] as {name:string,key:number}[]);
+    function addGroupItems(){
+      TransitionGroupItems.push({name:'item-'+TransitionGroupItems.length,key:Date.now()});
+    }
+    function removeGroupItem(index:number){
+      TransitionGroupItems.splice(index,1);
+    }
     return {
       transitionSwitch,
       transitionAbsoluteCell,
@@ -114,7 +131,10 @@ export default defineComponent({
       transitionItems,
       transitionTiming,
       transitionTimingOptions,
-      transitionDuration
+      transitionDuration,
+      TransitionGroupItems,
+      addGroupItems,
+      removeGroupItem
     }
   },
 })

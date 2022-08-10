@@ -2,14 +2,14 @@
   <div class="aq-transition-vessel" 
     :class="[absoluteCell?'aq-transition-vessel-absolute-cell':'']" 
     :style="{
-      perspective:perspective,
+      'perspective':perspective,
       '-webkit-perspective':perspective,
       '--enter':transDuration.enter,
       '--leave':transDuration.leave,
       '--entertiming':transTiming.enter,
       '--leavetiming':transTiming.leave,
     }">
-    <TransitionGroup :name="name" :mode="mode">
+    <TransitionGroup :name="name">
       <slot></slot>
     </TransitionGroup>
   </div>
@@ -45,7 +45,7 @@ export default defineComponent({
     },
     perspective:{ // 过渡效果透视强度
       type:Number,
-      default:500,
+      default:800,
     }
   },
   setup(props,context) {
