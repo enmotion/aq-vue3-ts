@@ -6,20 +6,20 @@
       </span>
       <div class="xrow flex-wrap my-10 p-10 items-center h-auto bg-dark-2 justify-start border border-dark-2 rounded-md">
         <span class="p-5 xrow justify-start items-center w-6/12">
-          <span class="text-dark-24 font-bold mr-5">Duration:</span>
-          <el-input-number v-model="transitionDuration.enter" class="w-60 mr-5" size="small" :controls="false"></el-input-number>
-          <el-input-number v-model="transitionDuration.leave" class="w-60" size="small" :controls="false"></el-input-number>
+          <span class="text-dark-24 font-bold mr-5 w-80 text-left">Duration:</span>
+          <el-input-number v-model="transitionDuration.enter" class="w-60 flex-grow-1 mr-5" size="small" :controls="false"></el-input-number>
+          <el-input-number v-model="transitionDuration.leave" class="w-60 flex-grow-1" size="small" :controls="false"></el-input-number>
         </span>
         <span class="p-5 xrow justify-start items-center w-6/12">
-          <span class="text-dark-24 font-bold mr-5">Timing:</span>
-          <el-select v-model="transitionTiming.enter" size="small" class="w-60 mr-5">
+          <span class="text-dark-24 font-bold mr-5 w-80 text-left">Timing:</span>
+          <el-select v-model="transitionTiming.enter" size="small" class="w-60 flex-grow-1 mr-5">
             <el-option v-for="it in transitionTimingOptions" 
               :key="it.label"
               :label="it.label" 
               :value="it.value">
             </el-option>
           </el-select>
-          <el-select v-model="transitionTiming.leave" size="small" class="w-60">
+          <el-select v-model="transitionTiming.leave" size="small" class="w-60 flex-grow-1">
             <el-option v-for="it in transitionTimingOptions" 
               :key="it.label"
               :label="it.label" 
@@ -28,7 +28,7 @@
           </el-select>
         </span>
         <span class="p-5 flex-grow-1 xrow justify-start items-center w-6/12">
-          <span class="text-dark-24 font-bold mr-5">Mode:</span>
+          <span class="text-dark-24 font-bold mr-5 w-80 text-left">Mode:</span>
           <el-select v-model="transitionMode" size="small" class="w-80">
             <el-option v-for="it in transitionModeOptions" 
               :key="it.label"
@@ -39,7 +39,7 @@
         </span>
         
         <span class="p-5 flex-grow-1 xrow justify-start items-center w-3/12">
-          <span class="text-dark-24 font-bold mr-5">AbsoluteCell:</span>
+          <span class="text-dark-24 font-bold mr-5 w-80 text-left">AbsoluteCell:</span>
           <el-switch size="small" v-model="transitionAbsoluteCell"></el-switch>
         </span>
         <span class="p-5 flex-grow-1 xrow justify-start items-center w-3/12">
@@ -65,17 +65,24 @@
       <div class="xrow my-10 bg-dark-2 border border-dark-2 rounded-md p-10 items-center">
         <el-button size="small" type="success" @click="addGroupItems">新增</el-button>
       </div>
-      <div class="xrow flex-wrap">
-        <aq-transition-group>
-          <div v-for="(item,index) in TransitionGroupItems" :key="item.key" class="h-100 w-2/12 p-5 xcol">
-            <span @click="removeGroupItem(index)" class="flex-grow-1 btn bg-p-10 text-lg font-bold text-white items-center justify-center flex rounded-md">{{item.name}}</span>
-          </div>
-        </aq-transition-group>
-      </div>
+      <aq-transition-group>
+        <div v-for="(item,index) in TransitionGroupItems" :key="item.key" class="item" @click="removeGroupItem(index)">
+          <!-- <span @click="removeGroupItem(index)" class="flex-grow-1 btn bg-p-10 text-lg font-bold text-white items-center justify-center flex rounded-md">{{item.name}}</span> -->
+        </div>
+      </aq-transition-group>
     </div>
   </div>
 </template>
-
+<style scoped>
+.item {
+  display: inline-block;
+  width: 20%;
+  height: 50px;
+  background-color: #f30000;
+  border: 1px solid #666;
+  box-sizing: border-box;
+}
+</style>
 <script lang="ts">
 import { defineComponent, ref, reactive } from 'vue';
 import { ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton } from "element-plus";
@@ -87,6 +94,7 @@ export default defineComponent({
     let transitionAbsoluteCell = ref(true);
     let transitionMode = ref('default');
     let transitionTiming = reactive({enter:'ease',leave:'ease'});
+    let transitionItemIndex = ref(0)
     let transitionTimingOptions = reactive([
       {label:'ease',value:'ease'},
       {label:'ease-out',value:'ease-out'},
@@ -118,7 +126,8 @@ export default defineComponent({
     ])
     let TransitionGroupItems = reactive([] as {name:string,key:number}[]);
     function addGroupItems(){
-      TransitionGroupItems.push({name:'item-'+TransitionGroupItems.length,key:Date.now()});
+      transitionItemIndex.value++;
+      TransitionGroupItems.push({name:'item-'+transitionItemIndex.value,key:Date.now()});
     }
     function removeGroupItem(index:number){
       TransitionGroupItems.splice(index,1);

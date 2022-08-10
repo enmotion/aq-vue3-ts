@@ -1,15 +1,6 @@
 <template>
-  <div class="aq-transition-vessel" 
-    :class="[absoluteCell?'aq-transition-vessel-absolute-cell':'']" 
-    :style="{
-      'perspective':perspective,
-      '-webkit-perspective':perspective,
-      '--enter':transDuration.enter,
-      '--leave':transDuration.leave,
-      '--entertiming':transTiming.enter,
-      '--leavetiming':transTiming.leave,
-    }">
-    <TransitionGroup :name="name">
+  <div class="aq-transition-group-vessel">
+    <TransitionGroup tag="ul" name="fade" class="container">
       <slot></slot>
     </TransitionGroup>
   </div>
@@ -21,7 +12,6 @@ import type { PropType } from "vue";
 import TranstionTypes from "../types/transtion";
 
 export default defineComponent({
-  name:'aq-transition-group',
   props:{
     name:{ // 过渡效果名称
       type:String as PropType<TranstionTypes.name>,
@@ -45,7 +35,7 @@ export default defineComponent({
     },
     perspective:{ // 过渡效果透视强度
       type:Number,
-      default:800,
+      default:500,
     }
   },
   setup(props,context) {
@@ -92,8 +82,8 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-@import url('../css/fade.css');
+<style>
+/* @import url('../css/fade.css');
 @import url('../css/zoomin.css');
 @import url('../css/scrolldown.css');
 @import url('../css/scrollup.css');
@@ -104,23 +94,48 @@ export default defineComponent({
 @import url('../css/flipx.css');
 @import url('../css/flipy.css');
 @import url('../css/growy.css');
-@import url('../css/growx.css');
-.aq-transition-vessel{
-  display:flex;
+@import url('../css/growx.css'); */
+.aq-transition-group-vessel .container{
+  text-align: left !important;
+  position:relative;
+  padding: 0;
+  /* display:flex;
   flex-direction:row;
   flex-wrap:wrap;
   flex-grow:1;
   align-items:flex-start;
-  align-content:flex-start;
-  position:relative;
+  align-content:flex-start; */
   --entertiming:ease;
   --leavetiming:ease;
   --enter:0s;
   --leave:0s;
 }
+.aq-transition-group-vessel .container>*{
+  background-color: #000 !important;
+}
 /* 是否启用绝对定位样式 */
-.aq-transition-vessel-absolute-cell > *{
+.aq-transition-vessel-absolute-cell >*{
   position: absolute !important;
+}
+
+/* 1. 声明过渡效果 */
+.aq-transition-group-vessel .fade-move,
+.aq-transition-group-vessel .fade-enter-active,
+.aq-transition-group-vessel .fade-leave-active {
+  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+/* 2. 声明进入和离开的状态 */
+.aq-transition-group-vessel .fade-enter-from,
+.aq-transition-group-vessel .fade-leave-to {
+  opacity: 0;
+  transform: scaleY(0.01) translate(0px, 0);
+}
+
+/* 3. 确保离开的项目被移除出了布局流
+      以便正确地计算移动时的动画效果。 */
+.aq-transition-group-vessel .fade-leave-active {
+  position: absolute;
 }
 </style>
 
