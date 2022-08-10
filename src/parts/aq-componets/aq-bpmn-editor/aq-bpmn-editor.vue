@@ -55,6 +55,7 @@
 </template>
 
 <style>
+/* @import url('highlight.js/styles/stackoverflow-light.css'); */
 .bpmn-editor .canvas {
   width: 100%;
   height: 100%;
@@ -113,8 +114,8 @@ import flowableModdleDescriptor from "./descriptor/flowableDescriptor.json"; // 
 import BpmnMenu from "./widgets/bpmn-menu/bpmn-menu";
 import * as ModuleMenusDefault from "./config/controlDashBoardConfig"; // 系统菜单
 // heighlight-js 显示
-import 'highlight.js/styles/stackoverflow-light.css';
-import 'highlight.js/lib/common';
+// import 'highlight.js/styles/stackoverflow-light.css';
+import hljs from 'highlight.js/lib/common';
 import hljsVuePlugin from "@highlightjs/vue-plugin";
 
 // 引入json 转换
@@ -274,7 +275,9 @@ export default defineComponent({
             BpmnIns.saveXML({ format: true }).then(({ xml }:{xml:string}) => {
               const { definitions } = newConvert.xml2js(xml);
               if (definitions) {
-                previewCode.value = JSON.stringify(transProcessJsonToCustome(definitions), null, 2);
+                let code:string = JSON.stringify(transProcessJsonToCustome(definitions), null, 2);
+                console.log(code);
+                previewCode.value = code;
               } else {
                 previewCode.value = "";
               }
@@ -283,6 +286,7 @@ export default defineComponent({
             });
             break;
           default:
+            console.log(xml)
             previewCode.value = xml;
             previewType.value = "xml";
             showPreview.value = true;

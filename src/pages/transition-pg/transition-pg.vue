@@ -76,11 +76,19 @@
           </el-select>
         </span>
       </div>
-      <aq-transition-group :name="transitionGroupTypeName" :timing="transitionTiming" :duration="transitionDuration">
-        <div v-for="(item,index) in TransitionGroupItems" :key="item.key" class="w-full h-100 mb-5 to-tc" style="display:block !important" @click="removeGroupItem(index)">
-          <span class="flex h-full items-center justify-center bg-p-10 text-white font-bold text-sm flex-grow-1 btn">{{item.name}}</span>
-        </div>
-      </aq-transition-group>
+      <div class="-mr-10 flex flex-grow-1 -m-5">
+        <aq-scroll-view :scroll-bar-props="{wrapClass:'pr-10'}">
+          <aq-transition-group 
+            :name="transitionGroupTypeName" 
+            :timing="transitionTiming" 
+            item-display="flex"
+            :duration="transitionDuration">
+            <div v-for="(item,index) in TransitionGroupItems" :key="item.key" class="w-full p-5 h-100 to-tc flex-grow-1" @click="removeGroupItem(index)">
+              <span class="flex h-full items-center justify-center bg-p-10 text-white font-bold text-sm flex-grow-1 btn rounded-md">{{item.name}}</span>
+            </div>
+          </aq-transition-group>
+        </aq-scroll-view>
+      </div>
     </div>
   </div>
 </template>

@@ -78,7 +78,7 @@ export default(({ mode } : { mode : any })=>{
       minify:'terser', // 配置代码压缩
       terserOptions:{
         compress:{
-          drop_console:true,  //丢弃 console
+          //drop_console:true,  //丢弃 console
           drop_debugger:true, //丢弃 debugger
         }
       }

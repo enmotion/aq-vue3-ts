@@ -1,4 +1,6 @@
 @import url('../icon/iconfont.css');
+/* hightlight js CSS 样式引入，在组件内引入，编译时出现丢失情况 */
+@import url('highlight.js/styles/stackoverflow-light.css'); 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

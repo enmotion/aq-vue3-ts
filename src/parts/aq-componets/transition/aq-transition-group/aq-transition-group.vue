@@ -8,7 +8,6 @@
       '--entertiming':transTiming.enter,
       '--leavetiming':transTiming.leave,
     }">
-    {{name}}{{perspective}}
     <TransitionGroup :name="name" :tag="tag" class="container" :style="{
       'perspective':perspective,
       '-webkit-perspective':perspective
