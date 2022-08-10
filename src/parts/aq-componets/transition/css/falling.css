@@ -1,0 +1,10 @@
+.aq-transition-vessel .falling-enter-from,.aq-transition-vessel .falling-leave-to {
+  transform: translateY(-10px);
+  opacity: 0;
+}
+.aq-transition-vessel .falling-enter-active{
+  transition: all var(--enter) var(--entertiming);
+}
+.aq-transition-vessel .falling-leave-active{
+  transition: all var(--leave) var(--leavetiming);
+}

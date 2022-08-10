@@ -1,0 +1,11 @@
+.aq-transition-vessel .growx-enter-from,
+.aq-transition-vessel .growx-leave-to {
+  overflow: hidden;
+  width:0px !important;
+}
+.aq-transition-vessel .growx-enter-active{
+  transition: all var(--enter) var(--entertiming);
+}
+.aq-transition-vessel .growx-leave-active{
+  transition: all var(--leave) var(--leavetiming);
+}

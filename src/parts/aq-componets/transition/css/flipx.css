@@ -1,0 +1,14 @@
+.aq-transition-vessel .flipx-enter-from{
+  transform: rotateX(-90deg);
+  opacity: 0;
+}
+.aq-transition-vessel .flipx-leave-to {
+  transform: rotateX(90deg);
+  opacity: 0;
+}
+.aq-transition-vessel .flipx-enter-active{
+  transition: all var(--enter) var(--entertiming);
+}
+.aq-transition-vessel .flipx-leave-active{
+  transition: all var(--leave) var(--leavetiming);
+}

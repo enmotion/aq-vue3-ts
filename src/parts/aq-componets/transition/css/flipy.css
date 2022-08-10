@@ -1,0 +1,14 @@
+.aq-transition-vessel .flipy-enter-from{
+  transform: rotateY(-90deg);
+  opacity: 0;
+}
+.aq-transition-vessel .flipy-leave-to {
+  transform: rotateY(90deg);
+  opacity: 0;
+}
+.aq-transition-vessel .flipy-enter-active{
+  transition: all var(--enter) var(--entertiming);
+}
+.aq-transition-vessel .flipy-leave-active{
+  transition: all var(--leave) var(--leavetiming);
+}

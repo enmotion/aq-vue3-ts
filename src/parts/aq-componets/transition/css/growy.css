@@ -1,0 +1,11 @@
+.aq-transition-vessel .growy-enter-from,
+.aq-transition-vessel .growy-leave-to {
+  overflow: hidden;
+  height:0px !important;
+}
+.aq-transition-vessel .growy-enter-active{
+  transition: all var(--enter) var(--entertiming);
+}
+.aq-transition-vessel .growy-leave-active{
+  transition: all var(--leave) var(--leavetiming);
+}

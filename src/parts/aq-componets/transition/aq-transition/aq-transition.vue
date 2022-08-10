@@ -3,6 +3,7 @@
     :class="[absoluteCell?'aq-transition-vessel-absolute-cell':'']" 
     :style="{
       perspective:perspective,
+      '-webkit-perspective':perspective,
       '--enter':transDuration.enter,
       '--leave':transDuration.leave,
       '--entertiming':transTiming.enter,
@@ -97,6 +98,12 @@ export default defineComponent({
 @import url('../css/scrollup.css');
 @import url('../css/scrollleft.css');
 @import url('../css/scrollright.css');
+@import url('../css/falling.css');
+@import url('../css/zoombounce.css');
+@import url('../css/flipx.css');
+@import url('../css/flipy.css');
+@import url('../css/growy.css');
+@import url('../css/growx.css');
 .aq-transition-vessel{
   display:flex;
   flex-direction:row;
