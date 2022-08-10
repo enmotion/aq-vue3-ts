@@ -4,7 +4,7 @@
       <span class="h-40 bg-d-10 xrow items-center p-10 text-white text-sm font-bold uppercase rounded select-none">
         transition
       </span>
-      <div class="xrow flex-wrap my-10 p-10 items-center h-auto bg-dark-2 justify-start">
+      <div class="xrow flex-wrap my-10 p-10 items-center h-auto bg-dark-2 justify-start border border-dark-2 rounded-md">
         <span class="p-5 xrow justify-start items-center w-6/12">
           <span class="text-dark-24 font-bold mr-5">Duration:</span>
           <el-input-number v-model="transitionDuration.enter" class="w-60 mr-5" size="small" :controls="false"></el-input-number>
