@@ -1,0 +1,12 @@
+.aq-transition-vessel .scrollright-enter-from {
+  transform: translateX(-100%);
+}
+.aq-transition-vessel .scrollright-leave-to {
+  transform: translateX(100%);
+}
+.aq-transition-vessel .scrollright-enter-active{
+  transition: all var(--enter) var(--entertiming);
+}
+.aq-transition-vessel .scrollright-leave-active{
+  transition: all var(--leave) var(--leavetiming);
+}

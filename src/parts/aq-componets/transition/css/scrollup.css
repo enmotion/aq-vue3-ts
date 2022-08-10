@@ -1,0 +1,12 @@
+.aq-transition-vessel .scrollup-enter-from {
+  transform: translateY(100%);
+}
+.aq-transition-vessel .scrollup-leave-to {
+  transform: translateY(-100%);
+}
+.aq-transition-vessel .scrollup-enter-active{
+  transition: all var(--enter) var(--entertiming);
+}
+.aq-transition-vessel .scrollup-leave-active{
+  transition: all var(--leave) var(--leavetiming);
+}

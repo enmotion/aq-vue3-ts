@@ -2,8 +2,8 @@
   opacity: 0;
 }
 .aq-transition-vessel .fade-enter-active{
-  transition: all var(--enter) ease;
+  transition: all var(--enter) var(--entertiming);
 }
 .aq-transition-vessel .fade-leave-active{
-  transition: all var(--leave) ease;
+  transition: all var(--leave) var(--leavetiming);
 }

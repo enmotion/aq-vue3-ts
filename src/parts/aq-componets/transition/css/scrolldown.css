@@ -1,9 +1,12 @@
-.aq-transition-vessel .scrolldown-enter-from,.aq-transition-vessel .scrolldown-leave-to {
-  opacity: 0;
+.aq-transition-vessel .scrolldown-enter-from {
+  transform: translateY(-100%);
+}
+.aq-transition-vessel .scrolldown-leave-to {
+  transform: translateY(100%);
 }
 .aq-transition-vessel .scrolldown-enter-active{
-  transition: all var(--enter) ease;
+  transition: all var(--enter) var(--entertiming);
 }
 .aq-transition-vessel .scrolldown-leave-active{
-  transition: all var(--leave) ease;
+  transition: all var(--leave) var(--leavetiming);
 }
