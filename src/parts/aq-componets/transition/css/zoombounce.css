@@ -1,9 +1,27 @@
-.aq-transition-vessel .zoombounce-enter-active{
+.aq-transition-vessel>.zoombounce-enter-active{
   animation: zoombounce-in var(--enter);
   /* position:absolute; */
 }
-.aq-transition-vessel .zoombounce-leave-active{
+.aq-transition-vessel>.zoombounce-leave-active{
   animation: zoombounce-out var(--leave);
+}
+/* transition-group */
+.aq-transition-group>.container>.zoombounce-move,
+.aq-transition-group>.container>.zoombounce-enter-active{
+  animation: zoombounce-in var(--enter);
+}
+.aq-transition-group>.container>.zoombounce-leave-active {
+  transition: all var(--leave) var(--leavetiming);
+}
+.aq-transition-group>.container>.zoombounce-leave-to {
+  z-index: 2;
+  opacity: 0;
+  width:0px;
+  height:0px;
+  transform: translateY(-50%);
+}
+.aq-transition-group>.container>.zoombounce-leave-active {
+  position: absolute;
 }
 @keyframes zoombounce-in {
   0% {

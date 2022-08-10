@@ -1,34 +1,36 @@
 <template>
-  <div class="h-full w-full bg-white xrow">
+  <div class="xrow w-full flex-grow-1 h-50 bg-white border-b border-dark-4 px-10">
+    <span class="p-5 xrow justify-start items-center w-6/12">
+        <span class="text-dark-24 font-bold mr-5 w-80 text-left">Duration:</span>
+        <el-input-number v-model="transitionDuration.enter" class="w-60 flex-grow-1 mr-5" size="small" :controls="false"></el-input-number>
+        <el-input-number v-model="transitionDuration.leave" class="w-60 flex-grow-1" size="small" :controls="false"></el-input-number>
+      </span>
+      <span class="p-5 xrow justify-start items-center w-6/12">
+        <span class="text-dark-24 font-bold mr-5 w-80 text-left">Timing:</span>
+        <el-select v-model="transitionTiming.enter" size="small" class="w-60 flex-grow-1 mr-5">
+          <el-option v-for="it in transitionTimingOptions" 
+            :key="it.label"
+            :label="it.label" 
+            :value="it.value">
+          </el-option>
+        </el-select>
+        <el-select v-model="transitionTiming.leave" size="small" class="w-60 flex-grow-1">
+          <el-option v-for="it in transitionTimingOptions" 
+            :key="it.label"
+            :label="it.label" 
+            :value="it.value">
+          </el-option>
+        </el-select>
+      </span>
+  </div>
+  <div class="h-full w-full bg-white xrow flex-wrap justify-start">    
     <div class="w-6/12 bg-dark-2 border-r border-dark-2 p-10 xcol">
       <span class="h-40 bg-d-10 xrow items-center p-10 text-white text-sm font-bold uppercase rounded select-none">
         transition
       </span>
-      <div class="xrow flex-wrap my-10 p-10 items-center h-auto bg-dark-2 justify-start border border-dark-2 rounded-md">
-        <span class="p-5 xrow justify-start items-center w-6/12">
-          <span class="text-dark-24 font-bold mr-5 w-80 text-left">Duration:</span>
-          <el-input-number v-model="transitionDuration.enter" class="w-60 flex-grow-1 mr-5" size="small" :controls="false"></el-input-number>
-          <el-input-number v-model="transitionDuration.leave" class="w-60 flex-grow-1" size="small" :controls="false"></el-input-number>
-        </span>
-        <span class="p-5 xrow justify-start items-center w-6/12">
-          <span class="text-dark-24 font-bold mr-5 w-80 text-left">Timing:</span>
-          <el-select v-model="transitionTiming.enter" size="small" class="w-60 flex-grow-1 mr-5">
-            <el-option v-for="it in transitionTimingOptions" 
-              :key="it.label"
-              :label="it.label" 
-              :value="it.value">
-            </el-option>
-          </el-select>
-          <el-select v-model="transitionTiming.leave" size="small" class="w-60 flex-grow-1">
-            <el-option v-for="it in transitionTimingOptions" 
-              :key="it.label"
-              :label="it.label" 
-              :value="it.value">
-            </el-option>
-          </el-select>
-        </span>
+      <div class="xrow flex-wrap my-10 p-5 items-center h-auto bg-dark-2 justify-start border border-dark-2 rounded-md">
         <span class="p-5 flex-grow-1 xrow justify-start items-center w-6/12">
-          <span class="text-dark-24 font-bold mr-5 w-80 text-left">Mode:</span>
+          <span class="text-dark-24 font-bold mr-5 w-40 text-left">Mode:</span>
           <el-select v-model="transitionMode" size="small" class="w-80">
             <el-option v-for="it in transitionModeOptions" 
               :key="it.label"
@@ -37,9 +39,8 @@
             </el-option>
           </el-select>
         </span>
-        
         <span class="p-5 flex-grow-1 xrow justify-start items-center w-3/12">
-          <span class="text-dark-24 font-bold mr-5 w-80 text-left">AbsoluteCell:</span>
+          <span class="text-dark-24 font-bold mr-5 w-40 text-left">AbsoluteCell:</span>
           <el-switch size="small" v-model="transitionAbsoluteCell"></el-switch>
         </span>
         <span class="p-5 flex-grow-1 xrow justify-start items-center w-3/12">
@@ -64,24 +65,26 @@
       </span>
       <div class="xrow my-10 bg-dark-2 border border-dark-2 rounded-md p-10 items-center">
         <el-button size="small" type="success" @click="addGroupItems">新增</el-button>
+        <span class="p-5 flex-grow-1 xrow justify-start items-center w-6/12">
+          <span class="text-dark-24 font-bold mr-5 w-120 text-left">TransitionTypeName:</span>
+          <el-select v-model="transitionGroupTypeName" size="small" class="w-80">
+            <el-option v-for="it in transitionItems" 
+              :key="it.name"
+              :label="it.name" 
+              :value="it.name">
+            </el-option>
+          </el-select>
+        </span>
       </div>
-      <aq-transition-group>
-        <div v-for="(item,index) in TransitionGroupItems" :key="item.key" class="item" @click="removeGroupItem(index)">
-          <!-- <span @click="removeGroupItem(index)" class="flex-grow-1 btn bg-p-10 text-lg font-bold text-white items-center justify-center flex rounded-md">{{item.name}}</span> -->
+      <aq-transition-group :name="transitionGroupTypeName" :timing="transitionTiming" :duration="transitionDuration">
+        <div v-for="(item,index) in TransitionGroupItems" :key="item.key" class="w-full h-100 mb-5 to-tc" style="display:block !important" @click="removeGroupItem(index)">
+          <span class="flex h-full items-center justify-center bg-p-10 text-white font-bold text-sm flex-grow-1 btn">{{item.name}}</span>
         </div>
       </aq-transition-group>
     </div>
   </div>
 </template>
 <style scoped>
-.item {
-  display: inline-block;
-  width: 20%;
-  height: 50px;
-  background-color: #f30000;
-  border: 1px solid #666;
-  box-sizing: border-box;
-}
 </style>
 <script lang="ts">
 import { defineComponent, ref, reactive } from 'vue';
@@ -95,6 +98,7 @@ export default defineComponent({
     let transitionMode = ref('default');
     let transitionTiming = reactive({enter:'ease',leave:'ease'});
     let transitionItemIndex = ref(0)
+    let transitionGroupTypeName = ref('growy');
     let transitionTimingOptions = reactive([
       {label:'ease',value:'ease'},
       {label:'ease-out',value:'ease-out'},
@@ -142,6 +146,7 @@ export default defineComponent({
       transitionTimingOptions,
       transitionDuration,
       TransitionGroupItems,
+      transitionGroupTypeName,
       addGroupItems,
       removeGroupItem
     }

@@ -1,6 +1,18 @@
 <template>
-  <div class="aq-transition-group-vessel">
-    <TransitionGroup tag="ul" name="fade" class="container">
+  <div 
+    class="aq-transition-group"
+    :style="{
+      '--itemdisplay':itemDisplay,
+      '--enter':transDuration.enter,
+      '--leave':transDuration.leave,
+      '--entertiming':transTiming.enter,
+      '--leavetiming':transTiming.leave,
+    }">
+    {{name}}{{perspective}}
+    <TransitionGroup :name="name" :tag="tag" class="container" :style="{
+      'perspective':perspective,
+      '-webkit-perspective':perspective
+    }">
       <slot></slot>
     </TransitionGroup>
   </div>
@@ -15,19 +27,19 @@ export default defineComponent({
   props:{
     name:{ // 过渡效果名称
       type:String as PropType<TranstionTypes.name>,
-      default:'fade'
+      default:'growx'
     },
-    mode:{ // 过渡播放模式
-      type:String as PropType<TranstionTypes.mode>,
-      default:'default'
+    tag:{ // 容器元素
+      type:String as PropType<TranstionTypes.tag>,
+      default:'ul'
+    },
+    itemDisplay:{ // 多列布局时，请选用 inline-block
+      type:String as PropType<'block'|'inline-block'|'flex'>,
+      default:'flex'
     },
     duration:{ // 过渡持续时长
       type:[Number,Object] as PropType<number|{enter:number,leave:number}>,
       default:()=>({enter:300,leave:300}),
-    },
-    absoluteCell:{ // 启用了绝对定位，可能会使得内部flex-grow失效，请自行设置内部高宽为100%
-      type:Boolean,
-      default:true,
     },
     timing:{
       type:[String,Object] as PropType<TranstionTypes.timing|{enter:TranstionTypes.timing,leave:TranstionTypes.timing}>,
@@ -35,7 +47,7 @@ export default defineComponent({
     },
     perspective:{ // 过渡效果透视强度
       type:Number,
-      default:500,
+      default:200,
     }
   },
   setup(props,context) {
@@ -83,59 +95,61 @@ export default defineComponent({
 </script>
 
 <style>
-/* @import url('../css/fade.css');
+@import url('../css/fade.css');
 @import url('../css/zoomin.css');
 @import url('../css/scrolldown.css');
+@import url('../css/falling.css');
+@import url('../css/flipx.css');
+@import url('../css/flipy.css');
 @import url('../css/scrollup.css');
 @import url('../css/scrollleft.css');
 @import url('../css/scrollright.css');
-@import url('../css/falling.css');
 @import url('../css/zoombounce.css');
-@import url('../css/flipx.css');
-@import url('../css/flipy.css');
 @import url('../css/growy.css');
-@import url('../css/growx.css'); */
-.aq-transition-group-vessel .container{
+@import url('../css/growx.css'); 
+.aq-transition-group{
+  --itemdisplay:'inline-block';
+  --perspectives:500;
+  --entertiming:ease;
+  --leavetiming:ease;
+  --enter:0s;
+  --leave:0s;
+}
+.aq-transition-group>.container{
   text-align: left !important;
   position:relative;
   padding: 0;
+  /* perspective: var(--perspective) !important;
+  -webkit-perspective: var(--perspective) !important; */
   /* display:flex;
   flex-direction:row;
   flex-wrap:wrap;
   flex-grow:1;
   align-items:flex-start;
   align-content:flex-start; */
-  --entertiming:ease;
-  --leavetiming:ease;
-  --enter:0s;
-  --leave:0s;
 }
-.aq-transition-group-vessel .container>*{
-  background-color: #000 !important;
-}
-/* 是否启用绝对定位样式 */
-.aq-transition-vessel-absolute-cell >*{
-  position: absolute !important;
+.aq-transition-group .container > *{
+  display: var(--itemdisplay) !important;
 }
 
 /* 1. 声明过渡效果 */
-.aq-transition-group-vessel .fade-move,
-.aq-transition-group-vessel .fade-enter-active,
-.aq-transition-group-vessel .fade-leave-active {
+/* .aq-transition-group .growy-move,
+.aq-transition-group .growy-enter-active,
+.aq-transition-group .growy-leave-active {
   transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
-}
+} */
 
 /* 2. 声明进入和离开的状态 */
-.aq-transition-group-vessel .fade-enter-from,
-.aq-transition-group-vessel .fade-leave-to {
+/* .aq-transition-group .growy-enter-from,
+.aq-transition-group .growy-leave-to {
   opacity: 0;
   transform: scaleY(0.01) translate(0px, 0);
-}
+} */
 
 /* 3. 确保离开的项目被移除出了布局流
       以便正确地计算移动时的动画效果。 */
-.aq-transition-group-vessel .fade-leave-active {
+/* .aq-transition-group .growy-leave-active {
   position: absolute;
-}
+} */
 </style>
 
