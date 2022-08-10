@@ -1,8 +1,7 @@
 <template>
   <div class="h-full flex flex-col mask text-xs overflow-hidden" style="pop">
-    <!-- <div class="h-50 bg-black text-white text-left">{{route.name}}</div> -->
     <router-view key="root_router" v-slot="{ Component }">
-      <aq-transition name="fade" mode="out-in">
+      <aq-transition name="zoombounce" :duration="{enter:500,leave:200}" :absolute-cell="true" :timing="{enter:'ease-out',leave:'ease-out'}">
         <keep-alive>
           <component :is="Component" :key="route.name" class="w-full h-full" />
         </keep-alive>

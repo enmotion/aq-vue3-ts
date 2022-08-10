@@ -1,9 +1,9 @@
 .aq-transition-vessel>.zoomin-enter-from{
-  transform: scale(0.8);
+  transform: scale(0.9);
   opacity: 0;
 }
 .aq-transition-vessel>.zoomin-leave-to{
-  transform: scale(1.2);
+  transform: scale(1.1);
   opacity: 0;
 }
 .aq-transition-vessel>.zoomin-enter-active{
@@ -26,7 +26,7 @@
   opacity: 0;
 }
 .aq-transition-group .container .zoomin-leave-to {
-  transform: scale(0.2);
+  transform: scale(0.8);
   opacity: 0;
 }
 .aq-transition-group>.container>.zoomin-leave-active {
