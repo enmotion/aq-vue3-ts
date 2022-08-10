@@ -1,0 +1,9 @@
+.aq-transition-vessel .scrolldown-enter-from,.aq-transition-vessel .scrolldown-leave-to {
+  opacity: 0;
+}
+.aq-transition-vessel .scrolldown-enter-active{
+  transition: all var(--enter) ease;
+}
+.aq-transition-vessel .scrolldown-leave-active{
+  transition: all var(--leave) ease;
+}

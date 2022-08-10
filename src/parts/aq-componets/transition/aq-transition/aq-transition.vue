@@ -1,99 +1,65 @@
 <template>
-  <transition 
-    :name="name" 
-    :mode="mode" 
-    @before-enter="aniMethods.beforeEnter" 
-    @enter="aniMethods.enter"
-    @after-enter="aniMethods.afterEnter" 
-    @enter-cancelled="aniMethods.enterCancelled"
-    @before-leave="aniMethods.beforeLeave" 
-    @leave="aniMethods.leave" 
-    @after-leave="aniMethods.afterLeave"
-    @leave-cancelled="aniMethods.leaveCancelled">
-    <slot></slot>
-  </transition>
+  <div class="aq-transition-vessel" :style="{perspective:perspective,'--enter':transDuration.enter,'--leave':transDuration.leave,}">
+    <!-- <span class="text-white absolute bg-black p-10">{{name}}</span> -->
+    <Transition :name="name" :mode="mode">
+      <slot></slot>
+    </Transition>
+  </div>
 </template>
 
 <script lang="ts">
-
-import { defineComponent, ref, getCurrentInstance, Transition, onUnmounted, computed, ComponentInternalInstance, PropType} from "vue";
-import type { Ref, ComputedRef } from "vue";
-import jsAnimationType from "../animation-js/index";
+import { defineComponent, computed, ref } from 'vue';
+import type { PropType } from "vue";
 import transtionTypes from "../types/transtion";
 
 export default defineComponent({
-  components: {
-    transition:Transition,
-  },
-  props: {
-    name: {
-      type: String as PropType<transtionTypes.name>,
-      default: "zoomin"
+  props:{
+    name:{ // 过渡效果名称
+      type:String as PropType<transtionTypes.name>,
+      default:'fade'
     },
-    mode:{
+    mode:{ // 过渡播放模式
       type:String as PropType<transtionTypes.mode>,
-      default: 'default'
+      default:'default'
     },
-    align: {
-      type: String as PropType<transtionTypes.align>,
-      default: 'col', // 由于transition absolute的定位问题，导致纵向排列时，消失动画会出现定位问题，因此需通过col来修正样式
+    duration:{ // 过渡持续时长
+      type:[Number,Object] as PropType<number|{enter:number,leave:number}>,
+      default:()=>({enter:300,leave:300}),
+    },
+    perspective:{ // 过渡效果透视强度
+      type:Number,
+      default:500,
     }
   },
-  setup(props, context) {
-    let lastWidth: Ref<number> = ref(0);
-    let lastHeight: Ref<number> = ref(0);
-    let { proxy } = getCurrentInstance() as ComponentInternalInstance;
-    onUnmounted(() => {
-      console.log('aq-transition is Destroy');
-    });    
-    const aniMethods:ComputedRef<{[key:string]:any}> = computed(()=>{
-      var methods:{[key:string]:any} = jsAnimationType[props.name]||{};
-      var methodsNames = ['beforeEnter', 'enter', 'afterEnter', 'enterCancelled', 'beforeLeave', 'leave', 'afterLeave', 'leaveCancelled'];
-      methodsNames.map(item => {
-        methods[item] = methods[item] ? methods[item].bind(proxy) : function(){}; //赋值一个空函数就行
-      })
-      return methods;
+  setup(props,context) {
+    const transDuration = computed(()=>{
+      if(props.duration.constructor == Number){
+        return {enter:props.duration/1000+'s',leave:props.duration/1000+'s'}
+      }else{
+        let duration = props.duration as {enter:number,leave:number};
+        return {enter:duration.enter/1000+'s',leave:duration.leave/1000+'s'}
+      }
     });
     return {
-      lastWidth,
-      lastHeight,
-      proxy,
-      aniMethods,
+      transDuration,
     }
-  }
+  },
 })
 </script>
-<style>
-@import url('../animation-css/zoom.css');
-/* 缩放动画 */
-@import url('../animation-css/zoombounce.css');
-/* 缩放弹性动画 */
-@import url('../animation-css/scalex.css');
-/* x轴缩放 */
-@import url('../animation-css/scaley.css');
-/* y轴缩放 */
-@import url('../animation-css/pushx.css');
-/* x推入 */
-@import url('../animation-css/pushy.css');
-/* y推入 */
-@import url('../animation-css/growy.css');
-/* x展开 */
-@import url('../animation-css/growx.css');
-/* y展开 */
-@import url('../animation-css/flipx.css');
-/* x翻转 */
-@import url('../animation-css/flipy.css');
-/* y翻转 */
-@import url('../animation-css/scrollup.css');
-/* 向上滑入 */
-@import url('../animation-css/scrolldown.css');
-/* 向下滑入 */
-@import url('../animation-css/scrollleft.css');
-/* 向左滑入 */
-@import url('../animation-css/scrollright.css');
-/* 向右滑入 */
-@import url('../animation-css/falling.css');
-/* 缓动坠入 */
-@import url('../animation-css/blur.css');
-/* 缓动模糊 */
+
+<style scoped>
+@import url('../css/fade.css');
+@import url('../css/scrolldown.css');
+.aq-transition-vessel{
+  display:flex;
+  flex-direction:row;
+  flex-wrap:wrap;
+  flex-grow:1;
+  align-items:flex-start;
+  align-content:flex-start;
+  position:relative;
+  --enter:0s;
+  --leave:0s;
+}
 </style>
+

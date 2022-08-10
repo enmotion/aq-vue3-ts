@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"> 
+<title>菜鸟教程(runoob.com)</title> 
+<style>
+	html,body,div,span{
+		box-sizing:border-box;
+		margin:0px;
+		padding:0px;
+	}
+	html,body{
+		width:100%;
+		height:100%;
+	}
+	/*外部测试空间区域*/
+	.space{
+		width:400px;
+		height:125px;
+		padding:5px;
+		display:flex;
+		flex-direction:column;
+		background:#00AA3344;
+	}
+	/*transition容器*/
+	.transition-vessel{
+		perspective: 500;
+		display:flex;
+		flex-direction:row;
+		flex-wrap:wrap;
+		flex-grow:1;
+		align-items:start;
+		align-content:start;
+		background:#F00;
+		position:relative;
+		border:3px solid #000000;
+	}
+	.transition-item{
+		width:40%;
+		margin:5px;
+		height:100px;
+		flex-grow:1;
+		border:1px dashed #FFF;
+	}
+</style>
+</head>
+
+<body>
+	<div class="space">
+		<div class="transition-vessel">
+			<div class="transition-item"></div>
+		</div>
+	</div>
+</body>
+
+</html>
