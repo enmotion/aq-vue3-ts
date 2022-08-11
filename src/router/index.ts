@@ -7,17 +7,18 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     PGS.LoginPg,
+    PGS.BpmnEditorPg,
+    PGS.TransitionPg,
     R.mergeAll([PGS.MainPg,
     {
       children: [
-        PGS.BpmnEditorPg,
-        PGS.TransitionPg,
-        PGS.Erro403Pg,
-        PGS.ErroDevPg,
-        PGS.Erro404Pg,
+        
       ]
     }
     ]) as RouteRecordRaw,
+    PGS.Erro403Pg,
+    PGS.ErroDevPg,
+    PGS.Erro404Pg,
   ]
 });
 router.beforeEach(async (to, from ) => {

@@ -245,7 +245,7 @@ export default defineComponent({
         if (valid) {
           console.log('do login!');
           store.commit('user/setToken',{ access_token:"111",refresh_token:"222" });
-          router.push({name:'bpmn-editor'});
+          router.push({name:'main'});
         } else {
           toastFormErrors(fields as ValidateFieldsError);
         }
