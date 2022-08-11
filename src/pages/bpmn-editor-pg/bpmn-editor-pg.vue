@@ -130,8 +130,8 @@ export default defineComponent({
     })
     async function preventBrowserBack(event:Event){
       let vm  = proxy as any;
+      history.pushState(null, "", document.URL);
       if(!unSaved.value){
-        history.pushState(null, "", document.URL);
         if(!isMessageBoxActived.value){
           isMessageBoxActived.value = true;
           vm.$confirm({
@@ -145,7 +145,7 @@ export default defineComponent({
           })
         }
       }else{
-        router.go(-2);
+        router.go(-1);
       }
     }
     function clickEvent($event:any) {
@@ -164,7 +164,7 @@ export default defineComponent({
       console.log(value)
     }
     function routerPushTo(route:RouteLocationRaw){
-      router.replace(route);
+      router.push(route);
     }
     return {
       router,

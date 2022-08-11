@@ -13,7 +13,7 @@
           <span class="flex items-start font-bold iconfont icon-logo-vk"
             :class="[screen.isWS?'items-start xrow':'xcol h-40 items-center justify-center']"
             :style="{fontSize:screen.isWS?'40px':'80px'}"
-            @click="push({name:'transition'})">
+            @click="router.push({name:'transition'})">
             <span 
               :class="[screen.isWS?'ml-10':'mt-40']" 
               :style="{fontSize:screen.isWS?'16px':'20px'}">
@@ -42,20 +42,28 @@
           <span v-show="screen.isWS" style="font-size:40px" class="text-left mb-20 flex-grow-1 xrow items-center text-p-10 iconfont icon-logo-vk">
             <span class="ml-10 text-dark-24" style="font-size:20px">纬业流程</span>
           </span>
-          <span class="xrow items-center" :class="[screen.isWS?'':'my-20']">
-            <span class="h-15 mr-5 xcol" style="width:4px;margin-top:-3px">
-              <span class="flex-grow-1 bg-s-10 rounded"></span>
-            </span>
-            <span class="h-15 flex items-end font-bold text-dark-32" style="font-size:16px">
-              {{ruleConfig.cn}}
-            </span>
-            <span class="h-15 flex items-end ml-5 text-dark-18 uppercase font-bold" style="font-size:12px;margin-top:4px">
-              {{ruleConfig.en}}
-            </span>
+          <span class="xrow items-center overflow-hidden" :class="[screen.isWS?'':'my-20']">
+            <aq-transition name="scrollright" :absolute-cell="true" class="h-20">
+              <div :key="ruleConfig.en" class="xrow items-center w-full">
+                <span class="h-15 mr-5 xcol" style="width:4px;margin-top:-3px">
+                  <span class="flex-grow-1 bg-s-10 rounded"></span>
+                </span>
+                <span class="h-15 flex items-end font-bold text-dark-32" style="font-size:16px">
+                  {{ruleConfig.cn}}
+                </span>
+                <span class="h-15 flex items-end ml-5 text-dark-18 uppercase font-bold" style="font-size:12px;margin-top:4px">
+                  {{ruleConfig.en}}
+                </span>
+              </div>
+            </aq-transition>
           </span>
-          <div class="xcol h-220 flex-grow-1 flex-shrink-0 overflow-hidden">
+          <div class="xcol h-140 flex-grow-1 flex-shrink-0 overflow-hidden">
             <!-- 登录 -->
-            <aq-transition name="scrollright" :duration="{enter:300,leave:120}" class="h-auto">
+            <aq-transition 
+              name="scrollright"
+              mode="out-in" 
+              :duration="{enter:280,leave:200}">
+
               <div v-if="pageStatus == 'Login'" key="login" class="xcol flex-grow-1 flex-shrink-0 justify-center w-full">
                 <el-form ref="LoginFormRef" :model="reqdata" :rules="ruleConfig.rule" :show-message="false">
                   <el-form-item prop="email" class="mb-10 last:mb-0">
@@ -98,7 +106,7 @@
                       <template v-slot:prepend>密码</template>
                     </el-input>
                   </el-form-item>
-                  <span class="xrow mb-10 last:mb-0" >
+                  <span class="xrow last:mb-0" >
                     <el-form-item prop="code" class="flex-grow-1">
                       <el-input v-model="reqdata.code" class="text-sm" placeholder="验证码..." clearable>
                         <template v-slot:prepend>验证</template>
@@ -140,40 +148,48 @@
         <span class="h-auto flex-shrink-0 xcol pb-30 pt-20 bg-dark-1 border-t border-dark-2"
           :class="[screen.isWS?'px-50':'px-20']">
           <span class="overflow-hidden flex-grow-1 xcol">
-            <!-- 登录 -->
-            <div v-if="pageStatus == 'Login'" class="xcol">
-              <el-button type="primary" @click="loginAction(LoginFormRef)">登录</el-button>
-              <span class="xrow justify-between items-center flex-grow-1 my-10 h-35">
-                <span class="px-10 py-5 rounded bg-dark-1 border border-dark-2 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
-                  @click="pageStatus = 'Register'">
-                  用户注册
+            <aq-transition 
+              name="scrollright" 
+              mode="out-in"
+              :duration="{enter:360,leave:320}"
+              :timing="{enter:'ease-out',leave:'ease-in'}"
+              :absolute-cell="true" 
+              class="xcol flex-grow-1 h-100">
+              <!-- 登录 -->
+              <div v-if="pageStatus == 'Login'" key="Login" class="xcol w-full">
+                <el-button type="primary" @click="loginAction(LoginFormRef)">登录</el-button>
+                <span class="xrow justify-between items-center flex-grow-1 my-10 h-35">
+                  <span class="px-10 py-5 rounded bg-dark-1 border border-dark-2 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
+                    @click="pageStatus = 'Register'">
+                    用户注册
+                  </span>
+                  <span class="px-10 py-5 rounded bg-dark-1 border border-dark-2 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
+                    @click="pageStatus = 'ResetPassword'">
+                    忘记密码
+                  </span>
                 </span>
-                <span class="px-10 py-5 rounded bg-dark-1 border border-dark-2 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
-                  @click="pageStatus = 'ResetPassword'">
-                  忘记密码
+              </div>
+              <!-- 注册 -->
+              <div v-if="pageStatus == 'Register'" key='Register' class="xcol w-full">
+                <el-button type="success" @click="regAction(RegisterFormRef)">注册</el-button>
+                <span class="xrow justify-center items-center flex-grow-1 my-10 h-35">
+                  <span class="px-10 py-5 rounded bg-dark-1 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
+                    @click="pageStatus = 'Login'">
+                    返回登录
+                  </span>
                 </span>
-              </span>
-            </div>
-            <!-- 注册 -->
-            <div v-if="pageStatus == 'Register'" class="xcol">
-              <el-button type="success" @click="regAction(RegisterFormRef)">注册</el-button>
-              <span class="xrow justify-center items-center flex-grow-1 my-10 h-35">
-                <span class="px-10 py-5 rounded bg-dark-1 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
-                  @click="pageStatus = 'Login'">
-                  返回登录
+              </div>
+              <!-- 忘记密码 -->
+              <div v-if="pageStatus == 'ResetPassword'" key="ResetPassword" class="xcol w-full">
+                <el-button type="danger" @click="resetPwAction(ResetPasswordFormRef)">重置密码</el-button>
+                <span class="xrow justify-center items-center flex-grow-1 my-10 h-35">
+                  <span class="px-10 py-5 rounded bg-dark-1 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
+                    @click="pageStatus = 'Login'">
+                    返回登录
+                  </span>
                 </span>
-              </span>
-            </div>
-            <!-- 忘记密码 -->
-            <div v-if="pageStatus == 'ResetPassword'" class="xcol">
-              <el-button type="danger" @click="resetPwAction(ResetPasswordFormRef)">重置密码</el-button>
-              <span class="xrow justify-center items-center flex-grow-1 my-10 h-35">
-                <span class="px-10 py-5 rounded bg-dark-1 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
-                  @click="pageStatus = 'Login'">
-                  返回登录
-                </span>
-              </span>
-            </div>
+              </div>
+            </aq-transition>
             <span class="text-center break-all xcol text-dark-12 font-medium uppercase" style="line-height:18px">
               POWERED BY yanjun-lab<br/>
               2022.08
@@ -283,7 +299,7 @@ export default defineComponent({
       ResetPasswordFormRef,
 
       pageStatus,
-      push:router.push,
+      router,
       ruleConfig,
       reqdata,
       screen,

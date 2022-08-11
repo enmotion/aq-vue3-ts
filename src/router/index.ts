@@ -9,13 +9,14 @@ const router = createRouter({
     PGS.LoginPg,
     PGS.BpmnEditorPg,
     PGS.TransitionPg,
-    R.mergeAll([PGS.MainPg,
-    {
-      children: [
+    PGS.MainPg,
+    // R.mergeAll([PGS.MainPg,
+    // {
+    //   children: [
         
-      ]
-    }
-    ]) as RouteRecordRaw,
+    //   ]
+    // }
+    // ]) as RouteRecordRaw,
     PGS.Erro403Pg,
     PGS.ErroDevPg,
     PGS.Erro404Pg,

@@ -29,7 +29,7 @@ export default defineComponent({
     },
     mode:{ // 过渡播放模式
       type:String as PropType<TranstionTypes.mode>,
-      default:'out-in'
+      default:'default'
     },
     duration:{ // 过渡持续时长
       type:[Number,Object] as PropType<number|{enter:number,leave:number}>,
