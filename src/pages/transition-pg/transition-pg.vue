@@ -53,13 +53,12 @@
         </span>
       </div>
       <div class="xrow flex-wrap -mx-5 -my-5">
-        <div v-for="item in transitionItems" :key="item.name" class="w-4/12 p-5 xcol" :class="[staticHeigh?'h-150':'']">
-          <div class="flex-grow-1 h-auto flex-shrink-0 rounded overflow-hidden">
+        <div v-for="item in transitionItems" :key="item.name" class="w-4/12 p-5 xcol" :class="[staticHeigh?'h-130':'']">
+          <div class="flex flex-grow-1 w-full bg-dark-32 flex-shrink-0 rounded overflow-hidden">
             <aq-transition :name="item.name" :mode="transitionMode" :timing="transitionTiming" :duration="transitionDuration" :absolute-cell="transitionAbsoluteCell">
-              <div v-if="transitionSwitch" :key="item.name+'-on'" class="w-full to-cc h-120 bg-black flex-grow-1 flex text-lg font-bold text-white uppercase items-center justify-center rounded transition-container">{{item.name}}-on</div>
-              <div v-if="!transitionSwitch" :key="item.name+'-off'" class="w-full to-cc h-140 bg-s-10 flex-grow-1 flex text-lg font-bold text-white uppercase items-center justify-center rounded transition-container">{{item.name}}-off</div>
+              <div v-if="transitionSwitch" :key="item.name+'-on'" class="w-full to-cc h-120 bg-p-10 flex-grow-1 flex text-lg font-bold text-white uppercase items-center justify-center rounded transition-container">{{item.name}}-on</div>
+              <div v-if="!transitionSwitch" :key="item.name+'-off'" class="w-full to-cc h-120 bg-s-10 flex-grow-1 flex text-lg font-bold text-white uppercase items-center justify-center rounded transition-container">{{item.name}}-off</div>
             </aq-transition>
-            <div class="w-full bg-p-10 text-left h-10 flex-shrink-0 rounded"></div>
           </div>
         </div>
       </div>

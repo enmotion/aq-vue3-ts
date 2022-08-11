@@ -56,7 +56,7 @@
           <div class="xcol h-220 flex-grow-1 flex-shrink-0 overflow-hidden">
             <!-- 登录 -->
             <aq-transition name="scrollright" :duration="{enter:300,leave:120}" class="h-auto">
-              <div v-if="pageStatus == 'Login'" key="login" class="xcol flex-grow-1 flex-shrink-0 justify-center">
+              <div v-if="pageStatus == 'Login'" key="login" class="xcol flex-grow-1 flex-shrink-0 justify-center w-full">
                 <el-form ref="LoginFormRef" :model="reqdata" :rules="ruleConfig.rule" :show-message="false">
                   <el-form-item prop="email" class="mb-10 last:mb-0">
                     <el-input v-model="reqdata.email" class="text-sm" type="text" placeholder="账号邮箱..." clearable>
@@ -81,8 +81,8 @@
                 </el-form>
               </div>
               <!-- 注册 -->
-              <div v-if="pageStatus == 'Register'" key="Register" class="xcol flex-grow-1 flex-shrink-0 justify-center">
-                <el-form ref="RegisterFormRef" :model="reqdata" :rules="ruleConfig.rule" :show-message="false">
+              <div v-if="pageStatus == 'Register'" key="Register" class="xcol flex-grow-1 flex-shrink-0 justify-center w-full">
+                <el-form ref="RegisterFormRef" :model="reqdata" :rules="ruleConfig.rule" :show-message="false" class="xcol">
                   <el-form-item prop="email" class="mb-10 last:mb-0">
                     <el-input v-model="reqdata.email" class="text-sm" type="text" placeholder="账号邮箱..." clearable>
                       <template v-slot:prepend class="px-5">账号</template>
@@ -99,19 +99,19 @@
                     </el-input>
                   </el-form-item>
                   <span class="xrow mb-10 last:mb-0" >
-                    <el-form-item prop="code">
+                    <el-form-item prop="code" class="flex-grow-1">
                       <el-input v-model="reqdata.code" class="text-sm" placeholder="验证码..." clearable>
                         <template v-slot:prepend>验证</template>
                       </el-input>
                     </el-form-item>
                     <span class="w-140 bg-dark-2 rounded overflow-hidden ml-5 flex items-center justify-center" style="height:32px">
                       image
-                    </span>
+                    </span> 
                   </span>
                 </el-form>
               </div>
               <!-- 忘记密码 -->
-              <div v-if="pageStatus == 'ResetPassword'" key="ResetPassword" class="xcol flex-grow-1 flex-shrink-0 justify-center">
+              <div v-if="pageStatus == 'ResetPassword'" key="ResetPassword" class="xcol flex-grow-1 flex-shrink-0 justify-center w-full">
                 <el-form ref="ResetPasswordFormRef" :model="reqdata" :rules="ruleConfig.rule" :show-message="false">
                   <el-form-item prop="email" class="mb-10 last:mb-0">
                     <el-input v-model="reqdata.email" class="text-sm" type="text" placeholder="账号邮箱..." clearable>
@@ -123,16 +123,13 @@
                       <template v-slot:prepend>密码</template>
                     </el-input>
                   </el-form-item>
-                  <span class="xrow mb-10 last:mb-0" >
-                    <el-form-item prop="code">
+                  <span class="mb-10 bg-d-10 last:mb-0" >
+                    <el-form-item prop="code" class="">
                       <el-input v-model="reqdata.code" class="text-sm" placeholder="重置验证码..." clearable>
                         <template v-slot:prepend>验证</template>
                         <template v-slot:append>发送验证码</template>
                       </el-input>
                     </el-form-item>
-                    <!-- <span class="w-140 bg-dark-2 rounded overflow-hidden ml-5 flex items-center justify-center" style="height:32px">
-                      发送验证码
-                    </span> -->
                   </span>
                 </el-form>
               </div>
