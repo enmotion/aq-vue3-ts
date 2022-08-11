@@ -1,3 +1,11 @@
+.aq-transition-vessel>.zoombounce-enter-from,
+.aq-transition-vessel>.zoombounce-enter-active,
+.aq-transition-vessel>.zoombounce-enter-to,
+.aq-transition-vessel>.zoombounce-leave-from,
+.aq-transition-vessel>.zoombounce-leave-active,
+.aq-transition-vessel>.zoombounce-leave-to{
+  position:var(--cellposition) !important;
+}
 .aq-transition-vessel>.zoombounce-enter-active{
   animation: zoombounce-in var(--enter);
   /* position:absolute; */

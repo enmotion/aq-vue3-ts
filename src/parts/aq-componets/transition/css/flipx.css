@@ -1,3 +1,11 @@
+.aq-transition-vessel>.flipx-enter-from,
+.aq-transition-vessel>.flipx-enter-active,
+.aq-transition-vessel>.flipx-enter-to,
+.aq-transition-vessel>.flipx-leave-from,
+.aq-transition-vessel>.flipx-leave-active,
+.aq-transition-vessel>.flipx-leave-to{
+  position:var(--cellposition) !important;
+}
 .aq-transition-vessel>.flipx-enter-from{
   transform: rotateX(-90deg);
   opacity: 0;

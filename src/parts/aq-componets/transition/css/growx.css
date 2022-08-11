@@ -1,4 +1,12 @@
 .aq-transition-vessel>.growx-enter-from,
+.aq-transition-vessel>.growx-enter-active,
+.aq-transition-vessel>.growx-enter-to,
+.aq-transition-vessel>.growx-leave-from,
+.aq-transition-vessel>.growx-leave-active,
+.aq-transition-vessel>.growx-leave-to{
+  position:var(--cellposition) !important;
+}
+.aq-transition-vessel>.growx-enter-from,
 .aq-transition-vessel>.growx-leave-to {
   overflow: hidden;
   width:0px !important;

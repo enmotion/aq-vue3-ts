@@ -1,3 +1,11 @@
+.aq-transition-vessel>.scrollright-enter-from,
+.aq-transition-vessel>.scrollright-enter-active,
+.aq-transition-vessel>.scrollright-enter-to,
+.aq-transition-vessel>.scrollright-leave-from,
+.aq-transition-vessel>.scrollright-leave-active,
+.aq-transition-vessel>.scrollright-leave-to{
+  position:var(--cellposition) !important;
+}
 .aq-transition-vessel>.scrollright-enter-from {
   transform: translateX(-100%);
 }

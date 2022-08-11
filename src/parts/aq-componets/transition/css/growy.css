@@ -1,3 +1,11 @@
+.aq-transition-vessel>.growy-enter-from,
+.aq-transition-vessel>.growy-enter-active,
+.aq-transition-vessel>.growy-enter-to,
+.aq-transition-vessel>.growy-leave-from,
+.aq-transition-vessel>.growy-leave-active,
+.aq-transition-vessel>.growy-leave-to{
+  position:var(--cellposition) !important;
+}
 /* transition */
 .aq-transition-vessel>.growy-enter-from,
 .aq-transition-vessel>.growy-leave-to {

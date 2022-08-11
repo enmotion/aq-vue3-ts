@@ -1,9 +1,10 @@
 <template>
-  <div class="aq-transition-vessel" 
-    :class="[absoluteCell?'aq-transition-vessel-absolute-cell':'']" 
+  <!-- :class="[absoluteCell?'aq-transition-vessel-absolute-cell':'']" -->
+  <div class="aq-transition-vessel"
     :style="{
       perspective:perspective,
       '-webkit-perspective':perspective,
+      '--cellposition':cellposition,
       '--enter':transDuration.enter,
       '--leave':transDuration.leave,
       '--entertiming':transTiming.enter,
@@ -28,7 +29,7 @@ export default defineComponent({
     },
     mode:{ // 过渡播放模式
       type:String as PropType<TranstionTypes.mode>,
-      default:'default'
+      default:'out-in'
     },
     duration:{ // 过渡持续时长
       type:[Number,Object] as PropType<number|{enter:number,leave:number}>,
@@ -36,7 +37,7 @@ export default defineComponent({
     },
     absoluteCell:{ // 启用了绝对定位，可能会使得内部flex-grow失效，请自行设置内部高宽为100%
       type:Boolean,
-      default:true,
+      default:false,
     },
     timing:{
       type:[String,Object] as PropType<TranstionTypes.timing|{enter:TranstionTypes.timing,leave:TranstionTypes.timing}>,
@@ -48,6 +49,9 @@ export default defineComponent({
     }
   },
   setup(props,context) {
+    const cellposition = computed(()=>{
+      return props.absoluteCell?'absolute':'relative';
+    })
     const transDuration = computed(()=>{
       if(props.duration.constructor == Number){
         return {enter:props.duration/1000+'s',leave:props.duration/1000+'s'}
@@ -84,6 +88,7 @@ export default defineComponent({
       }
     })
     return {
+      cellposition,
       transDuration,
       transTiming,
     }
@@ -106,20 +111,21 @@ export default defineComponent({
 @import url('../css/growx.css');
 .aq-transition-vessel{
   display:flex;
-  flex-direction:row;
-  flex-wrap:wrap;
+  flex-direction:column;
   flex-grow:1;
+  flex-shrink: 0;
   align-items:flex-start;
   align-content:flex-start;
   position:relative;
+  --cellposition:relative;
   --entertiming:ease;
   --leavetiming:ease;
   --enter:0s;
   --leave:0s;
 }
 /* 是否启用绝对定位样式 */
-.aq-transition-vessel-absolute-cell > *{
+/* .aq-transition-vessel-absolute-cell > *{
   position: absolute !important;
-}
+} */
 </style>
 

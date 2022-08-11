@@ -29,7 +29,7 @@
         transition
       </span>
       <div class="xrow flex-wrap my-10 p-5 items-center h-auto bg-dark-2 justify-start border border-dark-2 rounded-md">
-        <span class="p-5 flex-grow-1 xrow justify-start items-center w-6/12">
+        <span class="p-5 flex-grow-1 xrow justify-start items-center w-5/12">
           <span class="text-dark-24 font-bold mr-5 w-40 text-left">Mode:</span>
           <el-select v-model="transitionMode" size="small" class="w-80">
             <el-option v-for="it in transitionModeOptions" 
@@ -39,22 +39,27 @@
             </el-option>
           </el-select>
         </span>
-        <span class="p-5 flex-grow-1 xrow justify-start items-center w-3/12">
-          <span class="text-dark-24 font-bold mr-5 w-40 text-left">AbsoluteCell:</span>
+        <span class="p-5 flex-grow-1 xrow justify-start items-center w-2/12">
+          <span class="text-dark-24 font-bold mr-5 w-80 text-left">StaticHeight:</span>
+          <el-switch size="small" v-model="staticHeigh"></el-switch>
+        </span>
+        <span class="p-5 flex-grow-1 xrow justify-start items-center w-2/12">
+          <span class="text-dark-24 font-bold mr-5 w-80 text-left">AbsoluteCell:</span>
           <el-switch size="small" v-model="transitionAbsoluteCell"></el-switch>
         </span>
-        <span class="p-5 flex-grow-1 xrow justify-start items-center w-3/12">
+        <span class="p-5 flex-grow-1 xrow justify-start items-center w-2/12">
           <span class="text-dark-24 font-bold mr-5">Trigger:</span>
           <el-switch size="small" v-model="transitionSwitch"></el-switch>
         </span>
       </div>
       <div class="xrow flex-wrap -mx-5 -my-5">
-        <div v-for="item in transitionItems" :key="item.name" class="w-4/12 p-5 xcol h-120">
-          <div class="flex-grow-1 rounded overflow-hidden">
+        <div v-for="item in transitionItems" :key="item.name" class="w-4/12 p-5 xcol" :class="[staticHeigh?'h-150':'']">
+          <div class="flex-grow-1 h-auto flex-shrink-0 rounded overflow-hidden">
             <aq-transition :name="item.name" :mode="transitionMode" :timing="transitionTiming" :duration="transitionDuration" :absolute-cell="transitionAbsoluteCell">
               <div v-if="transitionSwitch" :key="item.name+'-on'" class="w-full to-cc h-120 bg-black flex-grow-1 flex text-lg font-bold text-white uppercase items-center justify-center rounded transition-container">{{item.name}}-on</div>
-              <div v-if="!transitionSwitch" :key="item.name+'-off'" class="w-full to-cc h-120 bg-s-10 flex-grow-1 flex text-lg font-bold text-white uppercase items-center justify-center rounded transition-container">{{item.name}}-off</div>
+              <div v-if="!transitionSwitch" :key="item.name+'-off'" class="w-full to-cc h-140 bg-s-10 flex-grow-1 flex text-lg font-bold text-white uppercase items-center justify-center rounded transition-container">{{item.name}}-off</div>
             </aq-transition>
+            <div class="w-full bg-p-10 text-left h-10 flex-shrink-0 rounded"></div>
           </div>
         </div>
       </div>
@@ -115,7 +120,8 @@ export default defineComponent({
   components:{ ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton },
   setup(props,context) {
     let transitionSwitch = ref(true);
-    let transitionAbsoluteCell = ref(true);
+    let transitionAbsoluteCell = ref(false);
+    let staticHeigh = ref(true);
     let transitionMode = ref('default');
     let transitionTiming = reactive({enter:'ease',leave:'ease'});
     let transitionItemIndex = ref(0);
@@ -163,6 +169,7 @@ export default defineComponent({
       TransitionGroupItems.splice(index,1);
     }
     return {
+      staticHeigh,
       transitionSwitch,
       transitionAbsoluteCell,
       transitionMode,

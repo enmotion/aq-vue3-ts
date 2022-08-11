@@ -1,3 +1,11 @@
+.aq-transition-vessel>.falling-enter-from,
+.aq-transition-vessel>.falling-enter-active,
+.aq-transition-vessel>.falling-enter-to,
+.aq-transition-vessel>.falling-leave-from,
+.aq-transition-vessel>.falling-leave-active,
+.aq-transition-vessel>.falling-leave-to{
+  position:var(--cellposition) !important;
+}
 .aq-transition-vessel>.falling-enter-from,.aq-transition-vessel>.falling-leave-to {
   transform: translateY(-10px);
   opacity: 0;
