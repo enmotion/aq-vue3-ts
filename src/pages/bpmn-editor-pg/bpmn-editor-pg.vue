@@ -7,13 +7,15 @@
         <el-button 
           size="small" 
           type="danger" 
-          class="mx-0 mr-5 last:mr-0">
+          class="mx-0 mr-5 last:mr-0"
+          @click="routerPushTo({name:'transition'});">
           发布
         </el-button>
         <el-button 
           size="small" 
           type="success" 
-          class="mx-0 mr-5 last:mr-0">
+          class="mx-0 mr-5 last:mr-0"
+          @click="router.back()">
           保存
         </el-button>
       </span>
@@ -48,7 +50,7 @@
               <div class="xcol p-10 text-xs text-left break-all flex-grow-1 bg-dark-2 flex-col">
                 <span class="h-50 border border-dark-2 rounded-md bg-white p-10 overflow-hidden items-center text-xs xrow">
                   {{currentItem.businessObject?.name}}
-                  <el-switch v-model="isSaved" size="small"></el-switch>
+                  <el-switch v-model="unSaved" size="small"></el-switch>
                 </span>
                 <aq-scroll-view :disabled="false" 
                   class="flex-grow-1 flex-shrink-1 -mr-10 mt-10" 
@@ -70,7 +72,9 @@
 
 <script lang="ts">
 import * as R from "ramda";
-import { ref, reactive, onMounted, onUnmounted, defineComponent, inject, computed, getCurrentInstance, ComponentPublicInstance } from "vue";
+import { ref, reactive, onMounted, onUnmounted, defineComponent, inject, getCurrentInstance, ComponentPublicInstance } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import type { RouteLocationRaw } from "vue-router";
 import type { Ref }  from "vue";
 import { Splitpanes, Pane } from "splitpanes";
 import 'splitpanes/dist/splitpanes.css';
@@ -86,12 +90,13 @@ import aqBpmnEditor from "@src/parts/aq-componets/aq-bpmn-editor/aq-bpmn-editor.
 export default defineComponent({
   components: { ElementMenu, ElSwitch, Splitpanes, Pane, ElButton, AqScrollView, aqBpmnEditor },
   setup(props, context){
-    // 组件配置数据 
+    // 组件配置数据
+    const router = useRouter();
     const screen = inject("screen"); // 引入屏幕
     const processType:Ref<'camunda'|'flowable'|'activiti'> = ref('flowable'); // 流程引擎类型
     const { proxy } = (getCurrentInstance() as { proxy:ComponentPublicInstance });
     const isMessageBoxActived = ref(false); // 避免重复弹窗
-    const isSaved = ref(false); // 是否已保存
+    const unSaved = ref(false); // 是否已保存
     // 组件嵌套实例
     const bpmnDom = ref(null as any); // bpmn-editor 组件实例 Dom
     const bpmnDesignDom = ref(null as any); // bpmn-editor + prop-editor 组件实例 Dom
@@ -107,10 +112,11 @@ export default defineComponent({
       businessObject:null as any
     }); // 当前属性配置
     // 生命周期函数；
-    onMounted(() => {
+    onMounted(async () => {
       // 阻止浏览器跳转
-      history.pushState({title:"",url:""}, "", document.URL); // 塞空值
-      window.addEventListener('popstate', preventBrowserBack); // 绑侦听
+      console.log('onMounted',Date.now(),'onMounted');
+      history.pushState(null, "", document.URL);
+      window.addEventListener('popstate', preventBrowserBack, false); // 绑侦听
       // 计算属性面板所需宽度
       bpmnDesignContainerResizeObserver = new ResizeObserver(() => {
         propEditorWidthPercent.value = Math.min(Math.round(bpmnPropEditorMinWidth / bpmnDesignDom.value.clientWidth * 100), 50);
@@ -118,27 +124,28 @@ export default defineComponent({
       bpmnDesignContainerResizeObserver.observe(bpmnDesignDom.value); // 添加侦听
     })
     onUnmounted(() => {
+      // console.log('onUnmounted',Date.now(),'beforeDestory');
       window.removeEventListener('popstate', preventBrowserBack); // 关闭侦听
       bpmnDesignContainerResizeObserver.disconnect(); // 关闭侦听
     })
-    function preventBrowserBack(event:Event){
+    async function preventBrowserBack(event:Event){
       let vm  = proxy as any;
-      if(!isSaved.value){
-        event.preventDefault();
-        history.pushState({title:"",url:""}, "", document.URL);
+      if(!unSaved.value){
+        history.pushState(null, "", document.URL);
         if(!isMessageBoxActived.value){
           isMessageBoxActived.value = true;
           vm.$confirm({
             message:`您当前的操作尚未保存，是否确认返回上一页并放弃保存`,
             customClass:'msg-light'
           }).then(()=>{
-            history.go(-2);
+            router.go(-2);
           }).catch(()=>{
             isMessageBoxActived.value = false;
+            // history.go(-1)
           })
         }
       }else{
-        history.go(-1);
+        router.go(-2);
       }
     }
     function clickEvent($event:any) {
@@ -156,7 +163,12 @@ export default defineComponent({
     function onscroll(value:string){
       console.log(value)
     }
+    function routerPushTo(route:RouteLocationRaw){
+      router.replace(route);
+    }
     return {
+      router,
+      
       screen,
       processType,
       bpmnDom,
@@ -165,8 +177,9 @@ export default defineComponent({
       xmlStr,
       elementsMenus,
       currentItem,
-      isSaved,
+      unSaved,
 
+      routerPushTo,
       clickEvent,
       removedEvent,
       processFuncHandler,

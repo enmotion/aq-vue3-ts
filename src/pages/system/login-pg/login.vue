@@ -12,7 +12,8 @@
           style="font-size:18px">
           <span class="flex items-start font-bold iconfont icon-logo-vk"
             :class="[screen.isWS?'items-start xrow':'xcol h-40 items-center justify-center']"
-            :style="{fontSize:screen.isWS?'40px':'80px'}">
+            :style="{fontSize:screen.isWS?'40px':'80px'}"
+            @click="push({name:'transition'})">
             <span 
               :class="[screen.isWS?'ml-10':'mt-40']" 
               :style="{fontSize:screen.isWS?'16px':'20px'}">
@@ -184,8 +185,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, inject, computed, PropType, Ref, getCurrentInstance } from 'vue';
-import type { UnwrapNestedRefs, ComponentPublicInstance } from 'vue';
+import { defineComponent, ref, reactive, inject, computed, PropType, Ref, getCurrentInstance, onMounted } from 'vue';
+import type { UnwrapNestedRefs, } from 'vue';
 import { RouteLocationRaw, useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { ElInput, ElButton, ElForm, ElFormItem } from "element-plus";
@@ -205,6 +206,9 @@ export default defineComponent({
     // const route = useRoute();
     const store = useStore();
     let pageStatus:Ref<'Login'|'Register'|'ResetPassword'> = ref('Login');
+    onMounted(()=>{
+      console.log('login onMouned');
+    })
     const reqdata:UnwrapNestedRefs<{
       nickname?:string,
       email:string,

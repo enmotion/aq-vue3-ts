@@ -1,9 +1,9 @@
 <template>
-  <div class="h-full flex flex-col mask text-xs overflow-hidden" style="pop">
+  <div class="h-full flex flex-col mask text-xs bg-dark-32 overflow-hidden" style="pop">
     <router-view key="root_router" v-slot="{ Component }">
-      <aq-transition name="zoombounce" :duration="{enter:500,leave:200}" :absolute-cell="true" :timing="{enter:'ease-out',leave:'ease-out'}">
+      <aq-transition name="zoomin" mode="out-in" :duration="{enter:300,leave:200}" :timing="{enter:'ease-out',leave:'ease-in'}">
         <keep-alive>
-          <component :is="Component" :key="route.name" class="w-full h-full" />
+          <component :is="Component" class="w-full h-full" />
         </keep-alive>
       </aq-transition>
     </router-view>

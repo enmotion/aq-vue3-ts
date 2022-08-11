@@ -63,12 +63,22 @@
       <span class="h-40 bg-p-10 xrow items-center p-10 text-white text-sm font-bold uppercase rounded select-none">
         transition-group
       </span>
-      <div class="xrow my-10 bg-dark-2 border border-dark-2 rounded-md p-10 items-center">
-        <el-button size="small" type="success" @click="addGroupItems">新增</el-button>
+      <div class="xrow my-10 bg-dark-2 border border-dark-2 rounded-md p-5 items-center">
+        <el-button size="small" type="success" class="ml-5" @click="addGroupItems">新增</el-button>
         <span class="p-5 flex-grow-1 xrow justify-start items-center w-6/12">
           <span class="text-dark-24 font-bold mr-5 w-120 text-left">TransitionTypeName:</span>
           <el-select v-model="transitionGroupTypeName" size="small" class="w-80">
             <el-option v-for="it in transitionItems" 
+              :key="it.name"
+              :label="it.name" 
+              :value="it.name">
+            </el-option>
+          </el-select>
+        </span>
+        <span class="p-5 flex-grow-1 xrow justify-start items-center w-6/12">
+          <span class="text-dark-24 font-bold mr-5 w-120 text-left">ItemDisplay:</span>
+          <el-select v-model="transitionGroupItemDisplay" size="small" class="w-80">
+            <el-option v-for="it in transtionGroupItemDisplayTypes" 
               :key="it.name"
               :label="it.name" 
               :value="it.name">
@@ -81,10 +91,13 @@
           <aq-transition-group 
             :name="transitionGroupTypeName" 
             :timing="transitionTiming" 
-            item-display="flex"
+            :item-display="transitionGroupItemDisplay"
             :duration="transitionDuration">
-            <div v-for="(item,index) in TransitionGroupItems" :key="item.key" class="w-full p-5 h-100 to-tc flex-grow-1" @click="removeGroupItem(index)">
-              <span class="flex h-full items-center justify-center bg-p-10 text-white font-bold text-sm flex-grow-1 btn rounded-md">{{item.name}}</span>
+            <div v-for="(item,index) in TransitionGroupItems" :key="item.key" 
+              class="p-5 h-100 to-tc flex-grow-1"
+              :class="[transitionGroupItemDisplay=='block'?'w-full':'w-2/12']"
+              @click="removeGroupItem(index)">
+              <span class="flex h-full items-center justify-center bg-p-10 text-white font-bold text-sm flex-grow-1 btn rounded">{{item.name}}</span>
             </div>
           </aq-transition-group>
         </aq-scroll-view>
@@ -105,7 +118,8 @@ export default defineComponent({
     let transitionAbsoluteCell = ref(true);
     let transitionMode = ref('default');
     let transitionTiming = reactive({enter:'ease',leave:'ease'});
-    let transitionItemIndex = ref(0)
+    let transitionItemIndex = ref(0);
+    let transitionGroupItemDisplay = ref('inline-block');
     let transitionGroupTypeName = ref('growy');
     let transitionTimingOptions = reactive([
       {label:'ease',value:'ease'},
@@ -136,6 +150,10 @@ export default defineComponent({
       {name:'growy'},
       {name:'growx'},
     ])
+    let transtionGroupItemDisplayTypes = reactive([
+      {name:'block'},
+      {name:'inline-block'}
+    ])
     let TransitionGroupItems = reactive([] as {name:string,key:number}[]);
     function addGroupItems(){
       transitionItemIndex.value++;
@@ -155,6 +173,8 @@ export default defineComponent({
       transitionDuration,
       TransitionGroupItems,
       transitionGroupTypeName,
+      transitionGroupItemDisplay,
+      transtionGroupItemDisplayTypes,
       addGroupItems,
       removeGroupItem
     }
