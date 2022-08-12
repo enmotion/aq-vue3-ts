@@ -1,4 +1,5 @@
-@import url('../icon/iconfont.css');
+@import url('//at.alicdn.com/t/c/font_3519576_fddl8ern56.css');
+/* @import url('../icon/iconfont.css'); */
 /* hightlight js CSS 样式引入，在组件内引入，编译时出现丢失情况 */
 @import url('highlight.js/styles/stackoverflow-light.css'); 
 @tailwind base;
@@ -41,6 +42,13 @@
   background-size: 70%;
   background-repeat:repeat-x;
   background-position: 0% 100%;
+}
+.bg-texture{
+  background-image: url('../img/texture-bg.jpeg');
+  background-repeat: no-repeat;
+  background-position: 100% 50%;
+  background-size:100% 200%;
+  background-size: fill;
 }
 .bg-blue{
   background-image: url('../img/bg-blue.jpeg');

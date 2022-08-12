@@ -10,7 +10,7 @@
         <div class="absolute z-10 h-full w-full xcol transition-all duration-700"
           :class="[screen.isWS?'p-30':'p-20 justify-center items-cente']"
           style="font-size:18px">
-          <span class="flex items-start font-bold iconfont icon-logo-vk"
+          <span class="flex items-start iconfont icon-unicom-logo"
             :class="[screen.isWS?'items-start xrow':'xcol h-40 items-center justify-center']"
             :style="{fontSize:screen.isWS?'40px':'80px'}"
             @click="router.push({name:'transition'})">
@@ -26,8 +26,8 @@
           </span>
           <div :class="[screen.isWS?'flex-grow-1':'h-15']"></div>
           <span v-show="screen.isWS" class="xcol uppercase" :class="[screen.isWS?'items-start':'items-center']">
-            <span class="text-white font-bold" :style="{fontSize:screen.isWS?'16px':'12px'}">version : 1.0</span>
-            <span class="mt-5 text-light-32 font-bold" style="font-size:12px">copyright : yanjun-mad-lab.com</span>
+            <span class="text-white font-bold" :style="{fontSize:screen.isWS?'14px':'12px'}">version : 1.0</span>
+            <span class="mt-5 text-light-32 font-bold scale-75 origin-left" style="font-size:12px">copyright : yanjun-mad-lab.com</span>
           </span>
         </div>
         <key-visual v-if="screen.isWS" class="w-full h-full"
@@ -39,8 +39,8 @@
         <!-- logo -->
         <span class="xcol flex-grow-5 bg-white"
           :class="[screen.isWS?'px-50 pt-30':'p-20 h-4/6']">
-          <span v-show="screen.isWS" style="font-size:40px" class="text-left mb-20 flex-grow-1 xrow items-center text-p-10 iconfont icon-logo-vk">
-            <span class="ml-10 text-dark-24" style="font-size:20px">纬业流程</span>
+          <span v-show="screen.isWS" style="font-size:40px" class="text-left mb-20 flex-grow-1 xrow items-center text-d-10 iconfont icon-unicom-logo">
+            <span class="ml-10 text-dark-24 font-bold" style="font-size:20px">纬业流程</span>
           </span>
           <span class="xrow items-center overflow-hidden" :class="[screen.isWS?'':'my-20']">
             <aq-transition name="scrollright" :absolute-cell="true" class="h-20">
