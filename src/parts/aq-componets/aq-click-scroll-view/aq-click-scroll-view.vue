@@ -1,12 +1,12 @@
 <template>
-  <div class="xrow text-white flex-grow-1 flex-shrink-1 px-20">
-    <span v-if="showMoveArrow" class="w-20 xcol justify-center iconfont icon-arrowL border-r-1 border-light-2 btn" @click="scrollTo(-1)"></span>
+  <div class="xrow items-center text-white flex-grow-1 flex-shrink-1 px-20">
+    <span v-if="showMoveArrow" class="w-20 h-20 xcol justify-center iconfont icon-arrowL border-r-1 border-light-2 font-bold btn text-xs bg-p-2 text-light-12 rounded-full m-5" @click="scrollTo(-1)"></span>
     <div ref="ScrollContainerDom" class="flex-grow-1 h-auto xrow overflow-hidden transition-all duration-300 scroll-smooth" style="width:0px">
       <div ref="ScrollContentDom" class="xrow w-auto flex-shrink-0">
         <slot></slot>
       </div>
     </div>
-    <span v-if="showMoveArrow" class="w-20 xcol justify-center iconfont icon-arrowR border-l-1 border-light-2 btn" @click="scrollTo(1)"></span>
+    <span v-if="showMoveArrow" class="w-20 h-20 xcol justify-center iconfont icon-arrowR border-l-1 border-light-2 font-bold btn text-xs bg-p-2 text-light-12 rounded-full  m-5" @click="scrollTo(1)"></span>
   </div>
 </template>
 

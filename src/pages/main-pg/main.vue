@@ -18,11 +18,11 @@
         <div class="h-90 xrow items-center">
           <aq-click-scroll-view class="h-40">
             <div class="h-40 w-auto xrow items-center px-20">
-              <span v-for="(i) in 8" 
+              <span v-for="(i) in 122" 
                 :key="i" 
                 class="py-5 flex-shrink-0 text-sm font-bold rounded-sm mr-30 border-b-2 border-dark-1 last:mr-0 cursor-pointer hover:text-white hover:border-light-12 transition-all duration-500"
                 :class="[i==3?'border-s-10 text-white':'bg-dark-1 text-light-32']"
-                style="margin-top: 2px;">
+                style="margin-top: 4px;">
                   首级菜单-{{i}}
               </span>
             </div>
@@ -33,7 +33,7 @@
           <div class="h-40 w-auto flex-grow-1 xrow items-end bg-dark-12 border-t border-light-6 rounded-t-md backdrop-blur-lg">
             <aq-click-scroll-view class="h-50 xrow">
               <span class="h-50 xrow items-end">
-                <span v-for="(i) in 10" 
+                <span v-for="(i) in 20" 
                   :key="i" 
                   class="px-15 flex-shrink-0 text-xs font-bold rounded-t-md mr-5 last:mr-0 xcol items-center justify-center"
                   :class="[i==2?'h-45 bg-gradient-to-t from-gray-200 to-white text-gray-600':
