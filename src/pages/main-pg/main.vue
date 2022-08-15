@@ -1,86 +1,97 @@
 <template>
-  <div class="xcol flex-grow-1 bg-texture">
-    <div class="h-140 bg-p-6 xrow">
-      <div class="w-200 xcol">
-        <!-- logo部分 -->
-        <div class="h-90 items-center xrow justify-center px-0">
-          <span class="iconfont icon-unicom-logo text-4xl text-white"></span>
-          <span class="ml-10 xrow items-start justify-center" style="margin-top:2px">
+  <div class="xcol flex-grow-1" :class="[screen.isWS?'bg-texture':'bg-white']">
+    <div class="xrow" :class="[screen.isWS?'h-140 bg-p-5':'h-50 bg-p-10']">
+      <!-- logo部分 -->
+      <div class="xcol" :class="[screen.isWS?'w-200':'w-auto items-start flex-grow-1']">
+        <div class="h-90 items-center xrow justify-center px-10">
+          <span class="iconfont icon-unicom-logo text-white xrow items-center" :class="[screen.isWS?'text-4xl':'text-2xl flex-grow-1']"></span>
+          <span v-if="screen.isWS" class="ml-10 xrow items-start justify-center" style="margin-top:2px">
             <span class="text-lg text-white font-bold" style="line-height:14px">纬业流程</span>
             <span class="h-15 text-xs text-light-32 uppercase font-bold origin-bottom-left ml-5" style="line-height:12px;padding-top:4px">0.0.1</span>
           </span>
         </div>
-        <div class="h-50">
-        </div>
       </div>
+      
       <!-- 导航与标签 -->
-      <div class="xcol flex-grow-1">
-        <div class="h-90 xrow items-center">
+      <div v-if="screen.isWS" class="xcol flex-grow-1">
+        <div class="h-100 xrow items-center">
           <aq-click-scroll-view class="h-40">
             <div class="h-40 w-auto xrow items-center px-20">
-              <span v-for="(i) in 122" 
+              <span v-for="(i) in 6" 
                 :key="i" 
-                class="py-5 flex-shrink-0 text-sm font-bold rounded-sm mr-30 border-b-2 border-dark-1 last:mr-0 cursor-pointer hover:text-white hover:border-light-12 transition-all duration-500"
-                :class="[i==3?'border-s-10 text-white':'bg-dark-1 text-light-32']"
-                style="margin-top: 4px;">
+                class="py-5 flex-shrink-0 text-sm font-bold rounded-sm mr-30 border-b-2 border-dark-1 last:mr-0 cursor-pointer transition-all duration-500"
+                :class="[i==menuindex?'border-s-10 text-white':'bg-dark-1 text-light-32 hover:text-white hover:border-light-12']"
+                style="margin-top: 4px;"
+                @click="menuindex=i">
                   首级菜单-{{i}}
               </span>
             </div>
           </aq-click-scroll-view>
         </div>
         <!-- tab部分 -->
-        <!-- <div class="h-50 xrow items-end">
-          <div class="h-50 w-auto flex-grow-1 xrow items-end bg-dark-6 border-t border-light-6 backdrop-blur-lg">
-            <aq-click-scroll-view class="h-55 xrow">
-              <span class="h-55 xrow items-end">
-                <span v-for="(i) in 20" 
+        <div class="h-40 mt-10 xrow items-end">
+          <div class="h-40 w-auto flex-grow-1 xrow items-end bg-dark-6 border-t border-light-6 backdrop-blur-lg">
+            <aq-click-scroll-view class="h-50 xrow">
+              <template v-slot:leftArrow>
+                <span class="iconfont icon-arrowL font-bold btn text-xs text-light-12 mt-10 hover:text-s-10 duration-300 transition-all"></span>
+              </template>
+              <span class="h-50 xrow items-end">
+                <span v-for="(i) in 120" 
                   :key="i" 
-                  class="px-15 flex-shrink-0 text-xs font-bold rounded-t-md mr-5 last:mr-0 xcol items-center justify-center"
-                  :class="[i==2?'h-55 bg-gradient-to-t from-gray-200 to-white text-gray-600':
-                  'text-light-18 h-40 cursor-pointer hover:h-55 hover:bg-p-10 hover:text-white transition-all duration-300']">
-                    标签菜单-{{i}}
+                  class="px-15 xrow flex-shrink-0 text-xs font-bold rounded-t-md mr-5 last:mr-0 xcol items-center justify-center cursor-pointer"
+                  :class="[i==tabindex?'h-45 bg-gradient-to-t from-gray-100 to-white text-gray-600':
+                  'text-light-18 h-40 hover:h-45 hover:bg-p-10 hover:text-white transition-all duration-300']"
+                  @click="tabindex=i">
+                    <span>标签菜单-{{i}}</span>
+                    <span v-show="tabindex==i" class="flex rounded-full iconfont icon-x items-center justify-center text-d-10 flex-shrink-0 flex-grow-0 ml-5 scale-75 hover:bg-d-10 hover:text-white hover:scale-100 duration-300 transition-all" 
+                      style="font-size:12px;width:20px;height:20px"
+                      @click.capture.stop="tabindex+=1">
+                    </span>
                 </span>
               </span>
+              <template v-slot:rightArrow>
+                <span class="iconfont icon-arrowR font-bold btn text-xs text-light-12 mt-10 hover:text-s-10 duration-300 transition-all"></span>
+              </template>
             </aq-click-scroll-view>
           </div>
-        </div> -->
+        </div>
       </div>
       <!-- 个人菜单 -->
-      <div class="bg-dark-8 border-l border-light-6 xcol px-20 py-10 backdrop-blur-lg">
-        <div class="h-45 flex-grow-1 xrow items-center">
-          <span class="h-45 w-45 rounded-full flex-shrink-0 flex-grow-0 bg-white  overflow-hidden shadow-lg shadow-white">
-            <img src="http://i1.go2yd.com/image.php?url=0W8wDjc3Sh" class="rounded-full" style="transform:scale(0.97)" alt="">
-          </span>
-          <span class="xrow w-120 flex-wrap ml-15 text-white flex-grow-1 overflow-hidden" style="margin-top: 3px;">
-            <span class="w-full text-sm text-left h-15 font-bold overflow-hidden text-ellipsis break whitespace-nowrap" style="line-height:14px">
-              叶文洁
-            </span>
-            <span class="w-full text-xs origin-top-left text-light-24 text-left font-bold overflow-hidden text-ellipsis break whitespace-nowrap" style="line-height:12px;transform: scale(0.9);">
-              threebody@qq.com
-            </span>
-            <span class="w-full text-xs origin-top-left text-light-24 text-left mt-5 font-bold overflow-hidden text-ellipsis break whitespace-nowrap" style="line-height:12px;">
-              最高统帅
-            </span>
-          </span>
-        </div>
-        <div class="mb-5 mt-10 border-t border-light-4"></div>
-        <div class="flex-grow-1 h-35 xrow items-center justify-between">
-          <span class="h-25 w-25 xrow items-center justify-center iconfont icon-notice text-light-36 font-thin text-xl mr-10 last:mr-0 relative">
-            <span class="absolute animate-ping inline-flex h-15 w-15 right-0 top-0 rounded-full bg-d-10 xcol items-center justify-center"></span>
-            <span class="absolute inline-flex rounded-full bg-d-10" style="width:5px;height:5px;right:5px;top:5px"></span>
-          </span>
-          <span class="h-25 w-25 xrow items-center justify-center iconfont icon-business text-light-36 font-thin text-xl mr-10 last:mr-0 relative">
-            <span class="absolute animate-ping inline-flex h-15 w-15 right-0 top-0 rounded-full bg-d-10 xcol items-center justify-center"></span>
-            <span class="absolute inline-flex rounded-full bg-d-10" style="width:5px;height:5px;right:5px;top:5px"></span>
-          </span>
-          <!-- <span class="h-25 w-25 xrow items-center justify-center iconfont icon-mail text-light-36 font-thin text-xl mr-10 last:mr-0"></span> -->
+      <div v-if="screen.isWS" class="bg-dark-4 border-l border-light-6 xcol px-20 py-10 backdrop-blur-sm">
+        <wg-user-info class="flex-grow-1" :use-slot="true">
+          <wg-pin-icon icon="icon-notice" :show-pin="true"></wg-pin-icon>
+          <wg-pin-icon icon="icon-business" :show-pin="true"></wg-pin-icon>
           <span class="h-25 w-25 xrow items-center btn justify-center iconfont icon-menu text-white text-xs bg-s-10 rounded-sm mr-10 last:mr-0"></span>
-        </div>
+        </wg-user-info>
       </div>
+      <!-- 窄屏菜单展开触发 -->
+      <wg-slider-pop v-show="!screen.isWS" size="60%">
+        <template v-slot:switchButton>
+          <span class="h-50 w-50 flex items-center justify-center iconfont icon-menu font-bold text-light-24 text-lg cursor-pointer hover:text-white transition-all duration-300"></span>
+        </template>
+        <div class="xcol h-full bg-p-10" style="background-size:200% 20%;background-position:60% 0%">
+          <div class="h-120 xrow items-center bg-p-6 overflow-hidden px-15">
+            <span class="iconfont icon-unicom-logo text-white xrow items-center text-4xl mr-20"></span>
+            <span class="flex flex-grow-12 flex-shrink-12"></span>
+            <wg-user-info :size="40" class="flex-grow-1 h-100" :glow-avatar="true" :user-info="{nickname:'章北海-大校',signature:'执行舰长',avatar:'http://img.duoziwang.com/2018/01/2021140018819.jpg'}"></wg-user-info>
+          </div>
+          <div class="bg-dark-4 border-b border-dark-2 h-60 xrow justify-between items-center px-20">
+            <span class="xrow items-center">
+              <wg-pin-icon icon="icon-notice" :show-pin="true"></wg-pin-icon>
+              <span class="text-light-32 font-bold">系统消息</span>
+            </span>
+            <span class="xrow items-center">
+              <wg-pin-icon icon="icon-business" :show-pin="true"></wg-pin-icon>
+              <span class="text-light-32 font-bold">待办事务</span>
+            </span>
+          </div>
+          <div class="xcol flex-grow-1 bg-white"></div>
+        </div>
+      </wg-slider-pop>
     </div>
     <div class="xrow flex-grow-1 bg-p-1">
       <!-- 二级菜单部分 -->
-      <div class="w-200 xcol">
+      <div v-if="screen.isWS" class="w-200 xcol">
         <span class="xcol bg-white flex-grow-1 -mt-55 z-10 rounded-tr-lg shadow-lg p-10">
           <div class="bg-p-1 h-45 rounded-sm"></div>
           <div class="xcol mt-20">
@@ -102,10 +113,10 @@
         </span>
       </div>
       <!-- 页面路由视窗 -->
-      <div class="bg-white flex-grow-1 xcol">
-        <div class="flex-grow-1 xcol p-20 bg-dark-1">
-          <div class="h-160 bg-white rounded-md overflow-hidden"></div>
-          <div class="h-300 mt-5 -mx-5 xrow">
+      <div class="bg-gray-100 flex-grow-1 xcol xcol" :class="[screen.isWS?'p-20':'p-10']">
+        <!-- <div class="flex-grow-1 flex bg-white rounded-lg"></div> -->
+        <div class="flex-grow-1 xcol -m-5">
+          <div class="h-300 xrow">
             <span class="w-1/4 p-5 flex">
               <span class="xcol items-center flex-grow-1 bg-white rounded-md overflow-hidden">
                 <span class="w-4/6 h-5 bg-s-10 rounded-b-lg"></span>
@@ -135,19 +146,26 @@
           </div>
         </div>
       </div>
-      </div>
-      
+    </div>
   </div>
 </template>
 
 <script lang="ts">
+import { defineComponent,ref , inject } from 'vue';
 import { useRouter } from "vue-router";
-import { defineComponent } from 'vue';
+import { useStore } from "vuex";
+
 
 export default defineComponent({
   setup(props,context) {
+    const screen = inject('screen') as { isWS:boolean,w:number,h:number };
     const router = useRouter();
+    let menuindex = ref(0);
+    let tabindex = ref(0);
     return {
+      menuindex,
+      tabindex,
+      screen,
       router,
     }
   },

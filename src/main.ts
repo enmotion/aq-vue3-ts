@@ -2,7 +2,7 @@
  * @ Author: enmoion
  * @ Create Time: 2022-06-20 10:12:05
  * @ Modified by: enmotion
- * @ Modified time: 2022-08-09 17:29:20
+ * @ Modified time: 2022-08-15 14:19:28
  * @ Description:
  * vue3-spa入口文件
  */
@@ -22,6 +22,11 @@ import type { ElMessageBoxOptions, MessageParams } from "element-plus";
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 store.commit("setDevice", Bowser.getParser(window.navigator.userAgent).parse()); //提交设备硬件系统环境数据至全局缓存
+store.commit('updateScreenInfo', {
+   isWS: document.body.clientWidth >= 1280,
+   h: document.body.clientHeight,
+   w: document.body.clientWidth,
+})
 window.onresize=function(){
    store.commit('updateScreenInfo', {
       isWS: document.body.clientWidth >= 1280,
