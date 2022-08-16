@@ -1,12 +1,12 @@
 <template>
   <div class="xcol flex-grow-1" :class="[screen.isWS?'bg-texture':'bg-white']">
-    <div class="xrow" :class="[screen.isWS?'h-140 bg-p-4':'h-50 bg-p-10']">
+    <div class="xrow" :class="[screen.isWS?'h-140 bg-p-7':'h-50 bg-p-10']">
       <!-- logo部分 -->
       <div class="xcol" :class="[screen.isWS?'w-200':'w-auto items-start flex-grow-1']">
         <div class="h-90 items-center xrow justify-center px-10">
           <span class="iconfont icon-unicom-logo text-white xrow items-center" :class="[screen.isWS?'text-4xl':'text-2xl flex-grow-1']"></span>
           <span v-if="screen.isWS" class="ml-10 xrow items-start justify-center" style="margin-top:2px">
-            <span class="text-lg text-white font-bold" style="line-height:14px">纬业流程</span>
+            <span class="text-lg text-white font-bold" style="line-height:14px">WEIYE</span>
             <span class="h-15 text-xs text-light-32 uppercase font-bold origin-bottom-left ml-5" style="line-height:12px;padding-top:4px">0.0.1</span>
           </span>
         </div>
@@ -23,7 +23,7 @@
                 style="margin-top: 4px;"
                 @click="menuindex=i">
                 <span :class="[i==menuindex?'border-s-10 text-white':'bg-dark-1 border-light-1 text-light-24 hover:text-white hover:border-w-10']">
-                  首级菜单-{{i}}
+                  MENU-{{i}}
                 </span>
                 <span class="w-0 rounded-md transition-all duration-300 bg-s-10 mt-5"
                   style="height:3px"
@@ -46,7 +46,7 @@
                   class="px-10 xrow flex-shrink-0 text-xs font-bold rounded-t-md mr-5 last:mr-0 xcol items-center justify-center cursor-pointer transition-all duration-300"
                   :class="[i==tabindex?'h-45 bg-gray-100 text-gray-600':'h-40 text-light-18 hover:h-45 hover:bg-p-10 hover:text-white']"
                   @click="tabindex=i">
-                    <span class="text-xs">标签菜单-{{i}}</span>
+                    <span class="text-xs">submenu-{{i}}</span>
                     <span v-show="tabindex==i" class="flex rounded-full iconfont icon-x items-center justify-center text-dark-30 font-bold flex-shrink-0 flex-grow-0 ml-5 hover:bg-dark-6 duration-300 transition-all" 
                       style="font-size:12px;width:18px;height:18px;"
                       @click.capture.stop="tabindex+=1">
@@ -124,9 +124,9 @@
                 style="line-height:18px">
               </span>
               <span 
-                class="ml-10"
-                :class="[i==4?'text-white font-bold text-sm':'text-gray-500 text-xs']">
-                二级菜单-{{i}}
+                class="ml-10 font-bold"
+                :class="[i==4?'text-white text-xs':'text-gray-500 text-xs']">
+                DISCOVERY-{{i}}
               </span>
             </span>
           </div>
