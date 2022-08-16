@@ -9,7 +9,11 @@
 .aq-transition-vessel>.growx-enter-from,
 .aq-transition-vessel>.growx-leave-to {
   overflow: hidden;
-  width:0px !important;
+  max-width:0px !important;
+}
+.aq-transition-vessel>.growx-enter-to,
+.aq-transition-vessel>.growx-leave-from{
+  max-width:var(--orgSizeWidth) !important;
 }
 .aq-transition-vessel>.growx-enter-active{
   transition: all var(--enter) var(--entertiming);

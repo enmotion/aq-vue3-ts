@@ -1,5 +1,5 @@
 <template>
-  <div class="xcol flex-gorw-1">
+  <div class="xcol flex-gorw-1 bg-d-10">
     <div class="xrow w-full flex-grow-1 h-50 bg-white border-b border-dark-4 px-10">
       <span class="p-5 xrow justify-start items-center w-6/12">
           <span class="text-dark-24 font-bold mr-5 w-80 text-left">Duration:</span>
@@ -56,7 +56,7 @@
         <div class="xrow flex-wrap -mx-5 -my-5">
           <div v-for="item in transitionItems" :key="item.name" class="w-4/12 p-5 xcol" :class="[staticHeigh?'h-130':'']">
             <div class="flex flex-grow-1 w-full bg-dark-32 flex-shrink-0 rounded overflow-hidden">
-              <aq-transition :name="item.name" :mode="transitionMode" :timing="transitionTiming" :duration="transitionDuration" :absolute-cell="transitionAbsoluteCell">
+              <aq-transition class="flex-grow-1 flex-shrink-0" :name="item.name" :mode="transitionMode" :timing="transitionTiming" :duration="transitionDuration" :absolute-cell="transitionAbsoluteCell">
                 <div v-if="transitionSwitch" :key="item.name+'-on'" class="w-full to-cc h-120 bg-p-10 flex-grow-1 flex text-lg font-bold text-white uppercase items-center justify-center rounded transition-container">{{item.name}}-on</div>
                 <div v-if="!transitionSwitch" :key="item.name+'-off'" class="w-full to-cc h-120 bg-s-10 flex-grow-1 flex text-lg font-bold text-white uppercase items-center justify-center rounded transition-container">{{item.name}}-off</div>
               </aq-transition>

@@ -1,6 +1,6 @@
 <template>
   <div class="xcol flex-grow-1" :class="[screen.isWS?'bg-texture':'bg-white']">
-    <div class="xrow" :class="[screen.isWS?'h-140 bg-p-5':'h-50 bg-p-10']">
+    <div class="xrow" :class="[screen.isWS?'h-140 bg-p-4':'h-50 bg-p-10']">
       <!-- logo部分 -->
       <div class="xcol" :class="[screen.isWS?'w-200':'w-auto items-start flex-grow-1']">
         <div class="h-90 items-center xrow justify-center px-10">
@@ -19,8 +19,8 @@
             <div class="h-40 w-auto xrow items-center px-20">
               <span v-for="(i) in 6" 
                 :key="i" 
-                class="py-5 flex-shrink-0 text-sm font-bold rounded-sm mr-30 border-b-2 border-dark-1 last:mr-0 cursor-pointer transition-all duration-500"
-                :class="[i==menuindex?'border-s-10 text-white':'bg-dark-1 text-light-32 hover:text-white hover:border-light-12']"
+                class="py-5 flex-shrink-0 text-sm font-bold rounded-sm mr-30 border-b-2 last:mr-0 cursor-pointer transition-all duration-200"
+                :class="[i==menuindex?'border-s-10 text-white':'bg-dark-1 border-light-1 text-light-24 hover:text-white hover:border-light-12']"
                 style="margin-top: 4px;"
                 @click="menuindex=i">
                   首级菜单-{{i}}
@@ -30,7 +30,7 @@
         </div>
         <!-- tab部分 -->
         <div class="h-40 mt-10 xrow items-end">
-          <div class="h-40 w-auto flex-grow-1 xrow items-end bg-dark-6 border-t border-light-6 backdrop-blur-lg">
+          <div class="h-40 w-auto flex-grow-1 xrow bg-dark-4 items-end border-t border-light-4 backdrop-blur-sm">
             <aq-click-scroll-view class="h-50 xrow">
               <template v-slot:leftArrow>
                 <span class="iconfont icon-arrowL font-bold btn text-xs text-light-12 mt-10 hover:text-s-10 duration-300 transition-all"></span>
@@ -38,13 +38,12 @@
               <span class="h-50 xrow items-end">
                 <span v-for="(i) in 120" 
                   :key="i" 
-                  class="px-15 xrow flex-shrink-0 text-xs font-bold rounded-t-md mr-5 last:mr-0 xcol items-center justify-center cursor-pointer"
-                  :class="[i==tabindex?'h-45 bg-gradient-to-t from-gray-100 to-white text-gray-600':
-                  'text-light-18 h-40 hover:h-45 hover:bg-p-10 hover:text-white transition-all duration-300']"
+                  class="px-10 xrow flex-shrink-0 text-xs font-bold rounded-t-md mr-5 last:mr-0 xcol items-center justify-center cursor-pointer transition-all duration-300"
+                  :class="[i==tabindex?'h-45 bg-gray-100 text-gray-600':'h-40 text-light-18 hover:h-45 hover:bg-p-10 hover:text-white']"
                   @click="tabindex=i">
-                    <span>标签菜单-{{i}}</span>
-                    <span v-show="tabindex==i" class="flex rounded-full iconfont icon-x items-center justify-center text-d-10 flex-shrink-0 flex-grow-0 ml-5 scale-75 hover:bg-d-10 hover:text-white hover:scale-100 duration-300 transition-all" 
-                      style="font-size:12px;width:20px;height:20px"
+                    <span class="text-xs">标签菜单-{{i}}</span>
+                    <span v-show="tabindex==i" class="flex rounded-full iconfont icon-x items-center justify-center text-dark-30 font-bold flex-shrink-0 flex-grow-0 ml-5 hover:bg-dark-6 duration-300 transition-all" 
+                      style="font-size:12px;width:18px;height:18px;"
                       @click.capture.stop="tabindex+=1">
                     </span>
                 </span>
@@ -57,35 +56,51 @@
         </div>
       </div>
       <!-- 个人菜单 -->
-      <div v-if="screen.isWS" class="bg-dark-4 border-l border-light-6 xcol px-20 py-10 backdrop-blur-sm">
-        <wg-user-info class="flex-grow-1" :use-slot="true">
+      <div v-if="screen.isWS" class="bg-dark-2 border-l border-light-6 xcol px-20 py-10 backdrop-blur-sm">
+        <wg-user-info class="flex-grow-1">
           <wg-pin-icon icon="icon-notice" :show-pin="true"></wg-pin-icon>
           <wg-pin-icon icon="icon-business" :show-pin="true"></wg-pin-icon>
-          <span class="h-25 w-25 xrow items-center btn justify-center iconfont icon-menu text-white text-xs bg-s-10 rounded-sm mr-10 last:mr-0"></span>
+          <span class="h-25 w-25 xrow items-center btn justify-center iconfont icon-menu font-bold text-white text-sm bg-s-10 rounded-sm mr-10 last:mr-0"></span>
         </wg-user-info>
       </div>
       <!-- 窄屏菜单展开触发 -->
-      <wg-slider-pop v-show="!screen.isWS" size="60%">
+      <wg-slider-pop v-show="!screen.isWS" size="70%">
         <template v-slot:switchButton>
           <span class="h-50 w-50 flex items-center justify-center iconfont icon-menu font-bold text-light-24 text-lg cursor-pointer hover:text-white transition-all duration-300"></span>
         </template>
-        <div class="xcol h-full bg-p-10" style="background-size:200% 20%;background-position:60% 0%">
-          <div class="h-120 xrow items-center bg-p-6 overflow-hidden px-15">
-            <span class="iconfont icon-unicom-logo text-white xrow items-center text-4xl mr-20"></span>
-            <span class="flex flex-grow-12 flex-shrink-12"></span>
-            <wg-user-info :size="40" class="flex-grow-1 h-100" :glow-avatar="true" :user-info="{nickname:'章北海-大校',signature:'执行舰长',avatar:'http://img.duoziwang.com/2018/01/2021140018819.jpg'}"></wg-user-info>
+        <div class="xcol h-full bg-texture" style="background-size:500%">
+          <!-- 个面面板 -->
+          <div class="xrow items-center overflow-hidden p-15 h-auto flex-shrink-0">
+            <span class="iconfont icon-unicom-logo text-white xcol items-center justify-center text-4xl backdrop-blur-sm bg-dark-4 rounded-md w-60 h-60 flex-shrink-0"></span>
+            <span class="flex flex-grow-1"></span>
+            <wg-user-info :size="40" class="h-60 px-10 w-150 flex-grow-0" :glow-avatar="true"></wg-user-info>
+            <span class="w-20 h-20 text-white bg-s-10 rounded-sm btn flex-shrink-0 iconfont icon-menu items-center justify-center flex text-xs font-bold" 
+              @click="openSliderSystemMenu=!openSliderSystemMenu">
+            </span>
           </div>
-          <div class="bg-dark-4 border-b border-dark-2 h-60 xrow justify-between items-center px-20">
-            <span class="xrow items-center">
+          <aq-transition name="growy">
+            <div v-if="openSliderSystemMenu" key="aaaa" class="h-auto w-full bg-p-10 overflow-hidden">
+              <div class="bg-dark-10 h-40 px-20 xrow items-center text-white border-b border-light-4 last:border-none">仪表面板</div>
+              <div class="bg-dark-10 h-40 px-20 xrow items-center text-white border-b border-light-4 last:border-none">重置密码</div>
+              <div class="bg-dark-10 h-40 px-20 xrow items-center text-white border-b border-light-4 last:border-none">切换租户</div>
+              <div class="bg-dark-10 h-40 px-20 xrow items-center text-white border-b border-light-4 last:border-none">退出登录</div>
+            </div>
+          </aq-transition>
+          <!-- 信息面板 -->
+          <div class="border-y border-light-6 h-50 xrow justify-between items-center flex-shrink-0 backdrop-blur-sm">
+            <span class="xrow px-20 items-center h-full flex-grow-1 border-r border-light-4">
               <wg-pin-icon icon="icon-notice" :show-pin="true"></wg-pin-icon>
               <span class="text-light-32 font-bold">系统消息</span>
             </span>
-            <span class="xrow items-center">
+            <span class="xrow px-20 items-center h-full flex-grow-1 border-r border-light-4 last:border-none">
               <wg-pin-icon icon="icon-business" :show-pin="true"></wg-pin-icon>
               <span class="text-light-32 font-bold">待办事务</span>
             </span>
           </div>
-          <div class="xcol flex-grow-1 bg-white"></div>
+          <!-- 系统菜单面板 -->
+          <div class="xcol flex-grow-1 bg-white">
+
+          </div>
         </div>
       </wg-slider-pop>
     </div>
@@ -160,6 +175,7 @@ export default defineComponent({
   setup(props,context) {
     const screen = inject('screen') as { isWS:boolean,w:number,h:number };
     const router = useRouter();
+    let openSliderSystemMenu = ref(false);
     let menuindex = ref(0);
     let tabindex = ref(0);
     return {
@@ -167,6 +183,7 @@ export default defineComponent({
       tabindex,
       screen,
       router,
+      openSliderSystemMenu,
     }
   },
 })

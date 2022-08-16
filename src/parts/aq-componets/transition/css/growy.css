@@ -10,7 +10,11 @@
 .aq-transition-vessel>.growy-enter-from,
 .aq-transition-vessel>.growy-leave-to {
   overflow: hidden;
-  height:0px !important;
+  max-height:0px !important;
+}
+.aq-transition-vessel>.growy-enter-to,
+.aq-transition-vessel>.growy-leave-from{
+  max-height:var(--orgSizeHeight) !important;
 }
 .aq-transition-vessel>.growy-enter-active{
   transition: all var(--enter) var(--entertiming);

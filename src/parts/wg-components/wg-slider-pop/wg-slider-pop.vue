@@ -11,7 +11,8 @@
       :with-header="withHeader"
       :lock-scroll="lockScroll"
       :size="size"
-      custom-class="wg-slider-pop"
+      :custom-class="customClass"
+      :modal-class="modalClass"
       :z-index="zIndex"
       :direction="direction">
       <slot></slot>
@@ -38,6 +39,14 @@ export default defineComponent({
     direction:{
       type:String as PropType<'rtl'|'ltr'|'ttb'|'btt'>,
       default:'ltr'
+    },
+    customClass:{
+      type:String as PropType<string>,
+      default:'wg-slider-pop'
+    },
+    modalClass:{
+      type:String as PropType<string>,
+      default:'backdrop-blur-sm'
     },
     title:{
       type:String as PropType<string>,

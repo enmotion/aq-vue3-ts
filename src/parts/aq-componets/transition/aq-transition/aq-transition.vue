@@ -4,13 +4,20 @@
     :style="{
       perspective:perspective,
       '-webkit-perspective':perspective,
+      '--orgSizeHeight':orgSize.height+'px',
+      '--orgSizeWidth':orgSize.width+'px',
       '--cellposition':cellposition,
       '--enter':transDuration.enter,
       '--leave':transDuration.leave,
       '--entertiming':transTiming.enter,
       '--leavetiming':transTiming.leave,
     }">
-    <Transition :name="name" :mode="mode">
+    <div class="relative h-0 overflow-hidden">
+      <div ref="slotSizeWrap" class="xcol h-auto">
+        <slot></slot>
+      </div>
+    </div>
+    <Transition :name="name" :mode="mode" @enter="enter" @appear="appear">
       <slot></slot>
     </Transition>
   </div>
@@ -41,7 +48,7 @@ export default defineComponent({
     },
     timing:{
       type:[String,Object] as PropType<TranstionTypes.timing|{enter:TranstionTypes.timing,leave:TranstionTypes.timing}>,
-      default:()=>({enter:'ease',leave:[0,0.5,1,0.5]})
+      default:()=>({enter:'ease',leave:'ease'})
     },
     perspective:{ // 过渡效果透视强度
       type:Number,
@@ -49,6 +56,8 @@ export default defineComponent({
     }
   },
   setup(props,context) {
+    const slotSizeWrap = ref(null as any);
+    const orgSize = ref({height:0,width:0});
     const cellposition = computed(()=>{
       return props.absoluteCell?'absolute':'relative';
     })
@@ -87,10 +96,22 @@ export default defineComponent({
         return result;
       }
     })
+
+    function appear(el:HTMLElement,done:Function){
+      console.log(el,el.clientHeight,111);
+    }
+    function enter(el:HTMLElement,done:Function){
+      orgSize.value.height = slotSizeWrap.value.offsetHeight;
+      orgSize.value.width = slotSizeWrap.value.offsetWidth;
+    }
     return {
+      orgSize,
+      slotSizeWrap,
       cellposition,
       transDuration,
       transTiming,
+      enter,
+      appear,
     }
   },
 })
@@ -112,11 +133,13 @@ export default defineComponent({
 .aq-transition-vessel{
   display:flex;
   flex-direction:column;
-  flex-grow:1;
-  flex-shrink: 0;
+  /* flex-grow:1; */
+  /* flex-shrink: 0; */
   align-items:flex-start;
   align-content:flex-start;
   position:relative;
+  --orgSizeHeight:0;
+  --orgSizeWidth:0;
   --cellposition:relative;
   --entertiming:ease;
   --leavetiming:ease;

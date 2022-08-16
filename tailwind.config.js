@@ -21,7 +21,7 @@ module.exports = {
       s:tailWindUtils.generateAlphaColorStep('#35ab1a',10), // 安全色
       w:tailWindUtils.generateAlphaColorStep('#F2C849',10), // 警告色
       i:tailWindUtils.generateAlphaColorStep('#FF0000',10), // 信息色
-      p:tailWindUtils.generateAlphaColorStep('#243FAD',10), // 主辅色
+      p:tailWindUtils.generateAlphaColorStep('#3F47F4',10), // 主辅色
     },
     spacing:tailWindUtils.generateSpacing(5,100,1200),
     extend: {
