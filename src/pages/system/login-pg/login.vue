@@ -43,7 +43,7 @@
             <span class="ml-10 text-dark-24 font-bold" style="font-size:20px">纬业流程</span>
           </span>
           <span class="xrow items-center overflow-hidden" :class="[screen.isWS?'':'my-20']">
-            <aq-transition name="scrollright" :absolute-cell="true" class="h-20">
+            <aq-transition name="scrollright" :absolute-cell="true" class="h-20 w-full">
               <div :key="ruleConfig.en" class="xrow items-center w-full">
                 <span class="h-15 mr-5 xcol" style="width:4px;margin-top:-3px">
                   <span class="flex-grow-1 bg-s-10 rounded"></span>
@@ -62,7 +62,8 @@
             <aq-transition 
               name="scrollright"
               mode="out-in" 
-              :duration="{enter:280,leave:200}">
+              :duration="{enter:280,leave:200}"
+              class="flex-grow-1">
 
               <div v-if="pageStatus == 'Login'" key="login" class="xcol flex-grow-1 flex-shrink-0 justify-center w-full">
                 <el-form ref="LoginFormRef" :model="reqdata" :rules="ruleConfig.rule" :show-message="false">
