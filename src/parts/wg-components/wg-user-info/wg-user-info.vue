@@ -2,9 +2,9 @@
   <div class="xcol">
     <div class="h-auto flex-grow-1 xrow items-center">
       <span v-show="userInfo.avatar"
-        :style="{height:size+'px',width:size+'px'}" 
-        class="flex rounded-full flex-shrink-0 flex-grow-0 "
-        :class="[glowAvatar?'border-1 border-white shadow-lg shadow-white bg-white overflow-hidden':'']">
+        :style="{height:size+'px',width:size+'px',padding:'1px'}" 
+        class="flex rounded-full flex-shrink-0 flex-grow-0 bg-light-24 overflow-hidden"
+        :class="[glowAvatar?'shadow-lg shadow-w-10':'']">
         <img :src="userInfo.avatar" class="rounded-full  bg-center" style="transform:scale(0.97)" alt="">
       </span>
       <span v-show="userInfo.nickname||userInfo.id||userInfo.signature" class="xrow w-auto ml-10 flex-wrap text-white flex-grow-1 flex-shrink-1 overflow-hidden" style="margin-top: 3px;">
@@ -13,15 +13,15 @@
           style="line-height:14px"
           v-html="userInfo.nickname">
         </span>
-        <span v-show="userInfo.id" 
-          class="w-full text-xs origin-top-left text-light-24 text-left font-bold overflow-hidden text-ellipsis break whitespace-nowrap" 
-          style="line-height:12px;transform: scale(0.9);"
-          v-html="userInfo.id">
-        </span>
         <span v-show="userInfo.signature"
           class="w-full text-xs origin-top-left text-light-24 text-left mt-5 font-bold overflow-hidden text-ellipsis break whitespace-nowrap" 
           style="line-height:12px;"
           v-html="userInfo.signature">
+        </span>
+        <span v-show="userInfo.id" 
+          class="w-full text-xs origin-top-left text-light-24 text-left font-bold overflow-hidden text-ellipsis break whitespace-nowrap" 
+          style="line-height:12px;transform: scale(0.9);"
+          v-html="userInfo.id">
         </span>
       </span>
     </div>
@@ -44,7 +44,7 @@ export default defineComponent({
         nickname:'叶文洁',
         // id:'threebody@qq.com',
         signature:'最高统帅',
-        avatar:"http://i1.go2yd.com/image.php?url=0W8wDjc3Sh",
+        avatar:"http://img.duoziwang.com/2017/03/07/B0259.jpg",
       })
     },
     size:{

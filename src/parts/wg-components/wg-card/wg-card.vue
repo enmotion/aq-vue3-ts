@@ -1,36 +1,12 @@
 <template>
   <div class="xcol">
-    <div v-if="styleType==='A'" class="xcol flex-grow-1 bg-white border p-20 border-dark-2"
+    <teleport to="body" :disabled="!isFullScreen">
+      <div v-if="styleType==='A'" class="xcol flex-grow-1 bg-white border p-20 border-dark-2"
       :class="[isFullScreen?'fixed left-0 top-0 z-10 w-full h-full':'rounded-md']">
-      <div class="xrow">
-        <slot name="title">
-          <div class="xrow items-center flex-grow-1">
-            <span class="rounded mr-10" :class="markClass" style="width:4px;height:18px;margin-top:-2px"></span>
-            <span v-if="title" class="text-base font-bold text-gray-600" style="line-height:14px">{{title}}</span>
-            <span v-if="tip" class="text-xs font-bold text-gray-400 uppercase ml-10" style="line-height:14px;padding-top:3px">{{tip}}</span>
-          </div>
-        </slot>
-        <div v-if="useMenu" class="xrow">
-          <el-tooltip v-for="(item,index) in menus" :key="item.label+index" :content="item.label" placement="left-start">
-            <span 
-              class="iconfont text-md scale-75 p-5 text-gray-400 rounded-full hover:text-white hover:bg-dark-6 cursor-pointer transition-all duration-200  mr-5 last:-mr-5"
-              :class="[item.icon]"
-              @click="doFunc(item.func)">
-            </span>
-          </el-tooltip>
-        </div>
-      </div>
-      <div class="h-auto w-full overflow-hidden xcol mt-15 text-justify text-sm text-gray-400">
-        <slot></slot>
-      </div>
-    </div>
-    <div v-if="styleType==='B'" class="xrow items-center flex-grow-1 bg-white border border-dark-2"
-      :class="[isFullScreen?'fixed left-0 top-0 z-10 w-full h-full':'rounded-md']">
-      <div class=" h-2/3 rounded-r-lg w-5 flex-shrink-0" :class="markClass"></div>
-      <div class="xcol py-20 pr-20 pl-15 h-full flex-grow-1">
         <div class="xrow">
           <slot name="title">
             <div class="xrow items-center flex-grow-1">
+              <span class="rounded mr-10" :class="markClass" style="width:4px;height:18px;margin-top:-2px"></span>
               <span v-if="title" class="text-base font-bold text-gray-600" style="line-height:14px">{{title}}</span>
               <span v-if="tip" class="text-xs font-bold text-gray-400 uppercase ml-10" style="line-height:14px;padding-top:3px">{{tip}}</span>
             </div>
@@ -38,7 +14,7 @@
           <div v-if="useMenu" class="xrow">
             <el-tooltip v-for="(item,index) in menus" :key="item.label+index" :content="item.label" placement="left-start">
               <span 
-                class="iconfont text-md scale-75 p-5 text-gray-400 rounded-full hover:text-white hover:bg-dark-6 cursor-pointer transition-all duration-200  mr-5 last:-mr-5"
+                class="w-25 h-25 flex items-center justify-center flex-shrink-0 iconfont text-md scale-75 text-gray-400 rounded-full hover:text-white hover:bg-dark-6 cursor-pointer transition-all duration-200  mr-5 last:-mr-5"
                 :class="[item.icon]"
                 @click="doFunc(item.func)">
               </span>
@@ -49,7 +25,33 @@
           <slot></slot>
         </div>
       </div>
-    </div>
+      <div v-if="styleType==='B'" class="xrow flex-grow-1 bg-white border border-dark-2"
+        :class="[isFullScreen?'fixed left-0 top-0 z-10 w-full h-full':'rounded-md items-center']">
+        <div class="rounded-r-lg w-5 flex-shrink-0 flex-grow-0" :class="[isFullScreen?'h-30 mt-20':'h-2/3',markClass]"></div>
+        <div class="xcol py-20 pr-20 pl-15 h-full flex-grow-1">
+          <div class="xrow">
+            <slot name="title">
+              <div class="xrow items-center flex-grow-1">
+                <span v-if="title" class="text-base font-bold text-gray-600" style="line-height:14px">{{title}}</span>
+                <span v-if="tip" class="text-xs font-bold text-gray-400 uppercase ml-10" style="line-height:14px;padding-top:3px">{{tip}}</span>
+              </div>
+            </slot>
+            <div v-if="useMenu" class="xrow">
+              <el-tooltip v-for="(item,index) in menus" :key="item.label+index" :content="item.label" placement="left-start">
+                <span 
+                  class="w-25 h-25 flex items-center justify-center flex-shrink-0 iconfont text-md scale-75 text-gray-400 rounded-full hover:text-white hover:bg-dark-6 cursor-pointer transition-all duration-200  mr-5 last:-mr-5"
+                  :class="[item.icon]"
+                  @click="doFunc(item.func)">
+                </span>
+              </el-tooltip>
+            </div>
+          </div>
+          <div class="h-auto w-full overflow-hidden xcol mt-15 text-justify text-sm text-gray-400">
+            <slot></slot>
+          </div>
+        </div>
+      </div>
+    </teleport>
   </div>
 </template>
 
