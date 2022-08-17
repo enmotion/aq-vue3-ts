@@ -34,12 +34,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue';
+import { defineComponent, onMounted, inject } from 'vue';
 import type { Screen } from '@src/store/types';
 
 export default defineComponent({
   setup() {
     const screen = inject('screen') as Screen;
+    console.log('ssss01')
+    onMounted(()=>{
+      console.log('test-01 is onMounted')
+    })
     return {
       screen
     }

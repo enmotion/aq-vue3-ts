@@ -128,10 +128,11 @@
       </div>
       <!-- 页面路由视窗 -->
       <div class="xcol flex-grow-1 bg-gray-50">
-        <router-view  v-slot="{ Component }">
-          <aq-transition name="falling" mode="out-in" class="flex-grow-1 flex-shrink-1 overflow-hidden" :duration="{enter:200,leave:100}" :timing="{enter:'ease-out',leave:'ease-in'}">
-            <keep-alive key="inner_router">
-              <component :is="Component" class="w-full h-full" />
+        <!-- <router-view /> -->
+        <router-view key="inner_route" v-slot="{ Component }">
+          <aq-transition name="falling" mode="out-in" class="flex-grow-1 flex-shrink-1 overflow-hidden" :duration="{enter:300,leave:200}" :timing="{enter:'ease-out',leave:'ease-in'}">
+            <keep-alive :include="[]">
+              <component :is="Component" :key="route.name" class="w-full h-full" />
             </keep-alive>
           </aq-transition>
         </router-view>
@@ -143,7 +144,9 @@
 <script lang="ts">
 import { MenuOption } from '@typ/public/mainPage';
 import { defineComponent, ref, inject } from 'vue';
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import PGS from '@src/pages/index';
+import type { RouteRecordRaw } from "vue-router";
 import { useStore } from "vuex";
 import MainMenu from "./widgets/main-menu/main-menu.vue";
 import TagMenu from "./widgets/tag-menu/tag-menu.vue";
@@ -159,12 +162,15 @@ export default defineComponent({
       h: number;
     };
     const router = useRouter();
+    const route = useRoute();
+    router.addRoute('main',PGS.Test02Pg);
+    router.addRoute('main',PGS.Test03Pg);
     let openSliderSystemMenu = ref(false);
     let menuindex = ref(0);
     let tabindex = ref(0);
     function getMenuOption(value:string){
       currentRouteValue.value = value;
-      router.push({name:value});
+      router.replace({name:value,params:{id:value}});
     }
     return {
       currentRouteValue,
@@ -172,6 +178,7 @@ export default defineComponent({
       menuindex,
       tabindex,
       screen,
+      route,
       router,
       openSliderSystemMenu,
       getMenuOption

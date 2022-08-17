@@ -2,7 +2,7 @@
   <div class="h-full flex flex-col mask text-xs bg-dark-32 overflow-hidden" style="pop">
     <router-view key="root_router" v-slot="{ Component }">
       <aq-transition name="zoomin" mode="out-in" class="flex-grow-1 flex-shrink-1" :duration="{enter:300,leave:200}" :timing="{enter:'ease-out',leave:'ease-in'}">
-        <keep-alive>
+        <keep-alive :include="[]">
           <component :is="Component" class="w-full h-full" />
         </keep-alive>
       </aq-transition>

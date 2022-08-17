@@ -13,11 +13,10 @@
       '--leavetiming':transTiming.leave,
     }">
     <div class="relative h-0 overflow-hidden">
-      <div ref="slotSizeWrap" class="xcol h-auto">
-        <slot></slot>
+      <div ref="slotSizeWrap" class="xcol h-auto" v-html="slotHtml">
       </div>
     </div>
-    <Transition :name="name" :mode="mode" @enter="enter" @appear="appear">
+    <Transition :name="name" :mode="mode" @before-enter="beforeEnter" @enter="enter">
       <slot></slot>
     </Transition>
   </div>
@@ -58,6 +57,7 @@ export default defineComponent({
   setup(props,context) {
     const slotSizeWrap = ref(null as any);
     const orgSize = ref({height:0,width:0});
+    let slotHtml = ref('' as string);
     const cellposition = computed(()=>{
       return props.absoluteCell?'absolute':'relative';
     })
@@ -96,9 +96,8 @@ export default defineComponent({
         return result;
       }
     })
-
-    function appear(el:HTMLElement,done:Function){
-      console.log(el,el.clientHeight,111);
+    function beforeEnter(el:HTMLElement){
+      slotHtml.value = el.outerHTML;
     }
     function enter(el:HTMLElement,done:Function){
       orgSize.value.height = slotSizeWrap.value.offsetHeight;
@@ -106,12 +105,13 @@ export default defineComponent({
     }
     return {
       orgSize,
+      slotHtml,
       slotSizeWrap,
       cellposition,
       transDuration,
       transTiming,
+      beforeEnter,
       enter,
-      appear,
     }
   },
 })

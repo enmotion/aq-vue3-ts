@@ -14,8 +14,6 @@ const router = createRouter({
       children: [
         PGS.HomePg,
         PGS.Test01Pg,
-        PGS.Test02Pg,
-        PGS.Test03Pg,
       ]
     }
     ]) as RouteRecordRaw,
