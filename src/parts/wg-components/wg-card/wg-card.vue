@@ -1,8 +1,8 @@
 <template>
   <div class="xcol">
-    <!-- <teleport to="body" :disabled="!isFullScreen"> -->
-      <div v-if="styleType==='A'" class="xcol flex-grow-1 backdrop-blur-md border p-20 border-dark-2"
-      :class="[isFullScreen?'fixed left-0 top-0 z-10 w-full h-full bg-light-32':'rounded-md bg-white']">
+    <teleport to="body" :disabled="!isFullScreen">
+      <div v-if="styleType==='A'" class="xcol flex-grow-1 bg-white border p-20 border-dark-2"
+      :class="[isFullScreen?'fixed left-0 top-0 z-10 w-full h-full bg-light-32':'rounded-md']">
         <div class="xrow">
           <slot name="title">
             <div class="xrow items-center flex-grow-1">
@@ -51,7 +51,7 @@
           </div>
         </div>
       </div>
-    <!-- </teleport> -->
+    </teleport>
   </div>
 </template>
 
