@@ -203,6 +203,7 @@
 </template>
 
 <script lang="ts">
+import {ax,apis} from "@src/restful";
 import { defineComponent, ref, reactive, inject, computed, PropType, Ref, getCurrentInstance, onMounted } from 'vue';
 import type { UnwrapNestedRefs, } from 'vue';
 import { RouteLocationRaw, useRouter, useRoute } from "vue-router";
@@ -260,9 +261,34 @@ export default defineComponent({
       let vm = proxy;
       formRef.validate((valid, fields) => {
         if (valid) {
-          console.log('do login!');
-          store.commit('user/setToken',{ access_token:"111",refresh_token:"222" });
-          router.push({name:'home'});
+          ax.send(
+            apis.userLogin,
+            {talentID:'-1spaceHash0-',userSpace:"123",age:12},
+            {
+              axios:{
+                method:'post',
+                timeout:20000,
+                headers:{
+                  // 'Content-Type':'application/x-www-form-urlencoded'
+                }
+              },
+              config:{
+                removeMatchedPathValuesFromPayload:false,
+                encryptKeys:[],
+                queryOrBody:{
+                  data:['userSpace'],
+                  params:['talentID']
+                }
+              }
+            }
+          ).then(res=>{
+            console.log(res);
+          }).catch(err=>{
+            console.log(err);
+          })
+          // console.log('do login!');
+          // store.commit('user/setToken',{ access_token:"111",refresh_token:"222" });
+          // router.push({name:'home'});
         } else {
           toastFormErrors(fields as ValidateFieldsError);
         }

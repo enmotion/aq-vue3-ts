@@ -2,7 +2,7 @@
  * @ Author: enmoion
  * @ Create Time: 2022-06-20 10:12:05
  * @ Modified by: enmotion
- * @ Modified time: 2022-08-15 14:19:28
+ * @ Modified time: 2022-08-19 02:50:56
  * @ Description:
  * vue3-spa入口文件
  */
@@ -14,8 +14,9 @@ import App from '@src/App.vue'; // 根节 vue 组件文件
 import 'element-plus/dist/index.css';
 import 'element-plus/theme-chalk/dark/css-vars.css'; // 引入element-ui 
 import './assets/css/index.css'; // 引入 tailwinds 编译后的全局 css
+import './assets/css/element-plus-revise.css'; // 引入 tailwinds 编译后的全局 css
 import store from "@src/store"; // vuex 状态管理
-import { RouteLocationRaw } from "vue-router";
+// import { RouteLocationRaw } from "vue-router";
 import router from  "@src/router"; // vue-router 路由配置
 import globalComponents from "@src/parts"; // 导入全部自定义公共组件
 import type { ElMessageBoxOptions, MessageParams } from "element-plus";

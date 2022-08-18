@@ -1,6 +1,6 @@
 <template>
   <div class="xcol flex-grow-1" :class="[screen.isWS?'bg-texture':'bg-white']">
-    <div class="xrow" :class="[screen.isWS?'h-140 bg-p-7':'h-50 bg-p-10']">
+    <div class="xrow" :class="[screen.isWS?'h-130 bg-p-7':'h-50 bg-p-10']">
       <!-- logo部分 -->
       <div class="xcol" :class="[screen.isWS?'w-200':'w-auto items-start flex-grow-1']">
         <div class="h-90 items-center xrow justify-center px-10">
@@ -20,19 +20,19 @@
               :value="currentRouteValue" 
               :options="[
                 {label:'系统设置',value:'home'},
-                  {label:'业务数据',value:'test01'},
-                  {label:'人员管理',value:'test02'},
-                  {label:'业务流程',value:'test03'},
-                  {label:'返回登录',value:'login'},
+                {label:'业务数据',value:'test01'},
+                {label:'人员管理',value:'test02'},
+                {label:'业务流程',value:'test03'},
+                {label:'返回登录',value:'mod'},
               ]" 
               @update:value="getMenuOption">
             </main-menu>
           </aq-click-scroll-view>
         </div>
         <!-- tab部分 -->
-        <div class="h-40 mt-10 xrow items-end">
-          <div class="h-40 w-auto flex-grow-1 xrow bg-dark-4 items-end border-t border-light-4 backdrop-blur-sm">
-            <aq-click-scroll-view class="h-50 xrow">
+        <div class="h-45 xrow items-end">
+          <div class="h-35 w-auto flex-grow-1 xrow bg-dark-4 items-end border-t border-light-4 backdrop-blur-sm">
+            <aq-click-scroll-view class="h-45 xrow">
               <template v-slot:leftArrow>
                 <span class="iconfont icon-arrowL font-bold btn text-xs text-light-12 mt-10 hover:text-s-10 duration-300 transition-all"></span>
               </template>
@@ -45,7 +45,7 @@
                   {label:'业务流程',value:'test03'},
                   {label:'返回登录',value:'login'},
                 ]" 
-                @update:value="currentTagValue = $event">
+                @update:value="getTagOption">
               </tag-menu>
               <template v-slot:rightArrow>
                 <span class="iconfont icon-arrowR font-bold btn text-xs text-light-12 mt-10 hover:text-s-10 duration-300 transition-all"></span>
@@ -78,11 +78,11 @@
             </span>
           </div>
           <aq-transition name="growy" :duration="{enter:200,leave:200}">
-            <div v-if="openSliderSystemMenu" key="aaaa" class="h-auto w-full overflow-hidden backdrop-blur-md border-t border-dark-4 bg-dark-8">
-              <div class="h-40 px-20 xrow items-center text-white border-b border-dark-4 last:border-none">仪表面板</div>
-              <div class="h-40 px-20 xrow items-center text-white border-b border-dark-4 last:border-none">重置密码</div>
-              <div class="h-40 px-20 xrow items-center text-white border-b border-dark-4 last:border-none">切换租户</div>
-              <div class="h-40 px-20 xrow items-center text-white border-b border-dark-4 last:border-none">退出登录</div>
+            <div v-if="openSliderSystemMenu" key="aaaa" class="h-auto w-full overflow-hidden backdrop-blur-md border-t border-dark-2 bg-dark-8">
+              <div class="h-40 px-20 xrow items-center text-white border-b border-light-4 last:border-none">仪表面板</div>
+              <div class="h-40 px-20 xrow items-center text-white border-b border-light-4 last:border-none">重置密码</div>
+              <div class="h-40 px-20 xrow items-center text-white border-b border-light-4 last:border-none">切换租户</div>
+              <div class="h-40 px-20 xrow items-center text-white border-b border-light-4 last:border-none">退出登录</div>
             </div>
           </aq-transition>
           <!-- 信息面板 -->
@@ -106,7 +106,7 @@
     <div class="xrow flex-grow-1 bg-p-1">
       <!-- 二级菜单部分 -->
       <div v-if="screen.isWS" class="w-200 xcol flex-shrink-0">
-        <span class="xcol bg-white flex-grow-1 -mt-55 z-10 rounded-tr-lg shadow-lg p-10">
+        <span class="xcol bg-white flex-grow-1 -mt-40 z-10 rounded-tr-lg shadow-lg p-10">
           <div class="bg-p-1 h-45 rounded-sm"></div>
           <div class="xcol mt-20">
             <span v-for="(i) in 8" :key="i" 
@@ -142,6 +142,7 @@
 </template>
 
 <script lang="ts">
+import * as R from "ramda";
 import { MenuOption } from '@typ/public/mainPage';
 import { defineComponent, ref, inject } from 'vue';
 import { useRouter, useRoute } from "vue-router";
@@ -155,7 +156,7 @@ export default defineComponent({
   components:{ MainMenu, TagMenu },
   setup(props, context) {
     const currentRouteValue = ref('002');
-    const currentTagValue = ref('001')
+    const currentTagValue = ref('001');
     const screen = inject("screen") as {
       isWS: boolean;
       w: number;
@@ -163,6 +164,7 @@ export default defineComponent({
     };
     const router = useRouter();
     const route = useRoute();
+    router.addRoute('main',R.mergeAll([PGS.Test02Pg,{name:'mod',path:'/mod'}]) as RouteRecordRaw);
     router.addRoute('main',PGS.Test02Pg);
     router.addRoute('main',PGS.Test03Pg);
     let openSliderSystemMenu = ref(false);
@@ -171,6 +173,11 @@ export default defineComponent({
     function getMenuOption(value:string){
       currentRouteValue.value = value;
       router.replace({name:value,params:{id:value}});
+    }
+    function getTagOption(value:string){
+      console.log('sss')
+      currentTagValue.value = value;
+      // router.replace({name:value,params:{id:value}});
     }
     return {
       currentRouteValue,
@@ -181,7 +188,8 @@ export default defineComponent({
       route,
       router,
       openSliderSystemMenu,
-      getMenuOption
+      getMenuOption,
+      getTagOption
     };
   },
 })
