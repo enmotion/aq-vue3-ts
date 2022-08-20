@@ -283,12 +283,12 @@ export default defineComponent({
             }
           ).then(res=>{
             console.log(res);
+            console.log('do login!');
+            store.commit('user/setToken',{ access_token:"111",refresh_token:"222" });
+            router.push({name:'home'});
           }).catch(err=>{
             console.log(err);
           })
-          // console.log('do login!');
-          // store.commit('user/setToken',{ access_token:"111",refresh_token:"222" });
-          // router.push({name:'home'});
         } else {
           toastFormErrors(fields as ValidateFieldsError);
         }

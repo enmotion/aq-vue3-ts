@@ -3,7 +3,6 @@ import ModAxiosType from "../types/ModAxios";
 const lib = import.meta.globEager("./**/*.ts");
 let apis:{[key:string]: ModAxiosType.RequestOption } = {};
 //过滤深度超过3的JS文件
-console.log(lib)
 const libs = R.keys(lib).filter(x=>{
     return x.split("/").length <=4
 });

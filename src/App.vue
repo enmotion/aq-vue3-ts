@@ -1,5 +1,8 @@
 <template>
-  <div class="h-full flex flex-col mask text-xs bg-dark-32 overflow-hidden" style="pop">
+  <div class="h-full xcol mask text-xs bg-dark-32 overflow-hidden">
+    <aq-console-view class="bg-white">
+      <div class="h-200 text-justify text-s-10">aerer</div>
+    </aq-console-view>
     <router-view key="root_router" v-slot="{ Component }">
       <aq-transition name="zoomin" mode="out-in" class="flex-grow-1 flex-shrink-1" :duration="{enter:300,leave:200}" :timing="{enter:'ease-out',leave:'ease-in'}">
         <keep-alive :include="[]">

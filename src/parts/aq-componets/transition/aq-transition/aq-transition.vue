@@ -1,5 +1,4 @@
 <template>
-  <!-- :class="[absoluteCell?'aq-transition-vessel-absolute-cell':'']" -->
   <div class="aq-transition-vessel"
     :style="{
       perspective:perspective,
@@ -133,10 +132,6 @@ export default defineComponent({
 .aq-transition-vessel{
   display:flex;
   flex-direction:column;
-  /* flex-grow:1; */
-  /* flex-shrink: 0; */
-  align-items:flex-start;
-  align-content:flex-start;
   position:relative;
   --orgSizeHeight:0;
   --orgSizeWidth:0;
