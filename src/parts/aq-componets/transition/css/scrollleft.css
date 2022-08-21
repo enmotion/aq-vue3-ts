@@ -7,11 +7,12 @@
   position:var(--cellposition) !important;
 }
 .aq-transition-vessel>.scrollleft-enter-from {
-  transform: translateX(105%);
+  transform: translateX(110%);
   opacity: 0;
 }
 .aq-transition-vessel>.scrollleft-leave-to {
-  transform: translateX(-100%);
+  transform: translateX(-110%);
+  opacity: 0;
 }
 .aq-transition-vessel>.scrollleft-enter-active{
   transition: all var(--enter) var(--entertiming);

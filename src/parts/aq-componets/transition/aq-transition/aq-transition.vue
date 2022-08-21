@@ -3,8 +3,8 @@
     :style="{
       perspective:perspective,
       '-webkit-perspective':perspective,
-      '--orgSizeHeight':orgSize.height+'px',
-      '--orgSizeWidth':orgSize.width+'px',
+      '--orgSizeHeight':orgSize.height,
+      '--orgSizeWidth':orgSize.width,
       '--cellposition':cellposition,
       '--enter':transDuration.enter,
       '--leave':transDuration.leave,
@@ -15,14 +15,14 @@
       <div ref="slotSizeWrap" class="xcol h-auto" v-html="slotHtml">
       </div>
     </div>
-    <Transition :name="name" :mode="mode" @before-enter="beforeEnter" @enter="enter">
+    <Transition :name="name" :mode="mode" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave">
       <slot></slot>
     </Transition>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from 'vue';
+import { defineComponent, computed, ref, nextTick } from 'vue';
 import type { PropType } from "vue";
 import TranstionTypes from "../types/transtion";
 
@@ -55,7 +55,7 @@ export default defineComponent({
   },
   setup(props,context) {
     const slotSizeWrap = ref(null as any);
-    const orgSize = ref({height:0,width:0});
+    const orgSize = ref({height:'0px',width:'0px'});
     let slotHtml = ref('' as string);
     const cellposition = computed(()=>{
       return props.absoluteCell?'absolute':'relative';
@@ -95,12 +95,20 @@ export default defineComponent({
         return result;
       }
     })
-    function beforeEnter(el:HTMLElement){
+    function beforeEnter(el:HTMLElement){      
       slotHtml.value = el.outerHTML;
     }
     function enter(el:HTMLElement,done:Function){
-      orgSize.value.height = slotSizeWrap.value.offsetHeight;
-      orgSize.value.width = slotSizeWrap.value.offsetWidth;
+      orgSize.value.height = slotSizeWrap.value.offsetHeight+'px';
+      orgSize.value.width = slotSizeWrap.value.offsetWidth+'px';
+      setTimeout(function(){
+        orgSize.value.height='none'
+        orgSize.value.width='none'
+      },parseFloat(transDuration.value.enter)*1000)
+    }
+    function beforeLeave(el:HTMLElement){
+      orgSize.value.height = slotSizeWrap.value.offsetHeight+'px';
+      orgSize.value.width = slotSizeWrap.value.offsetWidth+'px';
     }
     return {
       orgSize,
@@ -111,6 +119,7 @@ export default defineComponent({
       transTiming,
       beforeEnter,
       enter,
+      beforeLeave,
     }
   },
 })
