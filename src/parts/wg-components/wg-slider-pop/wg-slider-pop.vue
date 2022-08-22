@@ -26,6 +26,11 @@
     padding: 0 !important;
     overflow: auto;
 }
+.wg-slider-pop-modal{
+  background-color: #000000AA !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+  backdrop-filter: blur(5px) !important;
+}
 </style>
 
 <script lang="ts">
@@ -46,7 +51,7 @@ export default defineComponent({
     },
     modalClass:{
       type:String as PropType<string>,
-      default:'backdrop-blur-sm'
+      default:'wg-slider-pop-modal'
     },
     title:{
       type:String as PropType<string>,

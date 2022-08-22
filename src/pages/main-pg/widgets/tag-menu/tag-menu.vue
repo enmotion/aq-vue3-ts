@@ -1,29 +1,57 @@
 <template>
-  <span class="h-45 xrow items-end select-none">
-    <span v-for="option in options" :key="option.label+option.value" 
-      class="xrow items-center cursor-pointer rounded-t-md border-t border-light-2 font-bold transition-all duration-200" 
-      :class="[option.value==value?'px-5 h-40 bg-gray-100 text-gray-600':'px-15 h-35 text-light-24 hover:text-white hover:bg-p-10 hover:h-40']" 
-      @click="buttonClick(option)">
-      <div class="flex items-center mx-5">{{option.label}}</div>
-      <span 
-        class="flex h-20 iconfont icon-x text-xs text-gray-600 items-center justify-center transition-all scale-75 duration-200 overflow-hidden rounded-md hover:bg-d-2 hover:text-d-10 hover:scale-90" 
-        :class="[option.value==value?'w-20':'w-0']"
-        @click.capture.stop="doe(option)">
+  <div class="xrow items-end h-45 select-none" 
+    @mouseleave="mouseoverIndex = -1">
+    <span v-for="(option, index) in options" :key="option.label+index" 
+      class="xrow items-center cursor-pointer rounded-t-md border-t border-light-2 transition-all duration-300"
+      :class="[
+        option.value == value ? 'px-10 h-40 bg-gray-100 text-gray-600' : 'px-20',
+        option.value != value && mouseoverIndex == index ? 'h-40 text-white bg-p-10' : 'h-40'
+      ]"
+      @mouseover="mouseoverIndex = index"
+      @click="buttonClick({index:index,option:option})">
+      <span class=" transition-all duration-300"
+        :class="[option.value== value?'ml-10':'']">
+        <span :class="[option.value== value?'text-gray-600 font-bold':'text-light-32']">{{option.label}}</span>
+      </span>
+      <span :style="{width:option.value== value?'20px':'0px'}" class=" overflow-hidden transition-all duration-300">
+        <span class="xrow items-center justify-center rounded scale-75 hover:bg-d-2 hover:scale-110 transition-all duration-200" 
+          style="width:16px;height:16px;margin-left:4px">
+          <span class="iconfont icon-x text-xs text-d-10 font-bold scale-90" 
+            @click.capture.stop="tagRemoveClick({index:index,option:option})">
+          </span>
+        </span>
       </span>
     </span>
-  </span>
+  </div>
 </template>
 
 <script lang="ts">
-import * as R from "ramda";
-import menu from "../menu.lib";
-
-export default R.mergeAll([menu,{name:'tag-menu',methods:{
-  buttonClick(v:any){
-    console.log('buttonClick',v)
+import { defineComponent } from 'vue';
+import type { PropType, SetupContext } from 'vue';
+import type { MenuOption } from "types/public/mainPage";
+import { useMenuBase } from "../menu.lib"; // 组合式api代码复用
+export default defineComponent({
+  props:{
+    options:{
+      type:Array as PropType<MenuOption[]>,
+      default:()=>[]
+    },
+    value:{
+      type:String as PropType<string>,
+      default:''
+    }
   },
-  doe(v:any){
-    console.log(v)
+  emits:['update:value'], // v-model 写法
+  setup(props,context) {
+    const { buttonClick, mouseoverIndex } = useMenuBase(context as SetupContext);
+    function tagRemoveClick(event:{index:number,option:MenuOption}){
+      console.log(event);
+    }
+    return {
+      mouseoverIndex,
+      buttonClick,
+      tagRemoveClick,
+    }
   }
-}}]);
+})
 </script>

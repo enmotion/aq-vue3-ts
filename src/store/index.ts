@@ -2,13 +2,14 @@
  * @ Author: enmoion
  * @ Create Time: 2022-06-20 14:48:07
  * @ Modified by: enmotion
- * @ Modified time: 2022-07-29 11:42:40
+ * @ Modified time: 2022-08-22 17:03:14
  * @ Description:
  * 根级vuex模型对象
  */
 import * as R from "ramda"; // 引入ramda
 import { createStore } from 'vuex'; // 引入vuex/4.x的createStore方法
 import user from "./modules/user";
+import menu from "./modules/menu";
 import { State , AppInfo , Screen , Device , KeepAlivePage , PluginKeys } from "./types";
 
 export default createStore({
@@ -80,6 +81,7 @@ export default createStore({
         },
     },
     modules:{
-        user
+        user,
+        menu
     }
 })

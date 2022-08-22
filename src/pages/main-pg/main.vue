@@ -18,13 +18,7 @@
           <aq-click-scroll-view class="h-40">
             <main-menu 
               :value="currentRouteValue" 
-              :options="[
-                {label:'系统设置',value:'home'},
-                {label:'业务数据',value:'test01'},
-                {label:'人员管理',value:'test02'},
-                {label:'业务流程',value:'test03'},
-                {label:'返回登录',value:'mod'},
-              ]" 
+              :options="store.getters['menu/getSysMenu']" 
               @update:value="getMenuOption">
             </main-menu>
           </aq-click-scroll-view>
@@ -98,7 +92,9 @@
           </div>
           <!-- 系统菜单面板 -->
           <div class="xcol flex-grow-1 bg-white">
-
+            <aq-Scroll-view>
+              <aq-tree-menu :options="store.getters['menu/getSysMenu']"></aq-tree-menu>
+            </aq-Scroll-view>
           </div>
         </div>
       </wg-slider-pop>
@@ -151,10 +147,12 @@ import type { RouteRecordRaw } from "vue-router";
 import { useStore } from "vuex";
 import MainMenu from "./widgets/main-menu/main-menu.vue";
 import TagMenu from "./widgets/tag-menu/tag-menu.vue";
+import AqScrollView from "@src/parts/aq-componets/aq-scroll-view/aq-scroll-view.vue";
 
 export default defineComponent({
-  components:{ MainMenu, TagMenu },
+  components:{ MainMenu, TagMenu, AqScrollView },
   setup(props, context) {
+    const store = useStore();
     const currentRouteValue = ref('002');
     const currentTagValue = ref('001');
     const screen = inject("screen") as {
@@ -164,22 +162,22 @@ export default defineComponent({
     };
     const router = useRouter();
     const route = useRoute();
-    router.addRoute('main',R.mergeAll([PGS.Test02Pg,{name:'mod',path:'/mod'}]) as RouteRecordRaw);
-    router.addRoute('main',PGS.Test02Pg);
-    router.addRoute('main',PGS.Test03Pg);
+    // router.addRoute('main',R.mergeAll([PGS.Test02Pg,{name:'mod',path:'/mod'}]) as RouteRecordRaw);
+    // router.addRoute('main',PGS.Test02Pg);
+    // router.addRoute('main',PGS.Test03Pg);
     let openSliderSystemMenu = ref(false);
     let menuindex = ref(0);
     let tabindex = ref(0);
     function getMenuOption(value:string){
       currentRouteValue.value = value;
-      router.replace({name:value,params:{id:value}});
+      router.push({name:value,params:{id:value}});
     }
     function getTagOption(value:string){
-      console.log('sss')
       currentTagValue.value = value;
       // router.replace({name:value,params:{id:value}});
     }
     return {
+      store,
       currentRouteValue,
       currentTagValue,
       menuindex,

@@ -10,6 +10,7 @@ import { useRoute, useRouter } from 'vue-router';
 import type { Screen } from '@src/store/types';
 
 export default defineComponent({
+  name:'form-manager',
   setup() {
     const route = useRoute();
     const router = useRouter();

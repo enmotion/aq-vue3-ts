@@ -2,15 +2,15 @@
   <div class="xcol text-justify">
     <div v-for="(option,index) in options" 
       :key="option.label" 
-      class="xcol h-auto flex-grow-0 flex-shrink-0 border-b last:border-none last:border-light-1 border-light-6">
+      class="xcol h-auto flex-grow-0 flex-shrink-0 border-b last:border-none last:border-light-1 border-dark-2">
       <div class="xrow h-40 font-bold items-center cursor-pointer px-15 text"
-        :class="[valuePath[level]==option.value?'tree-menu':'text-white']"
+        :class="[valuePath[level]==option.value?'tree-menu':'text-gray-500']"
         @click="buttonClick(option,index)">
         <span class="h-full" :style="{width:level*10+'px'}"></span>
         <span class="tree-menu-icon w-15 h-15 xcol items-center justify-center iconfont mr-10 font-normal text-xs" 
           :class="[option.icon||'icon-sub-sm']">
         </span>
-        <span class="flex-grow-1 w-0 text-ellipsis h-full items-center xrow" :class="[level<1?'text-sm text-white':'text-xs text-light-24']">
+        <span class="flex-grow-1 w-0 text-ellipsis h-full items-center xrow" :class="[level<1?'text-sm text-gray-500':'text-xs text-light-24']">
           <span class="tree-menu-label text-ellipsis overflow-hidden w-0 whitespace-nowrap flex-grow-1">
            {{option.label}}
           </span>
@@ -21,13 +21,13 @@
       </div>
       <aq-transition name="growy">
         <div v-if="currentIndex.includes(index) && option.children" class="h-auto flex-shrink-0 xcol bg-dark-12 overflow-hidden">
-          <tree-menu 
+          <aq-tree-menu 
             :options="option.children"
             :value-path="valuePath"
             :level="level+1" 
             class="h-auto flex-shrink-0"
             @update:value="getSubOption">
-          </tree-menu>
+          </aq-tree-menu>
         </div>
       </aq-transition>
     </div>    
@@ -49,7 +49,7 @@ import { defineComponent, ref } from 'vue';
 import type { PropType, Ref } from 'vue';
 
 export default defineComponent({
-  name:'tree-menu',
+  name:'aq-tree-menu',
   props:{
     options:{
       type:Array as PropType<any[]>,

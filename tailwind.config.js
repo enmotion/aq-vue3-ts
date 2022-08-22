@@ -17,7 +17,7 @@ module.exports = {
       dark:tailWindUtils.generateAlphaColorStep('#000000',48),
       light:tailWindUtils.generateAlphaColorStep('#FFFFFF',48),
       gray:colors.gray,
-      d:tailWindUtils.generateAlphaColorStep('#ff552f',10), // 危险色
+      d:tailWindUtils.generateAlphaColorStep('#FF0053',10), // 危险色
       s:tailWindUtils.generateAlphaColorStep('#35ab1a',10), // 安全色
       w:tailWindUtils.generateAlphaColorStep('#F2C849',10), // 警告色
       i:tailWindUtils.generateAlphaColorStep('#FF0000',10), // 信息色

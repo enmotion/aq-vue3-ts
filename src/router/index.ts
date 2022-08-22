@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw, } from 'vue-router';
+import { createRouter, createWebHashHistory, RouteRecordRaw, useRoute } from 'vue-router';
 import store from "@src/store";
 import * as R from "ramda";
 import PGS from '@src/pages/index';
@@ -12,8 +12,10 @@ const router = createRouter({
     R.mergeAll([PGS.MainPg,
     {
       children: [
-        PGS.HomePg,
-        PGS.Test01Pg,
+        PGS.DashBoardPg,
+        PGS.UserManagerPg,
+        PGS.FormManagerPg,
+        PGS.WorkFlowPg,
       ]
     }
     ]) as RouteRecordRaw,
@@ -23,6 +25,7 @@ const router = createRouter({
   ]
 });
 router.beforeEach(async (to, from ) => {
+  console.log(to,from,'beforeEach')
   const userInfo = store.getters['user/getInfo']||{}; // 取出user状态
   const token = store.getters['user/getToken']||{}; // 取出token
   // 0.屏宽检测，部分页面不可在窄屏模式下显示
@@ -48,4 +51,7 @@ router.beforeEach(async (to, from ) => {
     }
   }
 });
+router.beforeResolve(async (to, from ) => {
+  console.log(to,from,'beforeResolve')
+})
 export default router;
