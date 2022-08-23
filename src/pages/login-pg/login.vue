@@ -285,7 +285,7 @@ export default defineComponent({
             console.log(res);
             console.log('do login!');
             store.commit('user/setToken',{ access_token:"111",refresh_token:"222" });
-            router.push({name:'home'});
+            router.push({name:'dash-board'});
           }).catch(err=>{
             console.log(err);
           })

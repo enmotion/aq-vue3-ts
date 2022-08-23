@@ -15,7 +15,10 @@
       <div ref="slotSizeWrap" class="xcol h-auto" v-html="slotHtml">
       </div>
     </div>
-    <Transition :name="name" :mode="mode" @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave">
+    <Transition :name="name" :mode="mode" 
+      @before-enter="beforeEnter" 
+      @enter="enter" 
+      @before-leave="beforeLeave">
       <slot></slot>
     </Transition>
   </div>
@@ -107,8 +110,8 @@ export default defineComponent({
       },parseFloat(transDuration.value.enter)*1000)
     }
     function beforeLeave(el:HTMLElement){
-      orgSize.value.height = slotSizeWrap.value.offsetHeight+'px';
-      orgSize.value.width = slotSizeWrap.value.offsetWidth+'px';
+      orgSize.value.height = el.offsetHeight+'px';
+      orgSize.value.width = el.offsetWidth+'px';
     }
     return {
       orgSize,

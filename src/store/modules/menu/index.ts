@@ -40,18 +40,24 @@ export default {
       {label:'常用菜单', value:'menu-manager', icon:'icon-flow',children:[]},
     ] as Menu[],
     sysMenu:[
-      {label:'首页面板', icon:'icon-target', value:'dash-board'},
-      {label:'重置密码', icon:'icon-pw', value:'dash-board'},
-      {label:'切换租户', icon:'icon-flow', value:'dash-board'},
-      {label:'退出登录', icon:'icon-sys', value:'dash-board'},
-    ]
+      {label:'统计面板', icon:'icon-target', value:'dash-board'},
+      {label:'重置密码', icon:'icon-pw', value:'reset-pw'},
+      {label:'切换租户', icon:'icon-flow', value:'org-list'},
+      {label:'退出登录', icon:'icon-sys', value:'login'},
+    ],
+    tagMenu:[
+      {label:'统计面板',value:'home',static:true}
+    ] as Array <Menu&{static?:boolean}> 
   }, 
   getters:{
+    getAppMenu(state:{appMenu:Menu[]}):Menu[]{
+      return state.appMenu;
+    },
     getSysMenu(state:{sysMenu:Menu[]}):Menu[]{
       return state.sysMenu;
     },
-    getAppMenu(state:{appMenu:Menu[]}):Menu[]{
-      return state.appMenu;
+    getTagMenu(state:{tagMenu:Menu[]}):Menu[]{
+      return state.tagMenu;
     },
     getCrumbPath(state:{sysMenu:Menu[]}):Menu[]{
       const route = useRoute();

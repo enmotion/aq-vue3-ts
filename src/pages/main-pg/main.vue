@@ -32,13 +32,7 @@
               </template>
               <tag-menu  
                 :value="currentTagValue" 
-                :options="[
-                  {label:'应用首页',value:'home',static:true},
-                  {label:'业务数据',value:'test01'},
-                  {label:'人员管理',value:'test02'},
-                  {label:'业务流程',value:'test03'},
-                  {label:'返回登录',value:'login'},
-                ]" 
+                :options="store.getters['menu/getTagMenu']" 
                 @update:value="getTagOption">
               </tag-menu>
               <template v-slot:rightArrow>
@@ -63,7 +57,8 @@
                 :label="item.label"
                 :icon="item.icon"
                 text-color="text-gray-500 text-xs"
-                class="border-dark-4 border-b cursor-pointer hover:bg-gray-100 transition-all duration-300 last:border-none">
+                class="border-dark-4 border-b cursor-pointer hover:bg-gray-100 transition-all duration-300 last:border-none"
+                @click="getMenuOption(item.value)">
               </sys-menu-botton>
             </div>
             <template #reference>
@@ -94,7 +89,8 @@
                 :key="index" 
                 :label="item.label"
                 :icon="item.icon"
-                class="border-b border-light-4 bg-d-1 last:border-none cursor-pointer hover:bg-d-3 transition-all duration-300">
+                class="border-b border-light-4 bg-d-1 last:border-none cursor-pointer hover:bg-d-3 transition-all duration-300"
+                @click="getMenuOption(item.value)">
               </sys-menu-botton>
             </div>
           </aq-transition>
@@ -176,7 +172,7 @@ export default defineComponent({
     let menuindex = ref(0);
     let tabindex = ref(0);
     function getMenuOption(value:string){
-      currentRouteValue.value = value;
+      // currentRouteValue.value = value;
       router.push({name:value,params:{id:value}});
     }
     function getTagOption(value:string){

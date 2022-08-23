@@ -19,7 +19,7 @@
           :class="[option.children && option.children.length > 0 ? 'icon-dots rotate-90 text-dark-12':'icon-arrowR text-gray-400']">
         </span>
       </div>
-      <aq-transition name="growy">
+      <aq-transition name="growy" :duration="{enter:1000,leave:1000}">
         <div v-if="currentIndex.includes(index) && option.children" class="h-auto flex-shrink-0 xcol bg-dark-2 overflow-hidden">
           <aq-tree-menu 
             :options="option.children"

@@ -13,6 +13,9 @@ const router = createRouter({
     {
       children: [
         PGS.DashBoardPg,
+        PGS.ResetPwPg,
+        PGS.OrgListPg,
+
         PGS.UserManagerPg,
         PGS.FormManagerPg,
         PGS.WorkFlowPg,
