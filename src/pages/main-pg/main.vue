@@ -139,7 +139,7 @@
         </span>
       </div>
       <!-- 页面路由视窗 -->
-      <div class="xcol flex-grow-1 bg-gray-50">
+      <div class="xcol flex-grow-1 bg-gray-100">
         <aq-scroll-view class="xcol flex-grow-1" :scroll-bar-props="{viewClass:screen.isWS?'p-20':'p-10'}">
           <!-- <router-view /> -->
           <router-view key="inner_route" v-slot="{ Component }" class="">
@@ -188,8 +188,10 @@ export default defineComponent({
     // router.addRoute('main',PGS.Test03Pg);
     
     function setMenuFirstLevel(value:string){
-      sideMenuRenderKey.value++;
-      store.commit('menu/setCurrent',{firstLevelValue:value});
+      if(store.getters['menu/getCurrent'].firstLevelValue != value){
+        store.commit('menu/setCurrent',{firstLevelValue:value});
+        sideMenuRenderKey.value++;
+      }
     }
     function routeForward(option:any){
       console.log(option.value);
