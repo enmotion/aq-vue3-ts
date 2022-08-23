@@ -17,9 +17,9 @@
         <div class="h-100 xrow items-center">
           <aq-click-scroll-view class="h-40">
             <main-menu 
-              :value="currentRouteValue" 
+              :value="store.getters['menu/getCurrent'].firstLevelValue" 
               :options="store.getters['menu/getAppMenu']" 
-              @update:value="getMenuOption">
+              @update:value="setMenuFirstLevel">
             </main-menu>
           </aq-click-scroll-view>
         </div>
@@ -31,9 +31,9 @@
                 <span class="iconfont icon-arrowL font-bold btn text-xs text-light-12 mt-10 hover:text-s-10 duration-300 transition-all"></span>
               </template>
               <tag-menu  
-                :value="currentTagValue" 
+                :value="store.getters['menu/getCurrent'].tagRouteName" 
                 :options="store.getters['menu/getTagMenu']" 
-                @update:value="getTagOption">
+                @update:value="routeForward">
               </tag-menu>
               <template v-slot:rightArrow>
                 <span class="iconfont icon-arrowR font-bold btn text-xs text-light-12 mt-10 hover:text-s-10 duration-300 transition-all"></span>
@@ -58,7 +58,7 @@
                 :icon="item.icon"
                 text-color="text-gray-500 text-xs"
                 class="border-dark-4 border-b cursor-pointer hover:bg-gray-100 transition-all duration-300 last:border-none"
-                @click="getMenuOption(item.value)">
+                @click="routeForward(item)">
               </sys-menu-botton>
             </div>
             <template #reference>
@@ -90,7 +90,7 @@
                 :label="item.label"
                 :icon="item.icon"
                 class="border-b border-light-4 bg-d-1 last:border-none cursor-pointer hover:bg-d-3 transition-all duration-300"
-                @click="getMenuOption(item.value)">
+                @click="routeForward(item)">
               </sys-menu-botton>
             </div>
           </aq-transition>
@@ -107,7 +107,7 @@
           </div>
           <!-- 系统菜单面板 -->
           <div class="xcol flex-grow-1 bg-gray-100">
-            <aq-Scroll-view>
+            <aq-Scroll-view class="flex-grow-1">
               <aq-tree-menu :options="store.getters['menu/getAppMenu']" class="bg-white">
               </aq-tree-menu>
             </aq-Scroll-view>
@@ -122,29 +122,42 @@
           <div class="xcol h-auto p-10">
             <span class="bg-p-2 h-50 rounded-md"></span>
           </div>
-          <aq-scroll-view class="xcol">
-            <aq-tree-menu :options="store.getters['menu/getAppMenu']" class="border-y border-dark-2" >
-            </aq-tree-menu>
+          <aq-scroll-view class="xcol w-full flex-grow-1">
+            <aq-transition name="falling"
+              :duration="{enter:300,leave:200}" 
+              :absolute-cell="true" 
+              class="w-full">
+              <aq-tree-menu
+                :key="sideMenuRenderKey"
+                :options="SideMenuOptions" 
+                :is-serial-expanded="true" 
+                class="border-y w-full border-dark-4"
+                @update:value="routeForward">
+              </aq-tree-menu>
+            </aq-transition>
           </aq-scroll-view>
         </span>
       </div>
       <!-- 页面路由视窗 -->
       <div class="xcol flex-grow-1 bg-gray-50">
-        <!-- <router-view /> -->
-        <router-view key="inner_route" v-slot="{ Component }">
-          <aq-transition name="falling" mode="out-in" class="flex-grow-1 flex-shrink-1 overflow-hidden" :duration="{enter:300,leave:200}" :timing="{enter:'ease-out',leave:'ease-in'}">
-            <keep-alive :include="[]">
-              <component :is="Component" :key="route.name" class="w-full h-full" />
-            </keep-alive>
-          </aq-transition>
-        </router-view>
+        <aq-scroll-view class="xcol flex-grow-1" :scroll-bar-props="{viewClass:screen.isWS?'p-20':'p-10'}">
+          <!-- <router-view /> -->
+          <router-view key="inner_route" v-slot="{ Component }" class="">
+            <aq-transition name="falling" mode="out-in" class="flex-grow-1 flex-shrink-1 overflow-hidden" :duration="{enter:300,leave:200}" :timing="{enter:'ease-out',leave:'ease-in'}">
+              <keep-alive :include="[]">
+                <component :is="Component" :key="route.name" class="w-full h-full" />
+              </keep-alive>
+            </aq-transition>
+          </router-view>
+        </aq-scroll-view>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, inject } from 'vue';
+import * as R from "ramda";
+import { defineComponent, ref, inject, computed } from 'vue';
 import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { ElPopover } from 'element-plus';
@@ -155,42 +168,43 @@ import SysMenuBotton from "./widgets/sys-menu-button/sys-menu-button.vue";
 export default defineComponent({
   components:{ MainMenu, TagMenu, SysMenuBotton, ElPopover },
   setup(props, context) {
+    const router = useRouter();
+    const route = useRoute();
     const store = useStore();
-    const currentRouteValue = ref('002');
-    const currentTagValue = ref('001');
+    let openSliderSystemMenu = ref(false);
+    const sideMenuRenderKey = ref(0);
     const screen = inject("screen") as {
       isWS: boolean;
       w: number;
       h: number;
     };
-    const router = useRouter();
-    const route = useRoute();
+    const SideMenuOptions = computed(()=>{
+      let option:any = R.find(R.propEq('value',store.getters['menu/getCurrent'].firstLevelValue))(store.getters['menu/getAppMenu']);
+      return option.children ? option.children : [];
+    })
+
     // router.addRoute('main',R.mergeAll([PGS.Test02Pg,{name:'mod',path:'/mod'}]) as RouteRecordRaw);
     // router.addRoute('main',PGS.Test02Pg);
     // router.addRoute('main',PGS.Test03Pg);
-    let openSliderSystemMenu = ref(false);
-    let menuindex = ref(0);
-    let tabindex = ref(0);
-    function getMenuOption(value:string){
-      // currentRouteValue.value = value;
-      router.push({name:value,params:{id:value}});
+    
+    function setMenuFirstLevel(value:string){
+      sideMenuRenderKey.value++;
+      store.commit('menu/setCurrent',{firstLevelValue:value});
     }
-    function getTagOption(value:string){
-      currentTagValue.value = value;
-      // router.replace({name:value,params:{id:value}});
+    function routeForward(option:any){
+      console.log(option.value);
+      router.push({name:option.value,params:{id:'12'}});
     }
     return {
       store,
-      currentRouteValue,
-      currentTagValue,
-      menuindex,
-      tabindex,
       screen,
       route,
       router,
       openSliderSystemMenu,
-      getMenuOption,
-      getTagOption
+      SideMenuOptions,
+      sideMenuRenderKey,
+      setMenuFirstLevel,
+      routeForward,
     };
   },
 })

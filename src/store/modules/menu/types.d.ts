@@ -6,6 +6,10 @@ export interface Menu{
   query?:any, // 菜单路由后缀参数
   children?:Menu[]
 }
+export interface MenuRecord{
+  tagRouteName:string,
+  firstLevelValue:string,
+}
 export interface Crumb{
   label:string,
   icon?:string,

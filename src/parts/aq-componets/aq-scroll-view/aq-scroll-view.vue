@@ -1,13 +1,21 @@
 <template>
-  <div class="flex flex-col flex-grow-1 flex-shrink-1 overflow-hidden">
-    <div ref="ScrollContainerDom" class="relative h-full overflow-hidden">
-      <div class="absolute h-full w-full">
-        <el-scrollbar v-if="!disabled" v-bind="scrollBarProps" :height="ScrollContainerDomSize.h" @scroll="scroll">
-          <div ref="SlotContainerDom" class="h-auto w-auto flex-grow-0 flex-shrink-0">
+  <div class="xcol">
+    <div ref="ScrollContainerDom" class="relative h-full w-full overflow-hidden">
+      <div class="absolute h-full w-full xcol">
+        <el-scrollbar v-if="!disabled" 
+          v-bind="scrollBarProps" 
+          class="xcol"
+          :wrap-class="['xcol',scrollBarProps.wrapClass]"
+          :view-class="['xcol flex-grow-1',scrollBarProps.viewClass]"
+          :height="ScrollContainerDomSize.h+'px'" 
+          @scroll="scroll">
+          <div ref="SlotContainerDom" 
+            class="xcol flex-grow-1 flex-shrink-0">
             <slot></slot>
           </div>
         </el-scrollbar>
-        <div v-if="disabled" class="flex flex-col">
+        <div v-if="disabled" 
+          class="flex flex-col flex-grow-1">
           <slot></slot>
         </div>
       </div>

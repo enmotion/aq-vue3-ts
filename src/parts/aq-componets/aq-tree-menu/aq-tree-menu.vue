@@ -19,12 +19,13 @@
           :class="[option.children && option.children.length > 0 ? 'icon-dots rotate-90 text-dark-12':'icon-arrowR text-gray-400']">
         </span>
       </div>
-      <aq-transition name="growy" :duration="{enter:1000,leave:1000}">
+      <aq-transition name="growy" :duration="{enter:300,leave:200}">
         <div v-if="currentIndex.includes(index) && option.children" class="h-auto flex-shrink-0 xcol bg-dark-2 overflow-hidden">
           <aq-tree-menu 
             :options="option.children"
             :value-path="valuePath"
-            :level="level+1" 
+            :level="level+1"
+            :is-serial-expanded="isSerialExpanded"
             class="h-auto flex-shrink-0"
             @update:value="getSubOption">
           </aq-tree-menu>
@@ -63,7 +64,7 @@ export default defineComponent({
       type:String as PropType<string>,
       default:''
     },
-    isOnlyExpanded:{
+    isSerialExpanded:{ // 是否为串行展开
       type:Boolean as PropType<boolean>,
       default:false,
     },
@@ -72,23 +73,24 @@ export default defineComponent({
       default:0
     },
   },
+  emits:['update:value'], // v-model 写法
   setup(props,context) {
     const currentIndex:Ref<(string|number)[]> = ref([]);
     function buttonClick(option:any,index:number){
       if(currentIndex.value.includes(index)){
-        if(props.isOnlyExpanded){
+        if(props.isSerialExpanded){
           currentIndex.value = []
         }else{
           currentIndex.value.splice(currentIndex.value.indexOf(index),1);
         }
       }else{
-        if(props.isOnlyExpanded){
+        if(props.isSerialExpanded){
           currentIndex.value = [index]
         }else{
           currentIndex.value.push(index);
         }
       }
-      if(!option.children){
+      if(!option.children||option.children.length <=0 ){
         context.emit('update:value',option);
       }
     };

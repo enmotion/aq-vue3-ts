@@ -1,7 +1,5 @@
 <template>
-  <aq-scroll-view class="bg-gray-100 flex-grow-1 xcol" :scroll-bar-props="{viewClass:screen.isWS?'p-20':'p-10'}">
-    test-03
-  </aq-scroll-view>
+  <div class="xcol flex-grow-1 h-full overflow-hidden bg-white">user-manager</div>
 </template>
 
 <script lang="ts">
