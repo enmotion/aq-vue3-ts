@@ -5,20 +5,9 @@
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
-    <style>
-      html,body{
-        height:100%;
-        background-color: black;
-      }
-      .app-container{
-        display:flex;
-        flex-direction:column;
-        height:100%;
-      }
-    </style>
   </head>
-  <body id="root">
-    <div id="app" class="app-container"></div>
+  <body id="bootstrap-tw">
+    <div id="app" class="flex flex-col bg-black flex-grow-1" v-cloak></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

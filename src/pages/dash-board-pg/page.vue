@@ -1,5 +1,5 @@
 <template>
-  <div class="xrow flex-wrap -m-5">
+  <div class="xrow flex-wrap -mx-5">
     <wg-card title="HOME" class="p-5" style-type="A" :class="[screen.isWS?'w-1/4':'w-full']" use-menu>
       放假快乐大数据分类卡收费，范德萨肌肤撒地方结束啦方式打开了封疆大吏撒放大开始了。结局放假的撒了风刀霜剑快乐发圣诞节快乐发大数据分类考试的，放假的卡萨飞机拉屎发大水false发大水坑啦烦。
     </wg-card>

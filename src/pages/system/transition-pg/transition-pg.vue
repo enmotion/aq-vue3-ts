@@ -97,7 +97,7 @@
           </span>
         </div>
         <div class="-mr-10 flex flex-grow-1 -m-5">
-          <aq-scroll-view :scroll-bar-props="{wrapClass:'pr-10'}">
+          <aq-scroll-view class="flex flex-col flex-grow-1" :scroll-bar-props="{wrapClass:'pr-10'}">
             <aq-transition-group 
               :name="transitionGroupTypeName" 
               :timing="transitionTiming" 
@@ -172,6 +172,7 @@ export default defineComponent({
     function addGroupItems(){
       transitionItemIndex.value++;
       TransitionGroupItems.push({name:'item-'+transitionItemIndex.value,key:Date.now()});
+      console.log('sss')
     }
     function removeGroupItem(index:number){
       TransitionGroupItems.splice(index,1);

@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full xcol mask text-xs bg-dark-32 overflow-hidden">
+  <div class="h-full flex flex-col flex-grow-1 flex-shrink-0 text-xs overflow-hidden">
     <aq-console-view class="bg-white">
       <div class="h-200 text-justify text-s-10">
         {{store.getters['menu/getCurrent']}}

@@ -1,6 +1,6 @@
 <template>
   <div class="xcol flex-grow-1" :class="[screen.isWS?'bg-texture':'bg-white']">
-    <div class="xrow" :class="[screen.isWS?'h-130 bg-p-7':'h-50 bg-p-10']">
+    <div class="xrow" :class="[screen.isWS?'h-130 bg-gradient-to-r from-p-9 via-d-3 to-p-1':'h-50 bg-p-10']">
       <!-- logo部分 -->
       <div class="xcol" :class="[screen.isWS?'w-200':'w-auto items-start flex-grow-1']">
         <div class="h-90 items-center xrow justify-center px-10">
@@ -140,10 +140,14 @@
       </div>
       <!-- 页面路由视窗 -->
       <div class="xcol flex-grow-1 bg-gray-100">
-        <aq-scroll-view class="xcol flex-grow-1" :scroll-bar-props="{viewClass:screen.isWS?'p-20':'p-10'}">
-          <!-- <router-view /> -->
-          <router-view key="inner_route" v-slot="{ Component }" class="">
-            <aq-transition name="falling" mode="out-in" class="flex-grow-1 flex-shrink-1 overflow-hidden" :duration="{enter:300,leave:200}" :timing="{enter:'ease-out',leave:'ease-in'}">
+        <aq-scroll-view class="xcol flex-grow-1 flex-shrink-0" :scroll-bar-props="{viewClass:'p-20'}" :disabled="false">
+          <router-view key="inner_route" v-slot="{ Component }">
+            <aq-transition 
+              name="falling" 
+              mode="out-in" 
+              class="flex-grow-1 flex-shrink-0 overflow-hidden" 
+              :duration="{enter:300,leave:300}" 
+              :timing="{enter:'ease-out',leave:'ease-in'}">
               <keep-alive :include="[]">
                 <component :is="Component" :key="route.name" class="w-full h-full" />
               </keep-alive>

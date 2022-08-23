@@ -1,24 +1,25 @@
 <template>
-  <div class="xcol">
-    <div ref="ScrollContainerDom" class="relative h-full w-full overflow-hidden">
-      <div class="absolute h-full w-full xcol">
-        <el-scrollbar v-if="!disabled" 
+  <div class="flex flex-col">
+    <div v-if="!disabled" ref="ScrollContainerDom" class="relative h-full w-full overflow-hidden">
+      <div class="absolute h-full w-full flex flex-col">
+        <el-scrollbar
           v-bind="scrollBarProps" 
-          class="xcol"
-          :wrap-class="['xcol',scrollBarProps.wrapClass]"
-          :view-class="['xcol flex-grow-1',scrollBarProps.viewClass]"
+          class="flex flex-col"
+          :wrap-class="['flex flex-col',scrollBarProps.wrapClass]"
+          :view-class="['flex flex-col flex-grow-1',scrollBarProps.viewClass]"
           :height="ScrollContainerDomSize.h+'px'" 
           @scroll="scroll">
           <div ref="SlotContainerDom" 
-            class="xcol flex-grow-1 flex-shrink-0">
+            class="flex flex-col flex-grow-1 flex-shrink-0">
             <slot></slot>
           </div>
-        </el-scrollbar>
-        <div v-if="disabled" 
-          class="flex flex-col flex-grow-1">
-          <slot></slot>
-        </div>
+        </el-scrollbar>        
       </div>
+    </div>
+    <div v-if="disabled" 
+      class="flex flex-col h-auto flex-grow-1 flex-shrink-0"
+      :class="[scrollBarProps.viewClass]">
+      <slot></slot>
     </div>
   </div>
 </template>
@@ -65,30 +66,34 @@ export default defineComponent({
     onMounted(() => {
       // 计算属性面板所需宽度
       ScrollContainerDomResizeObserver = new ResizeObserver(() => {
-        ScrollContainerDomSize.w = ScrollContainerDom.value.clientWidth;
-        ScrollContainerDomSize.h = ScrollContainerDom.value.clientHeight;
+        if(!props.disabled){ //禁用模式下，不启用高度侦测
+          ScrollContainerDomSize.w = ScrollContainerDom.value.clientWidth;
+          ScrollContainerDomSize.h = ScrollContainerDom.value.clientHeight;
+        }
       })
-      ScrollContainerDomResizeObserver.observe(ScrollContainerDom.value); // 添加侦听
+      ScrollContainerDom.value && ScrollContainerDomResizeObserver.observe(ScrollContainerDom.value); // 添加侦听
     })
     onUnmounted(() => {
       ScrollContainerDomResizeObserver.disconnect(); // 关闭侦听
     })
     function scroll(data:any){
-      if(data.scrollTop <= 0 ){
-        if(!isAlreadyTrigged.top){
-          isAlreadyTrigged.top = true;
-          context.emit('onScrollToTop','top');
+      if(!props.disabled){ //禁用模式下，不启用高度侦测
+        if(data.scrollTop <= 0 ){
+          if(!isAlreadyTrigged.top){
+            isAlreadyTrigged.top = true;
+            context.emit('onScrollToTop','top');
+          }
+        }else{
+          isAlreadyTrigged.top = false;
         }
-      }else{
-        isAlreadyTrigged.top = false;
-      }
-      if(data.scrollTop >= SlotContainerDom.value.clientHeight-ScrollContainerDomSize.h){
-        if(!isAlreadyTrigged.bottom){
-          isAlreadyTrigged.bottom = true;
-          context.emit('onScrollToBottom','bottom');
+        if(data.scrollTop >= SlotContainerDom.value.clientHeight-ScrollContainerDomSize.h){
+          if(!isAlreadyTrigged.bottom){
+            isAlreadyTrigged.bottom = true;
+            context.emit('onScrollToBottom','bottom');
+          }
+        }else{
+          isAlreadyTrigged.bottom = false;
         }
-      }else{
-        isAlreadyTrigged.bottom = false;
       }
     }
     return {
