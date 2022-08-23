@@ -3,24 +3,24 @@
     <div v-for="(option,index) in options" 
       :key="option.label" 
       class="xcol h-auto flex-grow-0 flex-shrink-0 border-b last:border-none last:border-light-1 border-dark-2">
-      <div class="xrow h-40 font-bold items-center cursor-pointer px-15 text"
+      <div class="xrow h-40 font-bold items-center cursor-pointer pl-20"
         :class="[valuePath[level]==option.value?'tree-menu':'text-gray-500']"
         @click="buttonClick(option,index)">
         <span class="h-full" :style="{width:level*10+'px'}"></span>
-        <span class="tree-menu-icon w-15 h-15 xcol items-center justify-center iconfont mr-10 font-normal text-xs" 
+        <span v-if="level!=0 || option.icon" class="tree-menu-icon w-15 h-15 xcol items-center justify-center iconfont mr-10 font-normal text-xs" 
           :class="[option.icon||'icon-sub-sm']">
         </span>
-        <span class="flex-grow-1 w-0 text-ellipsis h-full items-center xrow" :class="[level<1?'text-sm text-gray-500':'text-xs text-light-24']">
+        <span class="flex-grow-1 w-0 text-ellipsis h-full items-center xrow" :class="[level<1?'text-sm text-gray-600':'text-xs text-gray-500']">
           <span class="tree-menu-label text-ellipsis overflow-hidden w-0 whitespace-nowrap flex-grow-1">
            {{option.label}}
           </span>
         </span>
         <span class="tree-menu-side w-15 h-15 xcol items-center justify-center iconfont mr-10 scale-75 text-xs" 
-          :class="[option.children?'icon-dots text-light-12':'icon-arrowR text-white']">
+          :class="[option.children && option.children.length > 0 ? 'icon-dots rotate-90 text-dark-12':'icon-arrowR text-gray-400']">
         </span>
       </div>
       <aq-transition name="growy">
-        <div v-if="currentIndex.includes(index) && option.children" class="h-auto flex-shrink-0 xcol bg-dark-12 overflow-hidden">
+        <div v-if="currentIndex.includes(index) && option.children" class="h-auto flex-shrink-0 xcol bg-dark-2 overflow-hidden">
           <aq-tree-menu 
             :options="option.children"
             :value-path="valuePath"

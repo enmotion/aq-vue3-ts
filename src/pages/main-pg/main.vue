@@ -33,7 +33,7 @@
               <tag-menu  
                 :value="currentTagValue" 
                 :options="[
-                  {label:'系统设置',value:'home'},
+                  {label:'应用首页',value:'home',static:true},
                   {label:'业务数据',value:'test01'},
                   {label:'人员管理',value:'test02'},
                   {label:'业务流程',value:'test03'},
@@ -91,9 +91,10 @@
             </span>
           </div>
           <!-- 系统菜单面板 -->
-          <div class="xcol flex-grow-1 bg-white">
+          <div class="xcol flex-grow-1 bg-gray-100">
             <aq-Scroll-view>
-              <aq-tree-menu :options="store.getters['menu/getSysMenu']"></aq-tree-menu>
+              <aq-tree-menu :options="store.getters['menu/getSysMenu']" class="bg-white">
+              </aq-tree-menu>
             </aq-Scroll-view>
           </div>
         </div>
@@ -102,24 +103,14 @@
     <div class="xrow flex-grow-1 bg-p-1">
       <!-- 二级菜单部分 -->
       <div v-if="screen.isWS" class="w-200 xcol flex-shrink-0">
-        <span class="xcol bg-white flex-grow-1 -mt-40 z-10 rounded-tr-lg shadow-lg p-10">
-          <div class="bg-p-1 h-45 rounded-sm"></div>
-          <div class="xcol mt-20">
-            <span v-for="(i) in 8" :key="i" 
-              class="h-40 xrow items-center overflow-hidden mb-10 last:mb-0"
-              :class="[i==4?'bg-p-10 rounded-lg px-5':'']">
-              <span 
-                class="h-20 w-20 iconfont icon-flow ml-5"
-                :class="[i==4?'text-white text-lg':'text-gray-500 text-sm']" 
-                style="line-height:18px">
-              </span>
-              <span 
-                class="ml-10 font-bold"
-                :class="[i==4?'text-white text-xs':'text-gray-500 text-xs']">
-                DISCOVERY-{{i}}
-              </span>
-            </span>
+        <span class="xcol bg-white flex-grow-1 -mt-40 z-10 rounded-tr-lg shadow-lg">
+          <div class="xcol h-auto p-10">
+            <span class="bg-p-2 h-50 rounded-md"></span>
           </div>
+          <aq-scroll-view class="xcol">
+            <aq-tree-menu :options="store.getters['menu/getSysMenu']" class="border-y border-dark-2" >
+            </aq-tree-menu>
+          </aq-scroll-view>
         </span>
       </div>
       <!-- 页面路由视窗 -->
