@@ -195,7 +195,7 @@ export default defineComponent({
     }
     function routeForward(option:any){
       console.log(option.value);
-      router.push({name:option.value,params:{id:'12'}});
+      router.push({path:'/'+option.value,query:{id:'12'}});
     }
     return {
       store,
