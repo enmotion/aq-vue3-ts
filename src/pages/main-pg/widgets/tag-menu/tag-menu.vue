@@ -16,7 +16,7 @@
       <span 
         :style="{width:option.value== value?'20px':'0px'}" 
         class=" overflow-hidden transition-all duration-300">
-        <span class="xrow items-center justify-center rounded scale-75 hover:bg-d-2 hover:scale-110 transition-all duration-200"
+        <span class="xrow items-center justify-center rounded scale-75 hover:bg-d-1 hover:scale-110 transition-all duration-200"
           :class="[option.static ? 'bg-dark-6 pointer-events-none' : 'text-d-10']"
           style="width:16px;height:16px;margin-left:4px">
           <span class="iconfont icon-x text-xs font-bold scale-90"

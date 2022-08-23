@@ -1,7 +1,7 @@
 export interface Menu{
   label:string,
   icon?:string,
-  value?:string,
+  value?:any,
   params?:any,
   children?:Menu[]
 }

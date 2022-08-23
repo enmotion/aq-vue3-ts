@@ -18,7 +18,7 @@
           <aq-click-scroll-view class="h-40">
             <main-menu 
               :value="currentRouteValue" 
-              :options="store.getters['menu/getSysMenu']" 
+              :options="store.getters['menu/getAppMenu']" 
               @update:value="getMenuOption">
             </main-menu>
           </aq-click-scroll-view>
@@ -53,7 +53,24 @@
         <wg-user-info class="flex-grow-1">
           <wg-pin-icon icon="icon-notice" :show-pin="true"></wg-pin-icon>
           <wg-pin-icon icon="icon-business" :show-pin="true"></wg-pin-icon>
-          <span class="h-25 w-25 xrow items-center btn justify-center iconfont icon-menu font-bold text-white text-sm bg-s-10 rounded-sm mr-10 last:mr-0"></span>
+          <el-popover
+            placement="bottom-start"
+            :width="120"
+            trigger="hover">
+            <div class="xcol">
+              <sys-menu-botton v-for="(item,index) in store.getters['menu/getSysMenu']" 
+                :key="index" 
+                :label="item.label"
+                :icon="item.icon"
+                text-color="text-gray-500 text-xs"
+                class="border-dark-4 border-b cursor-pointer hover:bg-gray-100 transition-all duration-300 last:border-none">
+              </sys-menu-botton>
+            </div>
+            <template #reference>
+              <span class="h-25 w-25 xrow items-center btn justify-center iconfont icon-menu font-bold text-white text-sm bg-s-10 rounded-sm mr-10 last:mr-0"></span>
+            </template>
+          </el-popover>
+          
         </wg-user-info>
       </div>
       <!-- 窄屏菜单展开触发 -->
@@ -73,10 +90,12 @@
           </div>
           <aq-transition name="growy" :duration="{enter:200,leave:200}">
             <div v-if="openSliderSystemMenu" key="aaaa" class="h-auto w-full overflow-hidden backdrop-blur-md border-t border-dark-2 bg-dark-8">
-              <div class="h-40 px-20 xrow items-center text-white border-b border-light-4 last:border-none">仪表面板</div>
-              <div class="h-40 px-20 xrow items-center text-white border-b border-light-4 last:border-none">重置密码</div>
-              <div class="h-40 px-20 xrow items-center text-white border-b border-light-4 last:border-none">切换租户</div>
-              <div class="h-40 px-20 xrow items-center text-white border-b border-light-4 last:border-none">退出登录</div>
+              <sys-menu-botton v-for="(item,index) in store.getters['menu/getSysMenu']" 
+                :key="index" 
+                :label="item.label"
+                :icon="item.icon"
+                class="border-b border-light-4 bg-d-1 last:border-none cursor-pointer hover:bg-d-3 transition-all duration-300">
+              </sys-menu-botton>
             </div>
           </aq-transition>
           <!-- 信息面板 -->
@@ -93,7 +112,7 @@
           <!-- 系统菜单面板 -->
           <div class="xcol flex-grow-1 bg-gray-100">
             <aq-Scroll-view>
-              <aq-tree-menu :options="store.getters['menu/getSysMenu']" class="bg-white">
+              <aq-tree-menu :options="store.getters['menu/getAppMenu']" class="bg-white">
               </aq-tree-menu>
             </aq-Scroll-view>
           </div>
@@ -108,7 +127,7 @@
             <span class="bg-p-2 h-50 rounded-md"></span>
           </div>
           <aq-scroll-view class="xcol">
-            <aq-tree-menu :options="store.getters['menu/getSysMenu']" class="border-y border-dark-2" >
+            <aq-tree-menu :options="store.getters['menu/getAppMenu']" class="border-y border-dark-2" >
             </aq-tree-menu>
           </aq-scroll-view>
         </span>
@@ -129,19 +148,16 @@
 </template>
 
 <script lang="ts">
-import * as R from "ramda";
-import { MenuOption } from '@typ/public/mainPage';
 import { defineComponent, ref, inject } from 'vue';
 import { useRouter, useRoute } from "vue-router";
-import PGS from '@src/pages/index';
-import type { RouteRecordRaw } from "vue-router";
 import { useStore } from "vuex";
+import { ElPopover } from 'element-plus';
 import MainMenu from "./widgets/main-menu/main-menu.vue";
 import TagMenu from "./widgets/tag-menu/tag-menu.vue";
-import AqScrollView from "@src/parts/aq-componets/aq-scroll-view/aq-scroll-view.vue";
+import SysMenuBotton from "./widgets/sys-menu-button/sys-menu-button.vue";
 
 export default defineComponent({
-  components:{ MainMenu, TagMenu, AqScrollView },
+  components:{ MainMenu, TagMenu, SysMenuBotton, ElPopover },
   setup(props, context) {
     const store = useStore();
     const currentRouteValue = ref('002');
