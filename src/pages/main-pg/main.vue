@@ -49,7 +49,7 @@
           <wg-pin-icon icon="icon-business" :show-pin="true"></wg-pin-icon>
           <el-popover
             placement="bottom-start"
-            :width="120"
+            :width="150"
             trigger="hover">
             <div class="xcol">
               <sys-menu-botton v-for="(item,index) in store.getters['menu/getSysMenu']" 
@@ -140,7 +140,11 @@
       </div>
       <!-- 页面路由视窗 -->
       <div class="xcol flex-grow-1 bg-gray-100">
-        <aq-scroll-view class="xcol flex-grow-1 flex-shrink-0" :scroll-bar-props="{viewClass:'p-20'}" :disabled="false">
+        <aq-scroll-view class="xcol flex-grow-1 flex-shrink-0" 
+          :scroll-bar-props="{
+            viewClass:screen.isWS?'p-15':'p-10'
+          }" 
+          :disabled="false">
           <router-view key="inner_route" v-slot="{ Component }">
             <aq-transition 
               name="falling" 
