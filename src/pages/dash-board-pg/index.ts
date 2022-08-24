@@ -6,7 +6,7 @@ const router : RouteRecordRaw ={
   meta:{
     tokenRequire: true,
     powerRequire: [],
-    title:"dash-board",
+    title:"统计面板",
     keepAlive:false,
   },
   component: () => import('./page.vue')

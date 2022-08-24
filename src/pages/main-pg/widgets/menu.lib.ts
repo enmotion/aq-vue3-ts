@@ -8,7 +8,7 @@ export interface Props{
 export function useMenuBase(context:SetupContext){
   const mouseoverIndex = ref(-1);
   function buttonClick(event:{index:number,option:MenuOption}){
-    context.emit('update:value',event.option.value);
+    context.emit('update:value',event);
   };
   return{
     buttonClick,

@@ -221,7 +221,7 @@ export default defineComponent({
     const RegisterFormRef = ref<FormInstance>(); // 流程画布dom对象
     const ResetPasswordFormRef = ref<FormInstance>(); // 流程画布dom对象
     const router = useRouter();
-    const { proxy } = (getCurrentInstance() as { proxy : any });
+    const { proxy } = ( getCurrentInstance() as { proxy : any });
     // const route = useRoute();
     const store = useStore();
     let pageStatus:Ref<'Login'|'Register'|'ResetPassword'> = ref('Login');

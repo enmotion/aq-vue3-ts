@@ -1,6 +1,6 @@
 <template>
-  <div class="h-40 pl-15 pr-10 xrow items-center"
-    :class="[textColor]"
+  <div class="xrow items-center max-h-40"
+    :class="[textColor,less]"
     @mouseover="isMouseOver = true" 
     @mouseleave="isMouseOver = false">
     <span v-if="icon" 
@@ -21,6 +21,10 @@ export default defineComponent({
     label:{
       type:String as PropType<string>,
       default:'系统菜单'
+    },
+    less:{
+      type:String as PropType<string>,
+      default:'pl-15 pr-10'
     },
     icon:{
       type:String as PropType<string>,

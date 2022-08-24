@@ -6,7 +6,7 @@ const router : RouteRecordRaw ={
   meta:{
     tokenRequire: true,
     powerRequire: [],
-    title:"org-list",
+    title:"切换组织",
     keepAlive:false,
   },
   component: () => import('./page.vue')

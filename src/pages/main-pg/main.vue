@@ -49,16 +49,17 @@
           <wg-pin-icon icon="icon-business" :show-pin="true"></wg-pin-icon>
           <el-popover
             placement="bottom-start"
-            :width="150"
+            :width="100"
             trigger="hover">
             <div class="xcol">
               <sys-menu-botton v-for="(item,index) in store.getters['menu/getSysMenu']" 
                 :key="index" 
                 :label="item.label"
                 :icon="item.icon"
+                less="px-5"
                 text-color="text-gray-500 text-xs"
-                class="border-dark-4 border-b cursor-pointer hover:bg-gray-50 transition-all duration-300 last:border-none"
-                @click="routeForward(item)">
+                class="border-dark-4 h-35 px-0 border-b cursor-pointer bg-white hover:bg-gray-100 transition-all duration-300 last:border-none"
+                @click="routeForward({index:index,option:item})">
               </sys-menu-botton>
             </div>
             <template #reference>
@@ -90,7 +91,7 @@
                 :label="item.label"
                 :icon="item.icon"
                 class="border-b border-light-4 bg-d-1 last:border-none cursor-pointer hover:bg-d-3 transition-all duration-300"
-                @click="routeForward(item)">
+                @click="routeForward({index:index,option:item})">
               </sys-menu-botton>
             </div>
           </aq-transition>
@@ -123,15 +124,15 @@
             <span class="bg-p-2 h-50 rounded-md"></span>
           </div>
           <aq-scroll-view class="xcol w-full flex-grow-1">
-            <aq-transition name="falling"
-              :duration="{enter:300,leave:200}" 
-              :absolute-cell="true" 
+            <aq-transition name="zoomin"
+              :duration="{enter:200,leave:150}" 
+              :absolute-cell="true"
               class="w-full">
               <aq-tree-menu
                 :key="sideMenuRenderKey"
                 :options="SideMenuOptions" 
                 :is-serial-expanded="true" 
-                class="border-y w-full border-dark-4"
+                class=" origin-top border-y w-full border-dark-4 bg-white"
                 @update:value="routeForward">
               </aq-tree-menu>
             </aq-transition>
@@ -165,10 +166,11 @@
 
 <script lang="ts">
 import * as R from "ramda";
-import { defineComponent, ref, inject, computed } from 'vue';
+import { defineComponent, getCurrentInstance, ref, inject, computed, ComponentPublicInstance } from 'vue';
 import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { ElPopover } from 'element-plus';
+import type { MenuOption } from "@typ/public/mainPage";
 import MainMenu from "./widgets/main-menu/main-menu.vue";
 import TagMenu from "./widgets/tag-menu/tag-menu.vue";
 import SysMenuBotton from "./widgets/sys-menu-button/sys-menu-button.vue";
@@ -179,6 +181,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const store = useStore();
+    const { proxy } = getCurrentInstance() as { proxy:any };
     let openSliderSystemMenu = ref(false);
     const sideMenuRenderKey = ref(0);
     const screen = inject("screen") as {
@@ -195,15 +198,15 @@ export default defineComponent({
     // router.addRoute('main',PGS.Test02Pg);
     // router.addRoute('main',PGS.Test03Pg);
     
-    function setMenuFirstLevel(value:string){
-      if(store.getters['menu/getCurrent'].firstLevelValue != value){
-        store.commit('menu/setCurrent',{firstLevelValue:value});
+    function setMenuFirstLevel(event:{index:number,option:MenuOption}){
+      if(store.getters['menu/getCurrent'].firstLevelValue != event.option.value){
+        store.commit('menu/setCurrent',{firstLevelValue:event.option.value});
         sideMenuRenderKey.value++;
       }
     }
-    function routeForward(option:any){
-      console.log(option.value);
-      router.push({path:'/'+option.value,query:{id:'12'}});
+    function routeForward(event:{index:number,option:MenuOption}){
+      console.log(event.option.value);
+      proxy.$open({name:event.option.value,query:{id:'12'}})
     }
     return {
       store,

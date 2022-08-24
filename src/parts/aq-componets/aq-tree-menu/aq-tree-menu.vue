@@ -27,7 +27,7 @@
             :level="level+1"
             :is-serial-expanded="isSerialExpanded"
             class="h-auto flex-shrink-0"
-            @update:value="getSubOption">
+            @update:value="getSubOption($event,index)">
           </aq-tree-menu>
         </div>
       </aq-transition>
@@ -91,11 +91,11 @@ export default defineComponent({
         }
       }
       if(!option.children||option.children.length <=0 ){
-        context.emit('update:value',option);
+        context.emit('update:value',{index,option});
       }
     };
-    function getSubOption(option:any){
-      context.emit('update:value',option);
+    function getSubOption(option:any,index:number){
+      context.emit('update:value',{index,option});
     };
     return {
       currentIndex,

@@ -49,7 +49,7 @@ export default defineComponent({
   setup(props,context) {
     const { buttonClick, mouseoverIndex } = useMenuBase(context as SetupContext);
     function tagRemoveClick(event:{index:number,option:TagOption}){
-      console.log(event);
+      context.emit('update:value',event)
     }
     return {
       mouseoverIndex,

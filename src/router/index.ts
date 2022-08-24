@@ -53,6 +53,7 @@ router.beforeEach(async (to, from ) => {
       return { name:'erro403'};
     }
   }
+  store.commit('menu/setCurrent',{tagRouteName:to.name})
 });
 router.beforeResolve(async (to, from ) => {
   console.log(to,from,'beforeResolve')

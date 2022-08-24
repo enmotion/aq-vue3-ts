@@ -1,5 +1,6 @@
 import * as R from "ramda"; // 引入ramda
 import { useRoute } from "vue-router";
+import type { RouteLocationRaw } from "vue-router";
 import { Menu, MenuRecord } from "./types"; //引入用户模型描述
 
 export default {
@@ -47,7 +48,7 @@ export default {
     ] as Menu[],
     tagMenu:[
       {label:'统计面板',value:'dash-board',static:true}
-    ] as Array <Menu&{static?:boolean}>,
+    ] as Array < Menu & {static?:boolean} >,
     current:{
       tagRouteName:'', // 当前路由名
       firstLevelValue:'' // 当前一级菜单名
@@ -90,7 +91,12 @@ export default {
     }
   },
   mutations:{
-    setCurrent(state:{current:MenuRecord},data:MenuRecord){
+    createTagMenuItem(state:{current:MenuRecord,tagMenu:Array < Menu & {static?:boolean} >},to:Menu & {static?:boolean}):void{
+      if(!R.pluck('value',state.tagMenu).includes(to.value)){
+        state.tagMenu.push(to);
+      }
+    },
+    setCurrent(state:{current:MenuRecord},data:MenuRecord):void{
       state.current = R.mergeAll([state.current,data]);
     }
   },
