@@ -5,11 +5,11 @@
         <el-scrollbar
           v-bind="scrollBarProps" 
           class="flex flex-col"
-          :wrap-class="['flex flex-col',scrollBarProps.wrapClass]"
+          :wrap-class="['flex flex-col flex-grow-1',scrollBarProps.wrapClass]"
           :view-class="['flex flex-col flex-grow-1',scrollBarProps.viewClass]"
           :height="ScrollContainerDomSize.h+'px'" 
           @scroll="scroll">
-          <div ref="SlotContainerDom" 
+          <div ref="SlotContainerDom"
             class="flex flex-col flex-grow-1 flex-shrink-0">
             <slot></slot>
           </div>

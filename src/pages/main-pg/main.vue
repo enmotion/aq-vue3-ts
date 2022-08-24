@@ -57,7 +57,7 @@
                 :label="item.label"
                 :icon="item.icon"
                 text-color="text-gray-500 text-xs"
-                class="border-dark-4 border-b cursor-pointer hover:bg-gray-100 transition-all duration-300 last:border-none"
+                class="border-dark-4 border-b cursor-pointer hover:bg-gray-50 transition-all duration-300 last:border-none"
                 @click="routeForward(item)">
               </sys-menu-botton>
             </div>

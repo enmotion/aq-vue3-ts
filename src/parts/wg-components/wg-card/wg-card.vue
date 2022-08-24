@@ -21,8 +21,8 @@
             </el-tooltip>
           </div>
         </div>
-        <div class="h-auto w-full overflow-hidden xcol mt-15 text-justify text-sm text-gray-400">
-          <slot></slot>
+        <div class="xcol flex-grow-1 flex-shrink-1 h-auto w-full overflow-hidden mt-15 text-justify text-sm text-gray-400">
+          <slot :isFullScreen="isFullScreen"></slot>
         </div>
       </div>
       <div v-if="styleType==='B'" class="xrow flex-grow-1 bg-white border border-dark-2"
@@ -46,8 +46,8 @@
               </el-tooltip>
             </div>
           </div>
-          <div class="h-auto w-full overflow-hidden xcol mt-15 text-justify text-sm text-gray-400">
-            <slot></slot>
+          <div class="xcol flex-grow-1 flex-shrink-1 h-auto w-full overflow-hidden mt-15 text-justify text-sm text-gray-400">
+            <slot :isFullScreen="isFullScreen"></slot>
           </div>
         </div>
       </div>
