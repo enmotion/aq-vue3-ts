@@ -220,7 +220,9 @@ export default defineComponent({
     }
     async function routeTagRemoved(event:{index:number,option:MenuOption}){
       const next:TagRecordRaw = await store.dispatch('menu/removeTagitemFromTagMenu',event.option) as unknown as TagRecordRaw;
-      router.replace(next.to);
+      if(next){
+        router.replace(next.to);
+      }
     }
     return {
       store,
