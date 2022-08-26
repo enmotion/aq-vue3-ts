@@ -17,7 +17,7 @@
         <div class="h-100 xrow items-center">
           <aq-click-scroll-view class="h-40">
             <main-menu 
-              :value="store.getters['menu/getCurrent'].firstLevelValue" 
+              :value="store.getters['menu/getMainNavigateValue']" 
               :options="store.getters['menu/getAppMenu']" 
               @update:value="setMenuFirstLevel">
             </main-menu>
@@ -31,9 +31,10 @@
                 <span class="iconfont icon-arrowL font-bold btn text-xs text-light-12 mt-10 hover:text-s-10 duration-300 transition-all"></span>
               </template>
               <tag-menu  
-                :value="store.getters['menu/getCurrent'].tagRouteName" 
+                :value="route.name" 
                 :options="store.getters['menu/getTagMenu']" 
-                @update:value="routeForward">
+                @update:value="routeTagForward"
+                @remove:value="routeTagRemoved">
               </tag-menu>
               <template v-slot:rightArrow>
                 <span class="iconfont icon-arrowR font-bold btn text-xs text-light-12 mt-10 hover:text-s-10 duration-300 transition-all"></span>
@@ -85,12 +86,12 @@
             </span>
           </div>
           <aq-transition name="growy" :duration="{enter:200,leave:200}">
-            <div v-if="openSliderSystemMenu" key="aaaa" class="h-auto w-full overflow-hidden backdrop-blur-md border-t border-dark-2 bg-dark-8">
+            <div v-if="openSliderSystemMenu" key="aaaa" class="h-auto w-full overflow-hidden backdrop-blur-sm border-t border-dark-2 bg-dark-4">
               <sys-menu-botton v-for="(item,index) in store.getters['menu/getSysMenu']" 
                 :key="index" 
                 :label="item.label"
                 :icon="item.icon"
-                class="border-b border-light-4 bg-d-1 last:border-none cursor-pointer hover:bg-d-3 transition-all duration-300"
+                class="border-b h-80 border-light-4 bg-d-1 last:border-none cursor-pointer hover:bg-d-3 transition-all duration-300"
                 @click="routeForward({index:index,option:item})">
               </sys-menu-botton>
             </div>
@@ -168,12 +169,15 @@
 import * as R from "ramda";
 import { defineComponent, getCurrentInstance, ref, inject, computed, ComponentPublicInstance } from 'vue';
 import { useRouter, useRoute } from "vue-router";
+import type { RouteRecordRaw } from "vue-router";
 import { useStore } from "vuex";
 import { ElPopover } from 'element-plus';
-import type { MenuOption } from "@typ/public/mainPage";
+import type { MenuOption, TagRecordRaw } from "@typ/public/mainPage";
 import MainMenu from "./widgets/main-menu/main-menu.vue";
 import TagMenu from "./widgets/tag-menu/tag-menu.vue";
 import SysMenuBotton from "./widgets/sys-menu-button/sys-menu-button.vue";
+
+import PGS from '@src/pages/index';
 
 export default defineComponent({
   components:{ MainMenu, TagMenu, SysMenuBotton, ElPopover },
@@ -190,23 +194,33 @@ export default defineComponent({
       h: number;
     };
     const SideMenuOptions = computed(()=>{
-      let option:any = R.find(R.propEq('value',store.getters['menu/getCurrent'].firstLevelValue))(store.getters['menu/getAppMenu']);
+      let option:any = R.find(R.propEq('value',store.getters['menu/getMainNavigateValue']))(store.getters['menu/getAppMenu']);
       return option.children ? option.children : [];
     })
-
-    // router.addRoute('main',R.mergeAll([PGS.Test02Pg,{name:'mod',path:'/mod'}]) as RouteRecordRaw);
+    store.getters['menu/getAppMenu'][0].children.forEach((element:any) => {
+      router.addRoute('main',R.mergeDeepRight(PGS.ResetPwPg,{name:element.value,path:`/${element.value}`,meta:{
+        title:element.label,
+        avoidTag:false
+      }}) as RouteRecordRaw);
+    })
     // router.addRoute('main',PGS.Test02Pg);
     // router.addRoute('main',PGS.Test03Pg);
     
     function setMenuFirstLevel(event:{index:number,option:MenuOption}){
-      if(store.getters['menu/getCurrent'].firstLevelValue != event.option.value){
-        store.commit('menu/setCurrent',{firstLevelValue:event.option.value});
+      if(store.getters['menu/getMainNavigateValue'] != event.option.value){
+        store.commit('menu/setMainNavigateValue',event.option.value);
         sideMenuRenderKey.value++;
       }
     }
     function routeForward(event:{index:number,option:MenuOption}){
-      console.log(event.option.value);
       proxy.$open({name:event.option.value,query:{id:'12'}})
+    }
+    function routeTagForward(event:{index:number,option:MenuOption}){
+      router.replace(event.option.to);
+    }
+    async function routeTagRemoved(event:{index:number,option:MenuOption}){
+      const next:TagRecordRaw = await store.dispatch('menu/removeTagitemFromTagMenu',event.option) as unknown as TagRecordRaw;
+      router.replace(next.to);
     }
     return {
       store,
@@ -217,6 +231,8 @@ export default defineComponent({
       SideMenuOptions,
       sideMenuRenderKey,
       setMenuFirstLevel,
+      routeTagForward,
+      routeTagRemoved,
       routeForward,
     };
   },

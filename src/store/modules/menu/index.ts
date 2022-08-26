@@ -1,7 +1,8 @@
 import * as R from "ramda"; // 引入ramda
+import type { ActionContext } from "vuex";
 import { useRoute } from "vue-router";
-import type { RouteLocationRaw } from "vue-router";
-import { Menu, MenuRecord } from "./types"; //引入用户模型描述
+import type { Menu, MenuRecord } from "./types"; //引入用户模型描述
+import type { TagRecordRaw } from "@typ/public/mainPage";
 
 export default {
   namespaced: true,
@@ -9,14 +10,14 @@ export default {
     appMenu:[
       {label:'用户管理', value:'user', icon:'icon-flow',children:[
         {label:'员工管理', value:'user-manager', icon:'icon-flow',children:[]},
-        // {label:'等级管理', value:'system-manager', icon:'icon-flow',children:[]},
-        // {label:'组织管理', value:'report-manager', icon:'icon-flow',children:[]},
-        // {label:'岗位管理', value:'code-manager', icon:'icon-flow',children:[]},
-        // {label:'角色管理', value:'code-manager', icon:'icon-flow',children:[]},
-        // {label:'分级组织管理', value:'code-manager', icon:'icon-flow',children:[]},
-        // {label:'参与者属性管理', value:'code-manager', icon:'icon-flow',children:[]},
-        // {label:'用户组管理', value:'code-manager', icon:'icon-flow',children:[]},
-        // {label:'上下级管理', value:'code-manager', icon:'icon-flow',children:[]},
+        {label:'等级管理', value:'system-manager', icon:'icon-flow',children:[]},
+        {label:'组织管理', value:'report-manager', icon:'icon-flow',children:[]},
+        {label:'岗位管理', value:'position-manager', icon:'icon-flow',children:[]},
+        {label:'角色管理', value:'role-manager', icon:'icon-flow',children:[]},
+        {label:'分级组织管理', value:'level-manager', icon:'icon-flow',children:[]},
+        {label:'参与者属性管理', value:'props-manager', icon:'icon-flow',children:[]},
+        {label:'用户组管理', value:'group-manager', icon:'icon-flow',children:[]},
+        {label:'上下级管理', value:'leader-manager', icon:'icon-flow',children:[]},
       ]},
       {label:'表单管理', value:'form', icon:'icon-flow',children:[
         {label:'业务对象管理', value:'mine-office', icon:'icon-flow',children:[]},
@@ -41,25 +42,19 @@ export default {
       {label:'常用菜单', value:'menu-manager', icon:'icon-flow',children:[]},
     ] as Menu[],
     sysMenu:[
-      {label:'统计面板', icon:'icon-target', value:'dash-board'},
+      // {label:'统计面板', icon:'icon-target', value:'dash-board'},
       {label:'重置密码', icon:'icon-pw', value:'reset-pw'},
       {label:'切换租户', icon:'icon-flow', value:'org-list'},
       {label:'退出登录', icon:'icon-sys', value:'login'},
     ] as Menu[],
     tagMenu:[
-      {label:'统计面板',value:'dash-board',static:true}
-    ] as Array < Menu & {static?:boolean} >,
-    current:{
-      tagRouteName:'', // 当前路由名
-      firstLevelValue:'' // 当前一级菜单名
-    } as MenuRecord
+      // {label:'统计面板',value:'dash-board',static:true}
+    ] as TagRecordRaw[],
+    mainNavigateValue:'' as string,
   }, 
   getters:{
-    getCurrent(state:{current:MenuRecord,appMenu:Menu[],tagMenu:Array < Menu & {static?:boolean} >}):MenuRecord{
-      let current = R.clone(state.current);
-      current.tagRouteName = current.tagRouteName || state.tagMenu[0].value,
-      current.firstLevelValue = current.firstLevelValue || state.appMenu[0].value
-      return current;
+    getMainNavigateValue(state:{mainNavigateValue:string,appMenu:Menu[]}):string{
+      return state.mainNavigateValue ||state.appMenu[0].value;
     },
     getAppMenu(state:{appMenu:Menu[]}):Menu[]{
       return state.appMenu;
@@ -67,7 +62,7 @@ export default {
     getSysMenu(state:{sysMenu:Menu[]}):Menu[]{
       return state.sysMenu;
     },
-    getTagMenu(state:{tagMenu:Menu[]}):Menu[]{
+    getTagMenu(state:{tagMenu:TagRecordRaw[]}):TagRecordRaw[]{
       return state.tagMenu;
     },
     getCrumbPath(state:{sysMenu:Menu[]}):Menu[]{
@@ -91,14 +86,27 @@ export default {
     }
   },
   mutations:{
-    createTagMenuItem(state:{current:MenuRecord,tagMenu:Array < Menu & {static?:boolean} >},to:Menu & {static?:boolean}):void{
-      if(!R.pluck('value',state.tagMenu).includes(to.value)){
-        state.tagMenu.push(to);
+    setMainNavigateValue(state:{mainNavigateValue:string},value:string):void{
+      state.mainNavigateValue = value
+    },
+    tagInsert(state:{tagMenu:TagRecordRaw[]},tagItem:TagRecordRaw):void{
+      if(!R.pluck('value',state.tagMenu).includes(tagItem.value)){
+        state.tagMenu.push(tagItem);
       }
     },
-    setCurrent(state:{current:MenuRecord},data:MenuRecord):void{
-      state.current = R.mergeAll([state.current,data]);
+    tagRemove(state:{tagMenu:TagRecordRaw[]},index:number){
+      state.tagMenu.splice(index,1);
     }
   },
-  actions:{}
+  actions:{
+    removeTagitemFromTagMenu(context:any,tagItem:TagRecordRaw):TagRecordRaw{
+      const tags = context.getters.getTagMenu;
+      console.log(tags,tagItem);
+      const index = R.findIndex(R.propEq('value',tagItem.value))(tags);
+      const result = tags[index+1]||tags[index-1];
+      console.log(result,index);
+      context.commit('tagRemove',index);
+      return result;
+    }
+  }
 }

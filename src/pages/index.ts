@@ -18,5 +18,4 @@ PageNames.forEach((pagename:string)=>{
     let name = upperFirst(camelCase(pagename.split('/').splice(-2,1)[0])); //获取相关页面所在文件夹位置,取直接父文夹名为页面名称;
     PageRouter[name] = content.default||content;
 })
-console.log(PageRouter);
 export default PageRouter

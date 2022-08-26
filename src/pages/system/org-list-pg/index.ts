@@ -7,6 +7,7 @@ const router : RouteRecordRaw ={
     tokenRequire: true,
     powerRequire: [],
     title:"切换组织",
+    avoidTag:true,
     keepAlive:false,
   },
   component: () => import('./page.vue')

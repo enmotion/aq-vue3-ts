@@ -2,7 +2,7 @@
  * @ Author: enmoion
  * @ Create Time: 2022-06-20 10:12:05
  * @ Modified by: enmotion
- * @ Modified time: 2022-08-24 17:43:05
+ * @ Modified time: 2022-08-26 16:48:03
  * @ Description:
  * vue3-spa入口文件
  */
@@ -69,9 +69,7 @@ app.provide('$confirm', confirm);
 const open = function (to:RouteLocationRaw & {name:string},method:'replace'|'push'='push'):void{
    // 如果路由有名称则需要进行已存检查,或者 如果有path,则直接跳转
    if( to.name && router.hasRoute(to.name) ){
-      const routeRow:any = R.find(R.propEq('name',to.name))(router.getRoutes());
       router[method](to);
-      store.commit('menu/createTagMenuItem',{label:routeRow.meta.title,value:to.name})
    }else{
       router.push({name:'erro404'});
    }

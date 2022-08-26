@@ -6,6 +6,7 @@ const router : RouteRecordRaw ={
     tokenRequire: false,
     powerRequire: [],
     title:"设备受限",
+    avoidTag:true,
     keepAlive:false,
   },
   component: () => import('./erroDev.vue')

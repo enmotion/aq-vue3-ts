@@ -1,3 +1,4 @@
+import type { RouteLocationNormalized } from "vue-router"
 export interface Menu{
   label:string, // 菜单名称
   icon?:string, // 菜单icon图标
@@ -8,7 +9,7 @@ export interface Menu{
 }
 export interface MenuRecord{
   tagRouteName:string,
-  firstLevelValue:string,
+  sideMenuParentValue:string,
 }
 export interface Crumb{
   label:string,

@@ -6,6 +6,7 @@ const router : RouteRecordRaw ={
     tokenRequire: false,
     powerRequire: [],
     title:"路径错误",
+    avoidTag:true,
     keepAlive:false,
   },
   component: () => import('./erro404.vue')

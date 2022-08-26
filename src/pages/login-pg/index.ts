@@ -7,6 +7,7 @@ const router : RouteRecordRaw ={
     powerRequire: [],
     title:"登录",
     keepAlive:false,
+    avoidTag:true,
   },
   component: () => import('./login.vue')
 }

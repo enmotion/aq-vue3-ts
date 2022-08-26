@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "outDir": "./dist",
     "target": "esnext",/* target用于指定编译之后的版本目标: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'. */
     "module": "esnext",/* 用来指定要使用的模块标准: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
     "allowJs": true, /* allowJs设置的值为true或false，用来指定是否允许编译js文件，默认是false，即不编译js文件 */
@@ -22,8 +23,9 @@
       "@typ/*": ["types/*"],
     }
   },
-  "exclude": ["bpmn-js","bpmn-js-token-simulation"],
+  // "exclude": ["bpmn-js","bpmn-js-token-simulation",""],
   // "exclude": ["splitpanes","bpmn-js/**/*","bpmn-js-token-simulation"],
+  "exclude": ["node_modules"],
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "types/**/*.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

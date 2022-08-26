@@ -6,7 +6,8 @@ const router : RouteRecordRaw ={
   meta:{
     tokenRequire: true,
     powerRequire: [],
-    title:"修",
+    title:"重置密码",
+    avoidTag:true,
     keepAlive:false,
   },
   component: () => import('./page.vue')

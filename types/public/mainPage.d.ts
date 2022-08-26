@@ -1,8 +1,13 @@
 export declare interface MenuOption{
   label:string,
   value:string,
-  params?:any,
-  query?:any,
+  to:RouteLocationNormalized
+}
+export interface TagRecordRaw{
+  label:string,
+  value:string,
+  static?:boolean,
+  to?:RouteLocationNormalized
 }
 export declare interface TagOption{
   label:string,

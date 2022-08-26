@@ -1,11 +1,14 @@
 <template>
   <div class="h-full flex flex-col flex-grow-1 flex-shrink-0 text-xs overflow-hidden">
     <aq-console-view class="bg-white">
-      <div class="h-200 text-justify text-s-10">
-        {{store.getters['menu/getCurrent']}}
+      <div class="h-auto text-justify text-s-10">
+        {{store.getters['menu/getMainNavigateValue']}} 
       </div>
-      <div class="h-200 text-justify text-s-10">
-        {{store.getters['menu/getSysMenu']}}
+      <div class="h-auto text-justify text-s-10">
+        {{route.meta}} 
+      </div>
+      <div class="h-auto text-justify text-s-10">
+        {{store.getters['menu/getTagMenu']}}
       </div>
     </aq-console-view>
     <router-view key="root_router" v-slot="{ Component }">
@@ -25,7 +28,7 @@ import { useRoute } from "vue-router";
 
 export default defineComponent({
   setup(props:any,context:any) {
-    const route =reactive(useRoute());
+    const route = useRoute();
     const store = useStore();
     provide('screen',computed(()=>store.getters.screen));
     return {
