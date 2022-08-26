@@ -1,11 +1,11 @@
 <template>
   <div class="xrow items-end h-45 select-none" 
     @mouseleave="mouseoverIndex = -1">
-      <aq-transition-group name="zoomin" item-display="inline-block" :duration="{enter:100,leave:80}" class="h-40">
+      <aq-transition-group name="zoomin" item-display="inline-block" :duration="{enter:200,leave:100}" class="h-40">
         <div v-for="(option, index) in options" :key="option.value" class="h-40 w-auto origin-bottom-left overflow-hidden">
-          <div class="h-40 w-120 xrow items-center cursor-pointer overflow-hidden
-            transition-all duration-100"
-            :class="[option.value == value?'text-gray-500 bg-gray-100 rounded-t-md':'pt-5 hover:h-40 hover:pt-0 hover:bg-m hover:rounded-md ']"
+          <div class="h-40 w-120 xrow items-center cursor-pointer
+            overflow-hidden rounded-t-md transition-all duration-100 border-t border-dark-1"
+            :class="[option.value == value?'text-gray-500 bg-gray-100':'pt-5 hover:h-40 hover:pt-0 hover:bg-m hover:rounded-md ']"
             @mouseover="mouseoverIndex = index"
             @click="buttonClick({index:index,option:option})">
             <div class="h-20 xrow flex-grow-1 border-r border-light-6"
@@ -14,7 +14,9 @@
                 <span class="text-ellipsis overflow-hidden">{{option.label}}</span>
               </span>
               <span v-if="!option.static" 
-                class="bg-d-2 text-d-10 overflow-hidden h-20 flex scale-75 items-center justify-center iconfont icon-x text-xs font-bold hover:scale-90 hover:bg-d-10 hover:text-white transition-all duration-400" 
+                class="bg-d-2 text-d-10 overflow-hidden h-20 flex scale-75 items-center justify-center rounded-sm 
+                iconfont icon-x text-xs font-bold 
+                hover:scale-90 hover:bg-d-10 hover:text-white transition-all duration-200" 
                 :class="[option.value == value ? 'w-20' : 'w-0 opacity-0']"
                 @click.capture.stop="tagRemoveClick({index:index,option:option})">
               </span>
