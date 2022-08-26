@@ -3,7 +3,7 @@
     <div v-for="(option,index) in options" 
       :key="option.label" 
       class="xcol h-auto flex-grow-0 flex-shrink-0 border-b last:border-none last:border-light-1 border-dark-2">
-      <div class="xrow h-40 font-bold items-center cursor-pointer pl-20"
+      <div class="xrow h-40 font-bold items-center cursor-pointer pl-20 hover:bg-gray-100 transition-all duration-200"
         :class="[valuePath[level]==option.value?'tree-menu':'text-gray-500']"
         @click="buttonClick(option,index)">
         <span class="h-full" :style="{width:level*10+'px'}"></span>
