@@ -15,9 +15,10 @@ import 'element-plus/dist/index.css';
 import 'element-plus/theme-chalk/dark/css-vars.css'; // 引入element-ui 
 import './assets/css/index.css'; // 引入 tailwinds 编译后的全局 css
 import './assets/css/element-plus-revise.css'; // 引入 tailwinds 编译后的全局 css
+import router from  "@src/router"; // vue-router 路由配置
 import store from "@src/store"; // vuex 状态管理
 // import { RouteLocationRaw } from "vue-router";
-import router from  "@src/router"; // vue-router 路由配置
+
 import globalComponents from "@src/parts"; // 导入全部自定义公共组件
 import type { ElMessageBoxOptions, MessageParams } from "element-plus";
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -38,7 +39,7 @@ window.onresize=function(){
       w: document.body.clientWidth,
   })
 }; // 屏幕自适配侦测
-const app = createApp(App).use(store).use(router); // 构建应用添加 store, router
+const app = createApp(App).use(router).use(store); // 构建应用添加 store, router
 /* vue 全局注入 element-plus 弹窗方法 */
 // $message ------- 
 app.config.globalProperties.$message =function(msgParams:MessageParams & {message:string}){

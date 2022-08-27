@@ -15,39 +15,16 @@ const store = new ModStore({
         detail: {},
       }
     },
-    // dashbdLayout:{
-    //   type:Array,
-    //   method:"S",
-    //   default:[],
-    // },
-   
-    // wechatInfo:{
-    //   type:Object,
-    //   method:"S",
-    //   default:{
-    //     nickname:"",
-    //     openid:"",
-    //     headimgurl:""
-    //   }
-    // },
-    // menu:{
-    //   type:Array,
-    //   method:"S",
-    //   default:[]
-    // },
-    // crumb:{
-    //   type:Object,
-    //   method:"S",
-    //   default:{
-    //       path:[],
-    //       mark:"",
-    //   }
-    // },
-    // selecTreeData:{
-    //   type:Array,
-    //   method:"S",
-    //   default:[]
-    // },
+    mainNavigateValue:{
+      type:String,
+      method:'S',
+      default:''
+    },
+    tagMenu:{
+      type:Array,
+      method:'S',
+      default:[]
+    }
   },
   key:"WYLC!@#$SREWUILX"
 })

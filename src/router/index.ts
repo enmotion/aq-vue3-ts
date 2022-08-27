@@ -1,8 +1,10 @@
-import { createRouter, createWebHashHistory, useRoute } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import type { RouteRecordRaw } from "vue-router";
 import store from "@src/store";
 import * as R from "ramda";
 import PGS from '@src/pages/index';
+
+console.log(store.getters['menu/getAppMenu']); // 考虑到页面路由需要交由后台管理, 此处将添加路由 routes 它将在主app执行前完成
 
 const router = createRouter({
   history: createWebHashHistory(),

@@ -3,7 +3,8 @@ import type { ActionContext } from "vuex";
 import { useRoute } from "vue-router";
 import type { Menu, MenuRecord } from "./types"; //引入用户模型描述
 import type { TagRecordRaw } from "@typ/public/mainPage";
-
+import catcher from "@src/store/persistent";
+console.log('menu inited')
 export default {
   namespaced: true,
   state:{
@@ -47,10 +48,8 @@ export default {
       {label:'切换租户', icon:'icon-flow', value:'org-list'},
       {label:'退出登录', icon:'icon-sys', value:'login'},
     ] as Menu[],
-    tagMenu:[
-      // {label:'统计面板',value:'dash-board',static:true}
-    ] as TagRecordRaw[],
-    mainNavigateValue:'' as string,
+    tagMenu:catcher.$data.tagMenu as TagRecordRaw[],// [{label:'统计面板',value:'dash-board',static:true}]
+    mainNavigateValue: catcher.$data.mainNavigateValue as string,
   }, 
   getters:{
     getMainNavigateValue(state:{mainNavigateValue:string,appMenu:Menu[]}):string{
@@ -87,15 +86,18 @@ export default {
   },
   mutations:{
     setMainNavigateValue(state:{mainNavigateValue:string},value:string):void{
-      state.mainNavigateValue = value
+      state.mainNavigateValue = value;
+      catcher.$data.mainNavigateValue = state.mainNavigateValue;
     },
     tagInsert(state:{tagMenu:TagRecordRaw[]},tagItem:TagRecordRaw):void{
       if(!R.pluck('value',state.tagMenu).includes(tagItem.value)){
         state.tagMenu.push(tagItem);
+        catcher.$data.tagMenu = state.tagMenu
       }
     },
     tagRemove(state:{tagMenu:TagRecordRaw[]},index:number){
       state.tagMenu.splice(index,1);
+      catcher.$data.tagMenu = state.tagMenu
     }
   },
   actions:{

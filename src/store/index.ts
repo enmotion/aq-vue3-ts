@@ -11,7 +11,7 @@ import { createStore } from 'vuex'; // 引入vuex/4.x的createStore方法
 import user from "./modules/user";
 import menu from "./modules/menu";
 import { State, AppInfo, Screen, Device, KeepAlivePage, PluginKeys } from "./types";
-
+console.log('store inited')
 export default createStore({
   state: (): State => {
     return {

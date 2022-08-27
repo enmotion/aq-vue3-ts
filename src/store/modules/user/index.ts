@@ -1,12 +1,12 @@
 import * as R from "ramda"; // 引入ramda
 import UserStore from "./types"; //引入用户模型描述
-import store from "@src/store/persistent";
+import catcher from "@src/store/persistent";
 
 export default {
   namespaced: true,
   state:{
-    userInfo : store.$data.UserInfo as UserStore.Info,
-    token : store.$data.token as UserStore.Token,
+    userInfo : catcher.$data.UserInfo as UserStore.Info,
+    token : catcher.$data.token as UserStore.Token,
   },
   getters:{
     getUserInfo(state:UserStore.State):UserStore.Info{
@@ -18,10 +18,10 @@ export default {
   },
   mutations:{
     setUserInfo(state:UserStore.State,params:UserStore.Info){
-      state.userInfo = store.$data.userInfo = params;
+      state.userInfo = catcher.$data.userInfo = params;
     },
     setToken(state:UserStore.State,params:UserStore.Token){
-      state.token = store.$data.token = params;
+      state.token = catcher.$data.token = params;
     }
   },
   actions:{

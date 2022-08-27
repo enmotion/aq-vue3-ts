@@ -28,6 +28,7 @@ import { useRoute } from "vue-router";
 
 export default defineComponent({
   setup(props:any,context:any) {
+    console.log('app inited')
     const route = useRoute();
     const store = useStore();
     provide('screen',computed(()=>store.getters.screen));
