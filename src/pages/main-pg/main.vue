@@ -197,14 +197,7 @@ export default defineComponent({
       let option:any = R.find(R.propEq('value',store.getters['menu/getMainNavigateValue']))(store.getters['menu/getAppMenu']);
       return option.children ? option.children : [];
     })
-    store.getters['menu/getAppMenu'][0].children.forEach((element:any) => {
-      router.addRoute('main',R.mergeDeepRight(PGS.ResetPwPg,{name:element.value,path:`/${element.value}`,meta:{
-        title:element.label,
-        avoidTag:false
-      }}) as RouteRecordRaw);
-    })
-    // router.addRoute('main',PGS.Test02Pg);
-    // router.addRoute('main',PGS.Test03Pg);
+    
     
     function setMenuFirstLevel(event:{index:number,option:MenuOption}){
       if(store.getters['menu/getMainNavigateValue'] != event.option.value){

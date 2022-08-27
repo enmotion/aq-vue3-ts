@@ -4,8 +4,6 @@ import store from "@src/store";
 import * as R from "ramda";
 import PGS from '@src/pages/index';
 
-console.log(store.getters['menu/getAppMenu']); // 考虑到页面路由需要交由后台管理, 此处将添加路由 routes 它将在主app执行前完成
-
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -71,5 +69,11 @@ router.beforeEach(async (to, from ) => {
 });
 router.beforeResolve(async (to, from ) => {
   // console.log(to,from,'beforeResolve')
+})
+store.getters['menu/getAppMenu'][0].children.forEach((element:any) => {
+  router.addRoute('main',R.mergeDeepRight(PGS.ResetPwPg,{name:element.value,path:`/${element.value}`,meta:{
+    title:element.label,
+    avoidTag:false
+  }}) as RouteRecordRaw);
 })
 export default router;
