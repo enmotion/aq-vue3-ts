@@ -5,7 +5,8 @@ const router : RouteRecordRaw ={
   meta:{
     tokenRequire: false,
     powerRequire: [],
-    title:"登录",
+    title:"封装动画测试",
+    avoidTag:true,
     keepAlive:false,
   },
   component: () => import('./transition-pg.vue')

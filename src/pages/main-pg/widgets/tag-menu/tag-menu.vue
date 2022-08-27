@@ -1,15 +1,15 @@
 <template>
   <div class="xrow items-end h-45 select-none" 
     @mouseleave="mouseoverIndex = -1">
-      <aq-transition-group name="scrolldown" item-display="inline-block" :duration="{enter:200,leave:100}" class="h-40">
+      <aq-transition-group name="scrollup" item-display="inline-block" :duration="{enter:200,leave:100}" class="h-40">
         <div v-for="(option, index) in options" :key="option.value" class="h-40 w-auto origin-bottom-left overflow-hidden">
           <div class="h-40 w-120 xrow flex-shrink-0 items-center cursor-pointer
             overflow-hidden rounded-t-md transition-all duration-100 border-t border-dark-1"
-            :class="[option.value == value?'text-gray-500 bg-gray-100':'pt-5 hover:h-40 hover:pt-0 hover:bg-m hover:rounded-md ']"
+            :class="[option.value == value?'text-gray-500 bg-gray-100':'pt-5 hover:h-40 hover:pt-0 hover:bg-m hover:rounded-t-md ']"
             @mouseover="mouseoverIndex = index"
             @click="buttonClick({index:index,option:option})">
-            <div class="h-20 xrow flex-grow-1 border-r border-light-6"
-              :class="[option.value == value ? 'pl-15 pr-10' : 'px-15']">
+            <div class="h-20 xrow flex-grow-1"
+              :class="[option.value == value ? 'pl-15 pr-10' : 'px-15',mouseoverIndex == index||mouseoverIndex-1 == index ?'':'border-r border-light-6']">
               <span class=" whitespace-nowrap w-0 xrow items-center flex flex-grow-1 font-bold">
                 <span class="text-ellipsis overflow-hidden">{{option.label}}</span>
               </span>
@@ -23,7 +23,7 @@
             </div>
           </div>
         </div>
-      </aq-transition-group>      
+      </aq-transition-group>
   </div>
 </template>
 

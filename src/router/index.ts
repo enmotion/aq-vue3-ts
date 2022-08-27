@@ -10,19 +10,19 @@ const router = createRouter({
     PGS.LoginPg,
     PGS.BpmnEditorPg,
     PGS.TransitionPg,
+    PGS.TinymcePg,
     R.mergeAll([PGS.MainPg,
     {
       children: [
         PGS.DashBoardPg,
-        PGS.ResetPwPg,
-        PGS.OrgListPg,
-
         PGS.UserManagerPg,
         PGS.FormManagerPg,
         PGS.WorkFlowPg,
       ]
     }
     ]) as RouteRecordRaw,
+    PGS.ResetPwPg,
+    PGS.OrgListPg,
     PGS.Erro403Pg,
     PGS.ErroDevPg,
     PGS.Erro404Pg,

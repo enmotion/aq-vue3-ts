@@ -101,10 +101,8 @@ export default {
   actions:{
     removeTagitemFromTagMenu(context:any,tagItem:TagRecordRaw):TagRecordRaw{
       const tags = context.getters.getTagMenu;
-      console.log(tags,tagItem);
       const index = R.findIndex(R.propEq('value',tagItem.value))(tags);
       const result = tags[index+1]||tags[index-1];
-      console.log(result,index);
       context.commit('tagRemove',index);
       return result;
     }
