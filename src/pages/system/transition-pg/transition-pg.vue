@@ -104,7 +104,7 @@
               :item-display="transitionGroupItemDisplay"
               :duration="transitionDuration">
               <div v-for="(item,index) in TransitionGroupItems" :key="item.key" 
-                class="p-5 h-100 to-tc flex-grow-1"
+                class="p-5 h-100 to-tc flex-grow-1 flex-shrink-0"
                 :class="[transitionGroupItemDisplay=='block'?'w-full':'w-2/12']"
                 @click="removeGroupItem(index)">
                 <span class="flex h-full items-center justify-center bg-p-10 text-white font-bold text-sm flex-grow-1 btn rounded">{{item.name}}</span>

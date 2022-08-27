@@ -32,7 +32,7 @@
   transition: all var(--leave) var(--leavetiming);
 }
 .aq-transition-group>.container>.growy-enter-from,
-.aq-transition-group .container .growy-leave-to {
+.aq-transition-group>.container>.growy-leave-to {
   opacity: 0;
   transform: scaleY(0.01) translate(0px, 0);
 }

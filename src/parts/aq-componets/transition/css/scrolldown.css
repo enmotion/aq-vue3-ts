@@ -33,7 +33,7 @@
 .aq-transition-group>.container>.scrolldown-leave-to {
   z-index: 2;
   opacity: 0;
-  transform: translateY(50%);
+  transform: translateY(-50%);
 }
 .aq-transition-group>.container>.scrolldown-leave-active {
   position: absolute;

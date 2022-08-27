@@ -1,9 +1,9 @@
 <template>
   <div class="xrow items-end h-45 select-none" 
     @mouseleave="mouseoverIndex = -1">
-      <aq-transition-group name="zoomin" item-display="inline-block" :duration="{enter:200,leave:100}" class="h-40">
+      <aq-transition-group name="scrolldown" item-display="inline-block" :duration="{enter:200,leave:100}" class="h-40">
         <div v-for="(option, index) in options" :key="option.value" class="h-40 w-auto origin-bottom-left overflow-hidden">
-          <div class="h-40 w-120 xrow items-center cursor-pointer
+          <div class="h-40 w-120 xrow flex-shrink-0 items-center cursor-pointer
             overflow-hidden rounded-t-md transition-all duration-100 border-t border-dark-1"
             :class="[option.value == value?'text-gray-500 bg-gray-100':'pt-5 hover:h-40 hover:pt-0 hover:bg-m hover:rounded-md ']"
             @mouseover="mouseoverIndex = index"
