@@ -5,9 +5,10 @@
     <div class="overflow-hidden bg-p-2"
       :class="[screen.isWS?'xrow w-8/12 rounded-md shadow-xl':'xcol flex-grow-1']" style="min-height:540px">
       <!-- kv -->
-      <div class="relative text-white items-start flex bg-blue transition-all duration-700"
-        :class="[screen.isWS?'w-7/12 ':' xcol flex-grow-1 h-2/6']">
-        <div class="absolute z-10 h-full w-full xcol transition-all duration-700"
+      <div class="relative text-white items-start flex bg-texture transition-all duration-700"
+        :class="[screen.isWS?'w-7/12 ':' xcol flex-grow-1 h-2/6']"
+        style="background-size:180%">
+        <div class="absolute z-10 h-full w-full xcol bg-gradient-to-tl from-d-3 to-p-2 transition-all duration-700"
           :class="[screen.isWS?'p-30':'p-20 justify-center items-cente']"
           style="font-size:18px">
           <span class="flex items-start iconfont icon-unicom-logo"
@@ -30,7 +31,7 @@
             <span class="mt-5 text-light-32 font-bold scale-75 origin-left" style="font-size:12px">copyright : yanjun-mad-lab.com</span>
           </span>
         </div>
-        <key-visual v-if="screen.isWS" class="w-full h-full"
+        <key-visual v-if="screen.isWS" class="w-full h-full z-10"
           :class="[screen.isWS?'p-80':'p-40']">
         </key-visual>
       </div>

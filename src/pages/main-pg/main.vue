@@ -144,7 +144,7 @@
       <div class="xcol flex-grow-1 bg-gray-100">
         <aq-scroll-view class="xcol flex-grow-1 flex-shrink-0" 
           :scroll-bar-props="{
-            viewClass:screen.isWS?'p-15':'p-10'
+            viewClass:screen.isWS?'p-20':'p-10'
           }" 
           :disabled="false">
           <router-view key="inner_route" v-slot="{ Component }">
