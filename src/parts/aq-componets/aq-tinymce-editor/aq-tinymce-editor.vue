@@ -1,8 +1,21 @@
 <template>
-  <div ref="tinymceContainerDom" class="xcol">
-    <textarea ref="tinymceDom" :key="tinymceRenderKey" class="xcol"></textarea>
+  <div ref="tinymceContainerDom" class="xcol tinymce-editor overflow-hidden" >
+    <div class="xcol flex-grow-1" :class="[disabled?'-mx-10 -mt-15':'']">
+      <textarea ref="tinymceDom" :key="tinymceRenderKey" class="xcol flex-grow-1"></textarea>
+    </div>    
   </div>
 </template>
+
+<style>
+@import url('tinymce/skins/content/tinymce-5/content.min.css');
+/* @import url('tinymce/skins/content'); */
+.tinymce-editor .tox-tinymce{
+  border:none !important
+}
+body{
+  margin: 0px !important;
+}
+</style>
 
 <script lang="ts">
 /* 
@@ -10,7 +23,7 @@
  * vite-plugin-static-copy 插件是完成此拷贝的关键
 */
 import * as R from "ramda";
-import { defineComponent, ref, reactive, computed, onMounted, onUnmounted } from 'vue';
+import { defineComponent, ref, reactive, computed, onMounted, onUnmounted, watch } from 'vue';
 import type { PropType } from "vue";
 import tinymce from "tinymce";
 import type { RawEditorOptions, Editor } from "tinymce/tinymce";
@@ -25,11 +38,11 @@ export default defineComponent({
   props:{
     content:{
       type:String as PropType<string>,
-      default:'dfadsfsdasr',
+      default:'',
     },
     disabled:{
       type:Boolean as PropType<boolean>,
-      default:true,
+      default:false,
     },
     menubar:{
       type:Boolean as PropType<boolean>,
@@ -43,37 +56,43 @@ export default defineComponent({
       type:Boolean as PropType<boolean>,
       default:true,
     },
+    initOption:{
+      type:Object as PropType<RawEditorOptions>,
+      default:()=>({}),
+    }
   },
+  emits:['update:content'],
   setup(props,context) {
     const tinymceContainerDom = ref({} as {value?:Element}); //容器DOM
     const tinymceDom = ref({} as {value?:HTMLElement}); //实例DOM
     const tinymceVesselSize = ref({width:0,height:0} as DOMRect); // 实例容器布局数据
+    const tinymceEditorInstance = ref({} as Editor)
     const tinymceContainerObserver = reactive({} as any); // tinymceContainerDom 容器尺寸变化监听器
+
     let tinymceRenderKey = ref(0);
     let content = ref(props.content); // 引入外部变量
     const editorConfig = computed(()=>{
-      return baseDefaultConfig
-    })
-    onMounted(()=>{
-      tinymceVesselSize.value = (tinymceContainerDom.value as Element).getBoundingClientRect();
-      tinymceContainerObserver.value = new ResizeObserver(() => {
-        tinymceVesselSize.value = (tinymceContainerDom.value as Element).getBoundingClientRect();
-        tinymceInit(editorConfig.value,tinymceVesselSize.value)
-      })
-      tinymceContainerObserver.value.observe(tinymceContainerDom.value); // 添加侦听
-      tinymceInit(editorConfig.value,tinymceVesselSize.value)
-    })
-    onUnmounted(()=>{
-      tinymceContainerObserver.value.disconnect(); // 关闭侦听
-    })
-    function onChanged(v:string){
-      console.log(v,'here is what i say')
+      let config:RawEditorOptions = R.mergeDeepRight(R.pick(['menubar','resize','statusbar'],props), props.initOption);
+      if(props.disabled){
+        config.menubar=false;
+        config.resize=false;
+        config.statusbar=false;
+        config.readonly=true,
+        config.plugins='autoresize'
+        config.toolbar=''
+      }
+      return R.mergeDeepRight(baseDefaultConfig,config) as RawEditorOptions
+    })    
+    function onChanged(content:string){
+      context.emit('update:content',content);
     }
     function tinymceInit(config:RawEditorOptions,containerSize:DOMRect){
+      // console.log(config,'tinymceInit')
       tinymce.init(R.mergeDeepRight( config ,{
         target:tinymceDom.value,
         height:containerSize.height,
         setup:(editor) => {
+          tinymceEditorInstance.value = editor;
           useFullWidth(editor);
           editor.on('init', (e) => {
             editor.setContent(content.value)
@@ -84,6 +103,21 @@ export default defineComponent({
         }
       } as RawEditorOptions) as RawEditorOptions)
     }
+    // watch
+    watch(()=>props.content,(n,o)=>{
+      tinymceEditorInstance.value.setContent(n)
+    })
+    // 生命周期处理函数
+    onMounted(()=>{
+      tinymceContainerObserver.value = new ResizeObserver(() => {
+        tinymceVesselSize.value = (tinymceContainerDom.value as Element).getBoundingClientRect();
+        tinymceInit(editorConfig.value,tinymceVesselSize.value)
+      })
+      tinymceContainerObserver.value.observe(tinymceContainerDom.value); // 添加侦听
+    })
+    onUnmounted(()=>{
+      tinymceContainerObserver.value.disconnect(); // 关闭侦听
+    })
     return {
       tinymceDom,
       tinymceContainerDom,

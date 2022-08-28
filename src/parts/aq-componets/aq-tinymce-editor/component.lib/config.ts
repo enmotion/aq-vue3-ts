@@ -3,7 +3,7 @@ import type { RawEditorOptions } from "tinymce/tinymce";
 import 'tinymce/plugins/advlist';
 import 'tinymce/plugins/anchor';
 import 'tinymce/plugins/autolink';
-// import 'tinymce/plugins/autoresize'; 
+import 'tinymce/plugins/autoresize'; //自动高度 开启后，则不会适应外部容器高度
 import 'tinymce/plugins/autosave';
 import 'tinymce/plugins/charmap';
 import 'tinymce/plugins/code';
@@ -63,7 +63,6 @@ const option:RawEditorOptions = {
   // remove_script_host : true,
   document_base_url :'', // 文件基链接，上传图片等文件操作时，上传后返回的线上地址，可在显示时添加该前置地址; 
   images_upload_handler:function (blobInfo, progress):Promise<string>{
-    console.log('sssss')
     return new Promise((resolve,reject)=>{
       resolve('ssss')
     });
@@ -82,6 +81,7 @@ const option:RawEditorOptions = {
       title: string;
       items: string;
   }>,
+  font_size_formats:'12px 14px 16px 18px 20px 22px 24px 26px 28px 32px 36px 40px 50px 60px 80px 100px',
   line_height_formats: '1 1.2 1.4 1.6 1.8 2 3 4 5 6', // 行高设置配置
   plugins:'fullscreen lists image media table code link wordcount preview insertdatetime codesample',
   toolbar:'fullscreen | code | bold italic underline strikethrough | fontsize | lineheight | bullist numlist | forecolor backcolor | alignleft aligncenter alignright alignjustify | outdent indent blockquote | link unlink hr image media insertdatetime codesample | removeformat | fimg | cleanstyle',
