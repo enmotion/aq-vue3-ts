@@ -5,6 +5,7 @@ import AutoImport from 'unplugin-auto-import/vite';// element-ui 按需引用配
 import Components from 'unplugin-vue-components/vite';// element-ui 按需引用配置包
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';// element-ui 按需引用配置包
 import compressPlugin from 'vite-plugin-compression';
+import { viteStaticCopy } from 'vite-plugin-static-copy'; // 打包时复制文件夹内容 
 import vueJsx from '@vitejs/plugin-vue-jsx'; // vue 支持 jsx
 // import legacy from '@vitejs/plugin-legacy'; // IE11 兼容方案
 
@@ -48,6 +49,18 @@ export default(({ mode } : { mode : any })=>{
       }),
       Components({
         resolvers: [ElementPlusResolver()],
+      }),
+      viteStaticCopy({
+        targets:[
+          {src:'./node_modules/tinymce/icons/**/*',dest:'tinymce.lib/icons'},
+          {src:'./node_modules/tinymce/models/**/*',dest:'tinymce.lib/models'},
+          {src:'./node_modules/tinymce/skins/**/*',dest:'tinymce.lib/skins'},
+          {src:'./node_modules/tinymce/themes/**/*',dest:'tinymce.lib/themes'},
+          {src:'./src/parts/aq-componets/aq-tinymce-editor/language/ZH/zh-Hans.js',dest:'tinymce.lib/language/zh_CN.js'}
+        ],
+        //verbose:true,// 控制台输出copy日志 默认为false
+        //copyOnce:true,
+        //hook: 'writeBundle' // notice here
       }),
       // legacy({
       //   targets: ['ie >= 11'],

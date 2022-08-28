@@ -31,6 +31,7 @@
 import { defineComponent } from 'vue';
 import type { PropType, SetupContext } from 'vue';
 import type { TagRecordRaw } from "types/public/mainPage";
+import type { RouteRecordName } from 'vue-router';
 import { useMenuBase } from "../menu.lib"; // 组合式api代码复用
 import { ElTooltip } from 'element-plus';
 export default defineComponent({
@@ -40,7 +41,7 @@ export default defineComponent({
       default:()=>[]
     },
     value:{
-      type:String as PropType<string>,
+      type:String as PropType<RouteRecordName|null>,
       default:''
     }
   },
