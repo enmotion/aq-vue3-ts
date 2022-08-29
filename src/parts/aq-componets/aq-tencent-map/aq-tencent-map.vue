@@ -40,6 +40,10 @@ export default defineComponent({
       type:String as PropType<'3D'|'2D'>,
       default:'2D'
     },
+    mapStyleId:{
+      type:String as PropType<string>,
+      default:''
+    },
     zoom:{
       type:Number as PropType<number>,
       default:17,
@@ -68,9 +72,9 @@ export default defineComponent({
           draggable:!props.disabled,
           scrollable:!props.disabled,
           viewMode:props.viewMode,
+          mapStyleId:props.mapStyleId,
           showControl:false,
           scale:1,
-          mapStyleId:'2',
           baseMap:{type:'vector'}
         } as TencentMap.TencentMapInitOptions
       );
