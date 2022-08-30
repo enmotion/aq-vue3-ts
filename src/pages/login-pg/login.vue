@@ -65,7 +65,6 @@
               mode="out-in" 
               :duration="{enter:280,leave:200}"
               class="flex-grow-1">
-
               <div v-if="pageStatus == 'Login'" key="login" class="xcol flex-grow-1 flex-shrink-0 justify-center w-full">
                 <el-form ref="LoginFormRef" :model="reqdata" :rules="ruleConfig.rule" :show-message="false">
                   <el-form-item prop="email" class="mb-10 last:mb-0">
@@ -221,12 +220,12 @@
 
 <script lang="ts">
 import {ax,apis} from "@src/restful";
-import { defineComponent, ref, reactive, inject, computed, Ref, getCurrentInstance, onMounted } from 'vue';
+import { defineComponent, ref, reactive, inject, computed, getCurrentInstance, onMounted, watch } from 'vue';
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { ElInput, ElButton, ElForm, ElFormItem } from "element-plus";
 
-import type { UnwrapNestedRefs, } from 'vue';
+import type { UnwrapNestedRefs, Ref } from 'vue';
 import type { FormInstance } from 'element-plus';
 import type { ValidateFieldsError } from 'async-validator';
 import type { UserInfo } from "./types/login";
@@ -249,6 +248,9 @@ export default defineComponent({
     onMounted(()=>{
       // console.log('login onMouned');
       codeCaptchaAction()
+    })
+    watch(()=> pageStatus.value,(n,o)=>{
+      codeCaptchaAction();
     })
     const reqdata:UnwrapNestedRefs<UserInfo> = reactive({
       email:'',
@@ -274,7 +276,7 @@ export default defineComponent({
       })
     };
     function codeCaptchaAction(){
-      ax.send(apis.oauthCaptcha,{}).then(res=>{
+      ax.send(apis.oauthCaptcha).then(res=>{
         imageCode.data = res.data;
       })
     }

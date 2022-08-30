@@ -42,7 +42,7 @@ class ModAxios {
     // console.log(middleware)
     this.onion.use(middleware);
   }
-  public send(api:ModAxiosType.RequestOption, payload:any, config:ModAxiosType.BaseConfig={}):Promise<any> {
+  public send(api:ModAxiosType.RequestOption, payload:any={}, config:ModAxiosType.BaseConfig={}):Promise<any> {
     // 如果 api 为处理函数,则以 (payload,config) 为参数 交由 api 函数生成接口默认配置
     var apiconfig:ModAxiosType.RequestConfig = api.constructor == Function ? (api as ModAxiosType.RequestCreator)(payload, config) : R.clone(api as ModAxiosType.RequestConfig);
     // // 组装管道数据格式

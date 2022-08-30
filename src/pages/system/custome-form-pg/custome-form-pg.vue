@@ -1,0 +1,101 @@
+<template>
+  <div class="xcol flex-gorw-1">
+    <div class="xrow w-full flex-grow-1 h-50 bg-white border-b border-dark-4 px-10">
+      <span class="p-5 xrow justify-start items-center w-6/12">
+        
+      </span>
+      <span class="p-5 xrow justify-start items-center w-6/12">
+        
+      </span>
+    </div>
+    <div class="h-full w-full bg-white xrow flex-wrap justify-start">    
+      <div class="w-6/12 bg-dark-2 border-r border-dark-2 p-10 xcol">
+        
+      </div>
+      <div class="w-6/12 border-r border-dark-2 p-10 xcol">
+        
+      </div>
+    </div>
+  </div>
+  
+</template>
+<style scoped>
+</style>
+<script lang="ts">
+import { defineComponent, ref, reactive } from 'vue';
+import { ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton } from "element-plus";
+
+export default defineComponent({
+  name:'custome-form',
+  components:{ ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton },
+  setup(props,context) {
+    let transitionSwitch = ref(true);
+    let transitionAbsoluteCell = ref(false);
+    let staticHeigh = ref(true);
+    let transitionMode = ref('default');
+    let transitionTiming = reactive({enter:'ease',leave:'ease'});
+    let transitionItemIndex = ref(0);
+    let transitionGroupItemDisplay = ref('inline-block');
+    let transitionGroupTypeName = ref('growy');
+    let transitionTimingOptions = reactive([
+      {label:'ease',value:'ease'},
+      {label:'ease-out',value:'ease-out'},
+      {label:'ease-in',value:'ease-in'},
+      {label:'ease-in-out',value:'ease-in-out'},
+    ]);
+    let transitionModeOptions = reactive([
+      {label:'defalut',value:'default'},
+      {label:'in-out',value:'in-out'},
+      {label:'out-in',value:'out-in'},
+    ]);
+    let transitionDuration = reactive({
+      enter:300,
+      leave:300,
+    })
+    let transitionItems = reactive([
+      {name:'fade'},
+      {name:'scrolldown'},
+      {name:'zoomin'},
+      {name:'scrollup'},
+      {name:'scrollleft'},
+      {name:'scrollright'},
+      {name:'falling'},
+      {name:'zoombounce'},
+      {name:'flipx'},
+      {name:'flipy'},
+      {name:'growy'},
+      {name:'growx'},
+    ])
+    let transtionGroupItemDisplayTypes = reactive([
+      {name:'block'},
+      {name:'inline-block'}
+    ])
+    let TransitionGroupItems = reactive([] as {name:string,key:number}[]);
+    function addGroupItems(){
+      transitionItemIndex.value++;
+      TransitionGroupItems.push({name:'item-'+transitionItemIndex.value,key:Date.now()});
+      console.log('sss')
+    }
+    function removeGroupItem(index:number){
+      TransitionGroupItems.splice(index,1);
+    }
+    return {
+      staticHeigh,
+      transitionSwitch,
+      transitionAbsoluteCell,
+      transitionMode,
+      transitionModeOptions,
+      transitionItems,
+      transitionTiming,
+      transitionTimingOptions,
+      transitionDuration,
+      TransitionGroupItems,
+      transitionGroupTypeName,
+      transitionGroupItemDisplay,
+      transtionGroupItemDisplayTypes,
+      addGroupItems,
+      removeGroupItem
+    }
+  },
+})
+</script>

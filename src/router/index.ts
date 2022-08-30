@@ -12,6 +12,7 @@ const router = createRouter({
     PGS.TransitionPg,
     PGS.TinymcePg,
     PGS.TencentMapPg,
+    PGS.CustomeFormPg,
     R.mergeAll([PGS.MainPg,
     {
       children: [
