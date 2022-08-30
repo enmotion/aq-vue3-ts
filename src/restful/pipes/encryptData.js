@@ -8,7 +8,7 @@ function pipe(){
                 }
             }
         }
-        console.log(ctx,'encryptData');
+        // console.log(ctx,'encryptData');
         await next()
     }
 }

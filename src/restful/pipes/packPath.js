@@ -12,7 +12,7 @@ function pipe(pathPicker, keyPicker) {
       }
       return R.isNil(value) ? str : value // 如值不为空，则返回值
     });
-    console.log(ctx,{ url: ctx.axios.url }, 'packDataToPath')
+    // console.log(ctx,{ url: ctx.axios.url }, 'packDataToPath')
     await next()
   }
 }

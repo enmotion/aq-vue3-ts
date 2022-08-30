@@ -4,7 +4,7 @@ function pipe(){
         var hasParams = ctx.config.queryOrBody?.params && ctx.config.queryOrBody?.params.constructor === Array && ctx.config.queryOrBody.params.length>0;
         var hasData = ctx.config.queryOrBody?.data && ctx.config.queryOrBody?.data.constructor === Array && ctx.config.queryOrBody.data.length>0;
         // 当 Content-Type 为 fromdata时，打包数据
-        console.log(hasParams , hasData,ctx.config.queryOrBody?.params.constructor,ctx.config.queryOrBody?.data)
+        // console.log(hasParams , hasData,ctx.config.queryOrBody?.params.constructor,ctx.config.queryOrBody?.data)
         if( hasParams || hasData ){
           if(hasParams){
             ctx.axios.params = {};
@@ -25,8 +25,11 @@ function pipe(){
             })
           }
         }
-        ctx.axios = R.mergeDeepRight(ctx.axios.method == 'GET' ? {params:ctx.payload}:{data:ctx.payload},ctx.axios)
-        console.log(ctx.axios,'queryOrBody');
+        if(ctx.axios.method == 'GET'){
+          ctx.axios.params = ctx.payload;
+        }else{
+          ctx.axios.data = ctx.payload;
+        }
         await next()
     }
 }

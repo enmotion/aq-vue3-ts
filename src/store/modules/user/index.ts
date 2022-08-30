@@ -25,8 +25,9 @@ export default {
     }
   },
   actions:{
-    userlogin(context:any,data:any):UserStore.Token{
-      return context.commit('setToken',{})
+    logout(context:any):void{
+      context.commit('setToken',{}); // 清空用户的 token
+      context.commit('setUserInfo',{});  // 清空用户的 基本信息
     }
   }
 }

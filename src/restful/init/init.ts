@@ -24,7 +24,7 @@ class ModAxios {
   }
   private packageContext(api:ModAxiosType.RequestConfig, payload:any, requestConfig:ModAxiosType.BaseConfig={}) : ModAxiosType.Context {
     // requestConfig > api.config > this.baseConfig;
-    console.log(api)
+    // console.log(api)
     var context:ModAxiosType.Context =R.mergeDeepRight(R.mergeDeepRight(this.baseConfig,{
       name:api.tips,
       keyname:api.keyname,
@@ -35,7 +35,7 @@ class ModAxios {
     if(context.axios?.method){
       context.axios.method = context.axios.method?.toUpperCase() as Method;
     }
-    console.log(context,'sss')
+    // console.log(context,'sss')
     return context;
   }
   public use(middleware:Function|Promise<Function>):void{
@@ -49,6 +49,7 @@ class ModAxios {
     var context = this.packageContext(apiconfig, payload, config);
     // // 在请求时，组合管道，最后的请求方法并不放置在外部的中间件之中，在发送时组装
     return this.onion.pipingData(context, this.onion.middlewares).then((value:{response:any}) => {
+      // console.log(value,222222);
       return value.response
     })
   }

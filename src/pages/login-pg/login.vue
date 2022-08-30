@@ -84,8 +84,16 @@
                         <template v-slot:prepend>验证</template>
                       </el-input>
                     </el-form-item>
-                    <span class="w-140 bg-dark-2 rounded overflow-hidden ml-5 flex items-center justify-center" style="height:32px">
-                      image
+                    <span class="w-80 flex-shrink-0 flex-grow-0 rounded overflow-hidden ml-5 flex items-center justify-center" style="height:32px">
+                      <img v-if="imageCode.data.image" 
+                        :src="imageCode.data.image" 
+                        class="w-full h-full bg-dark-2 border cursor-pointer"
+                        @error="imageCode.data.image=''"
+                        @click="codeCaptchaAction" />
+                      <span v-if="!imageCode.data.image" 
+                        class="w-full h-full text-dark-24 bg-dark-2 border-1 xcol items-center justify-center">
+                        图片加载失败
+                      </span>
                     </span>
                   </span>
                 </el-form>
@@ -114,8 +122,16 @@
                         <template v-slot:prepend>验证</template>
                       </el-input>
                     </el-form-item>
-                    <span class="w-140 bg-dark-2 rounded overflow-hidden ml-5 flex items-center justify-center" style="height:32px">
-                      image
+                    <span class="w-80 flex-shrink-0 flex-grow-0 bg-dark-2 rounded overflow-hidden ml-5 flex items-center justify-center" style="height:32px">
+                      <img v-if="imageCode.data.image" 
+                        :src="imageCode.data.image" 
+                        class="w-full h-full bg-dark-2 border cursor-pointer"
+                        @error="imageCode.data.image=''"
+                        @click="codeCaptchaAction" />
+                      <span v-if="!imageCode.data.image" 
+                        class="w-full h-full text-dark-24 bg-dark-2 border-1 xcol items-center justify-center">
+                        图片加载失败
+                      </span>
                     </span> 
                   </span>
                 </el-form>
@@ -159,7 +175,7 @@
               class="xcol flex-grow-1 h-100">
               <!-- 登录 -->
               <div v-if="pageStatus == 'Login'" key="Login" class="xcol w-full">
-                <el-button type="primary" @click="loginAction(LoginFormRef)">登录</el-button>
+                <el-button :loading="isRequesting" type="primary" @click="loginAction(LoginFormRef)">登录</el-button>
                 <span class="xrow justify-between items-center flex-grow-1 my-10 h-35">
                   <span class="px-10 py-5 rounded bg-dark-1 border border-dark-2 cursor-pointer hover:bg-white hover:text-p-10 hover:border-p-2 transition-all duration-300"
                     @click="pageStatus = 'Register'">
@@ -205,13 +221,15 @@
 
 <script lang="ts">
 import {ax,apis} from "@src/restful";
-import { defineComponent, ref, reactive, inject, computed, PropType, Ref, getCurrentInstance, onMounted } from 'vue';
-import type { UnwrapNestedRefs, } from 'vue';
-import { RouteLocationRaw, useRouter, useRoute } from "vue-router";
+import { defineComponent, ref, reactive, inject, computed, Ref, getCurrentInstance, onMounted } from 'vue';
+import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { ElInput, ElButton, ElForm, ElFormItem } from "element-plus";
-import type { FormInstance, FormValidateCallback} from 'element-plus';
-import type { RuleItem, ValidateError, ValidateFieldsError } from 'async-validator';
+
+import type { UnwrapNestedRefs, } from 'vue';
+import type { FormInstance } from 'element-plus';
+import type { ValidateFieldsError } from 'async-validator';
+import type { UserInfo } from "./types/login";
 import * as R from "ramda";
 import PageConfig from "./config/page-config";
 
@@ -223,24 +241,22 @@ export default defineComponent({
     const ResetPasswordFormRef = ref<FormInstance>(); // 流程画布dom对象
     const router = useRouter();
     const { proxy } = ( getCurrentInstance() as { proxy : any });
+    const imageCode = reactive({data:{key:'',image:''}} as {data:{key:string,image:string}});
+    const isRequesting = ref(false);
     // const route = useRoute();
     const store = useStore();
     let pageStatus:Ref<'Login'|'Register'|'ResetPassword'> = ref('Login');
     onMounted(()=>{
-      console.log('login onMouned');
+      // console.log('login onMouned');
+      codeCaptchaAction()
     })
-    const reqdata:UnwrapNestedRefs<{
-      nickname?:string,
-      email:string,
-      userpassword:string,
-      code:string,
-      repeatpassword?:string,
-      account?:string,
-    }> = reactive({
+    const reqdata:UnwrapNestedRefs<UserInfo> = reactive({
       email:'',
       userpassword:'',
-      code:''
-    })
+      code:'',
+      grant_type:'captcha',
+      scope:'all',
+    } as UserInfo)
     const pageConfig = PageConfig;
     const ruleConfig = computed(()=>{
       return pageConfig[pageStatus.value]; // 注册账号
@@ -257,20 +273,31 @@ export default defineComponent({
         type:'error'
       })
     };
+    function codeCaptchaAction(){
+      ax.send(apis.oauthCaptcha,{}).then(res=>{
+        imageCode.data = res.data;
+      })
+    }
     function loginAction ( formRef:FormInstance|undefined ){
       if (!formRef) return;
-      let vm = proxy;
       formRef.validate((valid, fields) => {
         if (valid) {
+          isRequesting.value = true;
           ax.send(
-            apis.userLogin,
-            {talentID:'-1spaceHash0-',userSpace:"123",age:12},
+            apis.postAccessToken,
+            {
+              username:reqdata.email,
+              password:reqdata.userpassword,
+              grant_type:reqdata.grant_type,
+              scope:reqdata.scope
+            },
             {
               axios:{
                 method:'post',
                 timeout:20000,
                 headers:{
-                  // 'Content-Type':'application/x-www-form-urlencoded'
+                  'Captcha-Key':imageCode.data.key,
+                  'Captcha-Code':reqdata.code,
                 }
               },
               config:{
@@ -283,12 +310,21 @@ export default defineComponent({
               }
             }
           ).then(res=>{
-            console.log(res);
-            console.log('do login!');
-            store.commit('user/setToken',{ access_token:"111",refresh_token:"222" });
+            isRequesting.value = false;
+            store.commit('user/setToken',{ access_token:res.data.access_token,refresh_token:res.data.refresh_token });
+            store.commit('user/setUserInfo',R.omit(['access_token','refresh_token'],res.data));
+            proxy.$message({
+              message:`欢迎回来:${res.data.nick_name}`,
+              type:'success'
+            })
             router.push({name:'dash-board'});
           }).catch(err=>{
-            console.log(err);
+            isRequesting.value = false;
+            proxy.$message({
+              message:err.data.error_description,
+              type:'error'
+            })
+            codeCaptchaAction()
           })
         } else {
           toastFormErrors(fields as ValidateFieldsError);
@@ -326,12 +362,16 @@ export default defineComponent({
       RegisterFormRef,
       ResetPasswordFormRef,
 
+      imageCode,
+      isRequesting,
+
       pageStatus,
       router,
       ruleConfig,
       reqdata,
       screen,
       // 方法
+      codeCaptchaAction,
       loginAction,
       regAction,
       resetPwAction,
