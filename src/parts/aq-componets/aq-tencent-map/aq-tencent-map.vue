@@ -42,7 +42,7 @@ export default defineComponent({
     },
     mapStyleId:{
       type:String as PropType<string>,
-      default:''
+      default:'1'
     },
     zoom:{
       type:Number as PropType<number>,

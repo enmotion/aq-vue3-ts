@@ -2,7 +2,7 @@
   <div class="xcol flex-shrink-1 flex-gorw-1 bg-white overflow-hidden p-20">
     <aq-title-back-button :show-back="true">back</aq-title-back-button>
     <aq-tencent-map class="bg-gray-100 mt-10 flex-grow-1" 
-      app-key="BBABZ-A3TWJ-QFTFY-KGTXU-DETBE-KOBNV" 
+      
       :center="center" 
       disabled>
     </aq-tencent-map>
