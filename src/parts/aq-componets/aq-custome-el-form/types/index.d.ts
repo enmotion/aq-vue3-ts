@@ -1,17 +1,12 @@
 // 需要被加工的数据
 namespace CTF{
-  export interface Data{
-    [key:string]:any,
-  }
-  // 界面配置信息
-  onBeforeMount, onMounted, onBeforeUpdate, onBeforeUnmount, onUnmounted
+  export interface Data{[key:string]:any}
+  export interface State{value:Data}
+  export type BeforeUpdate = (key:string, n:any, o:any, innerState:{value:Data} )=> Data
+  export type UiGuardin = ( ui:ElementGroup, data:any )=> ElementGroup
   export interface UiConfig{
-    onBeforeMount?:(v:any,k:string)=>any
-    onMounted?:(v:any,k:string)=>boolean
-    onBeforeUpdate?:(v:any,k:string)=>boolean
-    onBeforeUnmount?:(v:any,k:string)=>boolean
-    onUnmounted?:(v:any,k:string)=>boolean
-    uiGuardian?:(ui:UIConfigOptions,mirroData:any)=>UIConfigOptions, // ui 守卫 根据处理数据的变化，对UI配置进行及时调整
+    beforeUpdate?:BeforeUpdate
+    uiGuardian?:UiGuardin // ui 守卫 根据处理数据的变化，对UI配置进行及时调整
     elementGroup:ElementGroup
   }
   // 多组件配置结构
@@ -26,6 +21,9 @@ namespace CTF{
     invisible?:boolean, // 界面组件是否隐藏
     outerClass?:string,//容器 class 样式
     outerStyle?:StyleValue, // 容器style配置
+    // 在使用中，有时我们需要对值进行转化,比如值为 '18px' 但在组件中必须为 数值 18 就可以通过以下两个访问器，进行转换操作
+    getter?:(v:any)=>any, // 值读取器 
+    setter?:(v:any)=>any, // 值设置器
     binds:{ // 组件绑定数据
       class?:string, // 组件的class
       style?:StyleValue,//组件的样式

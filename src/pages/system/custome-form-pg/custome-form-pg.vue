@@ -10,15 +10,26 @@
       </span>
     </div>
     <div class="h-full w-full bg-white xrow flex-wrap justify-start">    
-      <div class="w-6/12 bg-dark-2 border-r border-dark-2 p-10 xcol text-justify">
+      <div class="w-4/12 bg-dark-2 border-r border-dark-2 p-10 xcol text-justify">
         {{handingData}}
       </div>
-      <div class="w-6/12 border-r border-dark-2 p-10 xrow flex-wrap items-start">
+      <div class="w-8/12 border-r border-dark-2 p-10 xrow flex-wrap items-start">
         <aq-scroll-view class="flex-grow-1 w-full h-full">
-          <aq-custome-el-form 
-            :data="handingData" 
-            :ui-config="uiOption">
-          </aq-custome-el-form>
+          <div class="xrow">
+            <aq-custome-el-form
+              class="mx-5"
+              parent-path="a.c"
+              :data="handingData" 
+              :ui-config="uiConfigAT"
+              @update:data="handingData = $event">
+            </aq-custome-el-form>
+            <aq-custome-el-form
+              parent-path="b.c"
+              :data="handingData" 
+              :ui-config="uiConfigBT"
+              @update:data="handingData = $event">
+            </aq-custome-el-form>
+          </div>
         </aq-scroll-view>
       </div>
     </div>
@@ -30,9 +41,10 @@
 <script lang="ts">
 import { defineComponent, ref, reactive } from 'vue';
 import * as R from "ramda";
-import { ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton, inputEmits } from "element-plus";
+import { ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton, ElSlider } from "element-plus";
 import aqCustomeElForm from '@src/parts/aq-componets/aq-custome-el-form/aq-custome-el-form.vue';
 import CTF from "@src/parts/aq-componets/aq-custome-el-form/types";
+import { uiConfigA, uiConfigB } from './ui-config';
 
 export default defineComponent({
   name:'custome-form',
@@ -44,67 +56,18 @@ export default defineComponent({
         age:18,
         link:'www.baidu.com',
         body:{
+          size:'18cm',
           eye:'blue',
           skin:'yellow',
         }
       }
     });
-    const uiOption = ref({
-      uiGuard:function(ui:CTF.ElementGroup,data:any):CTF.ElementGroup{
-        if(data.info.age>20){
-          data.info.body.skin=data.info.age+'pink'
-          ui['info.age'].component='ElSwitch'
-          ui['info.body.skin']={
-            label:'肤色:',
-            component:'ElInput',
-            binds:{}
-          }
-          return ui
-        }else{
-          data.info.body.skin='yellow'
-        }
-        return ui
-      },
-      elementGroup:{
-        'name':{
-          label:'姓名:',
-          append:'px',
-          component:'ElInput',        
-          binds:{
-            size:'small'
-          }
-        },
-        'info.age':{
-          label:'年龄:',
-          append:'px',
-          component:'ElInputNumber',
-          binds:{
-            size:'small',
-            activeValue:18,
-            inactiveValue:0,
-            class:"flex-grow-1"
-          }
-        },
-        'info.link':{
-          label:'链接:',
-          append:'internet',
-          component:'ElInput',
-          binds:{
-            size:'small'
-          }
-        },
-        'info.body.eye':{
-          label:'瞳色:',
-          component:'ElInput',
-          binds:{
-            size:'small'
-          }
-        },
-      }
-    } as CTF.UiConfig)
+    const uiConfigAT = ref(uiConfigA);
+    const uiConfigBT = ref(uiConfigB);
     return {
       handingData,
-      uiOption,
+      uiConfigAT,
+      uiConfigBT
     }
   },
 })
