@@ -13,17 +13,19 @@
       <div class="w-4/12 bg-dark-2 border-r border-dark-2 p-10 xcol text-justify">
         {{handingData}}
       </div>
-      <div class="w-8/12 border-r border-dark-2 p-10 xrow flex-wrap items-start">
+      <div class="w-8/12 border-r border-dark-2 bg-gray-100 p-10 xrow flex-wrap items-start">
         <aq-scroll-view class="flex-grow-1 w-full h-full">
-          <div class="xrow">
+          <div class="xrow flex-wrap flex-grow-1 items-start">
             <aq-custome-el-form
-              class="mx-5"
+              class="mx-5 w-2/12 flex-grow-1 bg-gray-200 h-full items-start"
               parent-path="a.c"
-              :data="handingData" 
+              :data="handingData"
+              display-type="drawer"
               :ui-config="uiConfigAT"
               @update:data="handingData = $event">
             </aq-custome-el-form>
             <aq-custome-el-form
+              class="flex-grow-1 w-5/12 items-start"
               parent-path="b.c"
               :data="handingData" 
               :ui-config="uiConfigBT"
@@ -34,22 +36,24 @@
       </div>
     </div>
   </div>
-  
 </template>
+
 <style scoped>
 </style>
+
 <script lang="ts">
 import { defineComponent, ref, reactive } from 'vue';
 import * as R from "ramda";
-import { ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton, ElSlider } from "element-plus";
+import { ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton, ElSlider, ElDrawer } from "element-plus";
 import aqCustomeElForm from '@src/parts/aq-componets/aq-custome-el-form/aq-custome-el-form.vue';
 import CTF from "@src/parts/aq-componets/aq-custome-el-form/types";
 import { uiConfigA, uiConfigB } from './ui-config';
 
 export default defineComponent({
   name:'custome-form',
-  components:{ ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton ,aqCustomeElForm },
+  components:{ ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton ,aqCustomeElForm ,ElDrawer},
   setup(props,context) {
+    const drawerOpen = ref(false);
     const handingData = ref({
       name:'mod',
       info:{
@@ -65,6 +69,7 @@ export default defineComponent({
     const uiConfigAT = ref(uiConfigA);
     const uiConfigBT = ref(uiConfigB);
     return {
+      drawerOpen,
       handingData,
       uiConfigAT,
       uiConfigBT

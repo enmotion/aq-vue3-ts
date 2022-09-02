@@ -1,19 +1,20 @@
 <template>
   <div class="xrow flex-wrap aq-custome-el-form">
-    <div class="w-full xcol h-auto text-justify">
+    <!-- <div class="w-full xcol h-auto text-justify">
       <div class="p-10 bg-s-4">data:{{data}}</div>
       <div class="p-10 bg-p-4">uiConfig:{{uiConfig}}</div>
       <div class="p-10 bg-w-4">innerState:{{innerState}}</div>
       <div class="p-10 bg-d-4">computedElementGroup:{{computedElementGroup}}</div>
-    </div>
-    <div class="w-0 p-10 flex-grow-1 flex-shrink-1 xrow flex-wrap">
+    </div> -->
+    <div v-if="displayType=='default'" class="w-0 p-10 flex-grow-1 flex-shrink-1 xrow flex-wrap items-start">
       <div v-for="(item,key) in computedElementGroup" 
         :key="key" 
         class="xrow xwarp items-center" 
         :class="[item.outerClass||'mb-5 last:mb-0']"
         :style="item.outerStyle||{}">
         <span v-if="item.label" class="w-auto whitespace-nowrap mr-5">{{item.label}}</span>
-        <component v-model="innerState[key]" 
+        <component 
+          v-model="innerState[key]" 
           :is="item.component" 
           v-bind="item.binds||{}"
           @change="dateUpdate(key,$event)">
@@ -21,22 +22,48 @@
         <span v-if="item.append" class="w-auto whitespace-nowrap mx-5">{{item.append}}</span>
       </div>
     </div>
-    <div class="xcol h-auto bg-p-10 flex-grow-0 flex-shrink-0">
-      <slot>
-        <!-- <span class="w-200 h-100"></span> -->
-      </slot>
+    <div v-if="displayType=='drawer'" class="w-0 p-10 flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap items-start">
+      <span @click="isExpand = true" class=" cursor-pointer select-none">open</span>
+      <el-drawer
+        v-model="isExpand"
+        :show-close="false"
+        size="50%"
+        direction="rtl">
+        <div class="w-full p-10 flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap items-start">
+          <div v-for="(item,key) in computedElementGroup" 
+            :key="key" 
+            class="xrow xwarp items-center" 
+            :class="[item.outerClass||'mb-5 last:mb-0']"
+            :style="item.outerStyle||{}">
+            <span v-if="item.label" class="w-auto whitespace-nowrap mr-5">{{item.label}}</span>
+            <component 
+              v-model="innerState[key]" 
+              :is="item.component" 
+              v-bind="item.binds||{}"
+              @change="dateUpdate(key,$event)">
+            </component>
+            <span v-if="item.append" class="w-auto whitespace-nowrap mx-5">{{item.append}}</span>
+          </div>
+        </div>
+      </el-drawer>
     </div>
+    
+    <!-- <div class="xcol h-auto bg-p-10 flex-grow-0 flex-shrink-0">
+      <slot>
+        <span class="w-200 h-20"></span>
+      </slot>
+    </div> -->
   </div>
 </template>
 
 <script lang="ts">
 import * as R from "ramda";
-import { defineComponent, computed, getCurrentInstance} from 'vue';
+import { defineComponent, ref, computed, getCurrentInstance} from 'vue';
 import type { PropType, ComponentPublicInstance } from "vue";
 import CTF from "./types";
 import { 
   ElInput, ElInputNumber, ElSelect, ElSwitch, ElDivider, ElSlider, 
-  ElColorPicker, ElRadioGroup, ElRadioButton, ElImage 
+  ElColorPicker, ElRadioGroup, ElRadioButton, ElImage, ElDrawer
 } from 'element-plus';
 import { useDataPluckToInnerState, useInnerStateReforgeToData } from "./use.lib";
 
@@ -44,7 +71,7 @@ export default defineComponent({
   name:'aq-custome-el-form',
   components:{ 
     ElInput, ElInputNumber, ElSelect, ElSwitch, ElDivider, ElSlider, 
-    ElColorPicker, ElRadioGroup, ElRadioButton, ElImage 
+    ElColorPicker, ElRadioGroup, ElRadioButton, ElImage, ElDrawer
   },
   props:{
     // 需要被处理加工的数据
@@ -62,6 +89,10 @@ export default defineComponent({
       type:String as PropType<string>,
       default:''
     },
+    displayType:{
+      type:String as PropType<'default'|'dialog'|'drawer'>,
+      default:'default',
+    },
     // slot 配置
     slotOption:{
       type:Object as PropType<CTF.SlotConfig>,
@@ -73,7 +104,8 @@ export default defineComponent({
   },
   emits:['update:data'],
   setup(props,context) {
-    const { proxy } = getCurrentInstance() as { proxy: any}; // 实例对象
+    const isExpand = ref(false);
+    const { proxy } = getCurrentInstance() as { proxy: ComponentPublicInstance}; // 实例对象
     const innerState = useDataPluckToInnerState( props.uiConfig.elementGroup , R.clone(props.data)); // 内部数据
 
     // 根据 处理数据 ui配置 决定当前UI的显示
@@ -106,14 +138,12 @@ export default defineComponent({
       props.uiConfig.beforeUpdate( (key as string), value, old, R.clone(innerState) ) : innerState;
       let data = useInnerStateReforgeToData( computedElementGroup.value ,state);
       context.emit('update:data',R.mergeDeepRight(props.data,data))
-      // props.uiConfig.beforeUpdate ? ( props.uiConfig.beforeUpdate as Function )(key,value,)
-      // innerState.value[key]=value;
     }
-    
     return {
       proxy,
       innerState,
       computedElementGroup,
+      isExpand,
       dateUpdate
     }
   },

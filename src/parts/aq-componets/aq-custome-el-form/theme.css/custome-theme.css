@@ -1,5 +1,5 @@
 /* el-input */
-.aq-custome-el-form  .el-input--small .el-input__wrapper {
+.aq-custome-el-form  .el-input__wrapper {
   padding: 0px 0px;
 }
 .aq-custome-el-form input[type=number]::-webkit-inner-spin-button {
@@ -11,10 +11,10 @@
 }
 
 .aq-custome-el-form .el-input__inner {
-  background-color: #00000044;
-  border: 1px solid #FFFFFF10;
+  background-color: #FFFFFF;
+  border: 1px solid #00000016;
   border-radius: 4px;
-  color: #FFF;
+  color: #666;
   padding: 10px;
 }
 
@@ -84,7 +84,7 @@
 /* el-slider */
 .aq-custome-el-form .el-slider__runway {
   height: 2px;
-  background-color: #FFFFFF10;
+  background-color: #00000022;
 }
 
 .aq-custome-el-form .el-slider__bar {
