@@ -1,7 +1,7 @@
 <template>
   <div ref="tinymceContainerDom" class="xcol tinymce-editor overflow-hidden" >
     <div class="xcol flex-grow-1" :class="[disabled?'-mx-10 -mt-15':'']">
-      <textarea ref="tinymceDom" :key="tinymceRenderKey" class="xcol flex-grow-1"></textarea>
+      <textarea ref="tinymceDom" class="xcol flex-grow-1"></textarea>
     </div>    
   </div>
 </template>
@@ -69,7 +69,6 @@ export default defineComponent({
     const tinymceEditorInstance = ref({} as Editor)
     const tinymceContainerObserver = reactive({} as any); // tinymceContainerDom 容器尺寸变化监听器
 
-    let tinymceRenderKey = ref(0);
     let content = ref(props.content); // 引入外部变量
     const editorConfig = computed(()=>{
       let config:RawEditorOptions = R.mergeDeepRight(R.pick(['menubar','resize','statusbar'],props), props.initOption);
@@ -87,17 +86,18 @@ export default defineComponent({
       context.emit('update:content',content);
     }
     function tinymceInit(config:RawEditorOptions,containerSize:DOMRect){
-      // console.log(config,'tinymceInit')
+      console.log(config,'tinymceInit')
       tinymce.init(R.mergeDeepRight( config ,{
         target:tinymceDom.value,
         height:containerSize.height,
         setup:(editor) => {
           tinymceEditorInstance.value = editor;
-          useFullWidth(editor);
+          useFullWidth(editor);          
           editor.on('init', (e) => {
             editor.setContent(content.value)
           });
           editor.on('Change', (e) => {
+            editor.getContent()
             onChanged(editor.getContent());
           });
         }
@@ -105,7 +105,10 @@ export default defineComponent({
     }
     // watch
     watch(()=>props.content,(n,o)=>{
-      tinymceEditorInstance.value.setContent(n)
+      // 只有在预览模式下，才可以侦听外部内容的变化
+      if(props.disabled){
+        tinymceEditorInstance.value.setContent(n)
+      }
     })
     // 生命周期处理函数
     onMounted(()=>{
@@ -122,7 +125,6 @@ export default defineComponent({
       tinymceDom,
       tinymceContainerDom,
       tinymceVesselSize,
-      tinymceRenderKey,
       onChanged,
     }
   },

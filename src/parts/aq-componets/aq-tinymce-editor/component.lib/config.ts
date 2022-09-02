@@ -82,7 +82,7 @@ const option:RawEditorOptions = {
       items: string;
   }>,
   font_size_formats:'12px 14px 16px 18px 20px 22px 24px 26px 28px 32px 36px 40px 50px 60px 80px 100px',
-  line_height_formats: '1 1.2 1.4 1.6 1.8 2 3 4 5 6', // 行高设置配置
+  line_height_formats: '0 0.2 0.4 0.6 0.8 1 1.2 1.4 1.6 1.8 2 3 4 5 6', // 行高设置配置
   plugins:'fullscreen lists image media table code link wordcount preview insertdatetime codesample',
   toolbar:'fullscreen | code | bold italic underline strikethrough | fontsize | lineheight | bullist numlist | forecolor backcolor | alignleft aligncenter alignright alignjustify | outdent indent blockquote | link unlink hr image media insertdatetime codesample | removeformat | fimg | cleanstyle',
 }
