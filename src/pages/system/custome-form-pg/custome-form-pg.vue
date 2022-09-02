@@ -17,8 +17,7 @@
         <aq-scroll-view class="flex-grow-1 w-full h-full">
           <aq-custome-el-form 
             :data="handingData" 
-            :ui-config="uiOption"
-            :ui-guard="uiGuard">
+            :ui-config="uiOption">
           </aq-custome-el-form>
         </aq-scroll-view>
       </div>
@@ -33,6 +32,7 @@ import { defineComponent, ref, reactive } from 'vue';
 import * as R from "ramda";
 import { ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton, inputEmits } from "element-plus";
 import aqCustomeElForm from '@src/parts/aq-componets/aq-custome-el-form/aq-custome-el-form.vue';
+import CTF from "@src/parts/aq-componets/aq-custome-el-form/types";
 
 export default defineComponent({
   name:'custome-form',
@@ -50,47 +50,61 @@ export default defineComponent({
       }
     });
     const uiOption = ref({
-      'name':{
-        label:'姓名:',
-        append:'px',
-        component:'ElInput',
-        componentBind:{}
-      },
-      'info.age':{
-        label:'姓名:',
-        append:'px',
-        component:'ElInputNumber',
-        componentBind:{}
-      },
-      'info.link':{
-        label:'链接:',
-        append:'internet',
-        component:'ElInput',
-        componentBind:{}
-      },
-      'info.body.eye':{
-        label:'瞳色:',
-        component:'ElInput',
-        componentBind:{}
-      },
-    })
-    function uiGuard(ui:any,data:any){
-      console.log('sss',data);
-      if(data.info.age>20){
-        data.info.body.skin='pink'
-        ui['info.age'].component='switch';
-        ui['info.body.skin']={
-          component:'input',
-          componentBind:{}
+      uiGuard:function(ui:CTF.ElementGroup,data:any):CTF.ElementGroup{
+        if(data.info.age>20){
+          data.info.body.skin=data.info.age+'pink'
+          ui['info.age'].component='ElSwitch'
+          ui['info.body.skin']={
+            label:'肤色:',
+            component:'ElInput',
+            binds:{}
+          }
+          return ui
+        }else{
+          data.info.body.skin='yellow'
         }
         return ui
+      },
+      elementGroup:{
+        'name':{
+          label:'姓名:',
+          append:'px',
+          component:'ElInput',        
+          binds:{
+            size:'small'
+          }
+        },
+        'info.age':{
+          label:'年龄:',
+          append:'px',
+          component:'ElInputNumber',
+          binds:{
+            size:'small',
+            activeValue:18,
+            inactiveValue:0,
+            class:"flex-grow-1"
+          }
+        },
+        'info.link':{
+          label:'链接:',
+          append:'internet',
+          component:'ElInput',
+          binds:{
+            size:'small'
+          }
+        },
+        'info.body.eye':{
+          label:'瞳色:',
+          component:'ElInput',
+          binds:{
+            size:'small'
+          }
+        },
       }
-      return ui
-    }
+    } as CTF.UiConfig)
     return {
       handingData,
       uiOption,
-      uiGuard
     }
   },
 })
