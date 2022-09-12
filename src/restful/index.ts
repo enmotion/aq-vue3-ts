@@ -44,6 +44,6 @@ ax.use(formdata());
 // 添加路径传参中间件
 ax.use(queryOrBody());
 //添加模拟数据中间件,除接口 参数 extra.penetrate = ture 的接口外，其余将直接使用本地模式数据，方便调试
-ax.use(simulate({bounce:2000,base:1000},true));
+ax.use(simulate({bounce:2000,base:1000},false));
 ax.use(request()); // 添加中间件
 export { ax,apis,host,wsst};

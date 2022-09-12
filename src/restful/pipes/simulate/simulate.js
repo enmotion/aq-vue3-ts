@@ -22,9 +22,9 @@ function pipe(delay, usePenetrate) {
   var responseDelay = R.mergeAll([{ bounce: 300, base: 10 }, delay.constructor == Object ? delay : {}])
   return async function (ctx, next) {
     // 只有在启用penetrate的模式下，且并没有开启穿透模拟数据配置的接口 则启用本地模拟数据，否则访问真实的服务器
-    if (!(ctx.config && ctx.config.penetrate) || !usePenetrate) {
-
-      // if(process.env.NODE_ENV==='development' && !(ctx.config && ctx.config.penetrate)){
+    if (usePenetrate && ctx.config?.penetrate) {
+      await next()
+    } else {
       var simulateData = simulateDatas[ctx.keyname] || {};
       // 组装默认模拟数据
       let defaultLocalRes = {
@@ -47,8 +47,6 @@ function pipe(delay, usePenetrate) {
           resolve();
         }, Math.round(Math.random() * responseDelay.bounce) + responseDelay.base)
       })
-    } else {
-      await next()
     }
   }
 }
