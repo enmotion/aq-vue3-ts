@@ -48,7 +48,7 @@ export const uiConfigA:CTF.UiConfig = {
       setter:(value)=>{ return value + 'cm' },
       binds:{
         size:'small',
-        activeValue:18,
+        activeValue:10,
         inactiveValue:0,
         class:"flex-grow-1"
       }
@@ -56,7 +56,7 @@ export const uiConfigA:CTF.UiConfig = {
     'info.link':{
       label:'链接:',
       append:'internet',
-      outerClass:'w-3/12 flex-grow-1',
+      outerClass:'w-6/12 flex-grow-1',
       component:'ElInput',
       binds:{
         size:'small'
@@ -64,7 +64,8 @@ export const uiConfigA:CTF.UiConfig = {
     },
     'info.body.eye':{
       label:'瞳色:',
-      outerClass:'w-3/12 flex-grow-1',
+      outerClass:'mt-10 mr-20',
+      outerStyle:{width:'200px'},
       component:'ElInput',
       binds:{
         size:'small'
@@ -72,10 +73,21 @@ export const uiConfigA:CTF.UiConfig = {
     },
     'info.body.skin':{
       label:'肤色:',
-      outerClass:'w-3/12 flex-grow-1 mt-10',
+      outerClass:'mt-10 mr-20',
+      outerStyle:{width:'200px'},
       component:'ElInput',
       binds:{
-        // size:'small'
+        size:'small'
+      }
+    },
+    'info.body.skins':{
+      label:'肤色:',
+      outerClass:'mt-10',
+      outerStyle:{width:'300px'},
+      component:'ElInput',
+      append:'cm',
+      binds:{
+        size:'small'
       }
     },
   }
@@ -177,6 +189,14 @@ export const uiConfigB:CTF.UiConfig = {
       component:'ElInput',
       binds:{
         size:'small'
+      }
+    },
+    'info.body.eyes':{
+      label:'瞳色:',
+      outerClass:'w-full h-20 my-5',
+      component:'ElColorPicker',
+      binds:{
+        showAlpha:true,
       }
     },
   }

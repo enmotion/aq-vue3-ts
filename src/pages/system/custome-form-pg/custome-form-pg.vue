@@ -62,14 +62,14 @@
 <script lang="ts">
 import { defineComponent, ref, reactive } from 'vue';
 import * as R from "ramda";
-import { ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton, ElSlider, ElDrawer } from "element-plus";
+import { ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton, ElSlider, ElDrawer, ElColorPicker } from "element-plus";
 import aqCustomeElForm from '@src/parts/aq-componets/aq-custome-el-form/aq-custome-el-form.vue';
 import CTF from "@src/parts/aq-componets/aq-custome-el-form/types";
 import { uiConfigA, uiConfigB } from './ui-config';
 
 export default defineComponent({
   name:'custome-form',
-  components:{ ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton ,aqCustomeElForm ,ElDrawer},
+  components:{ ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton ,aqCustomeElForm ,ElDrawer, ElColorPicker},
   setup(props,context) {
     const drawerOpen = ref(false);
     const handingData = ref({
