@@ -39,7 +39,7 @@
           width:'90%',
           direction:'rtl',
           customClass:'aq-custome-el-form-dialog'
-        },vesselProp])">
+        },vesselConfig.prop||{}])">
         <div class="w-full p-10 flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap items-start">
           <div v-for="(item,key) in computedElementGroup" 
             :key="key" 
@@ -68,7 +68,7 @@
           size:'50%',
           direction:'rtl',
           customClass:'aq-custome-el-form-drawer'
-        },vesselProp])">
+        },vesselConfig.prop||{}])">
         <div class="w-full p-10 flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap items-start">
           <div v-for="(item,key) in computedElementGroup" 
             :key="key" 
@@ -118,18 +118,9 @@ export default defineComponent({
       type:Object as PropType<CTF.UiConfig>,
       default:()=>({})
     },
-    // 前置路径，当组件进入嵌套模式时，需要前置路径进行相关处理
-    parentPath:{
-      type:String as PropType<string>,
-      default:''
-    },
     vesselConfig:{
-      type:Object as PropType<{type:'default'|'dialog'|'drawer',label:string,trigger?:string}>,
+      type:Object as PropType<CTF.DisplayConfig>,
       default:()=>({type:'default',label:'设置:',trigger:'OPEN'}),
-    },
-    vesselProp:{
-      type:Object as PropType<any>,
-      default:()=>({})
     },
     // slot 配置
     slotOption:{
@@ -146,10 +137,11 @@ export default defineComponent({
     const isExpand = ref(false);
     const { proxy } = getCurrentInstance() as { proxy: ComponentPublicInstance}; // 实例对象
     const innerState = useDataPluckToInnerState( props.uiConfig.elementGroup , R.clone(props.data)); // 内部数据
+    const exclude = ref(['ElSelect','aq-custome-el-form','aq-array-data'])
 
     // 根据 处理数据 ui配置 决定当前UI的显示
     const computedElementGroup = computed(()=>{
-      console.log(props.parentPath,props.data,'computedElementGroup')      
+      console.log(props.data,'computedElementGroup')      
       // 此处的入参数，必须复制，避免内部修改，影响到外部原始值的触发错误情况
       const renderElementGroup = props.uiConfig.uiGuardian ? 
       props.uiConfig.uiGuardian ( R.clone(props.uiConfig.elementGroup), R.clone(props.data) ) as CTF.ElementGroup || props.uiConfig.elementGroup :
@@ -157,7 +149,7 @@ export default defineComponent({
       // 当界面配置或数据发生变化时，需要重置 innerState; 且以外部数据为准;
       let state = useDataPluckToInnerState(renderElementGroup , props.data);
       innerState.value = R.mergeDeepRight(innerState.value,state.value);
-      console.log(props.parentPath, innerState.value, 'computedElementGroup end')
+      console.log(innerState.value, 'computedElementGroup end')
       /* 
        * 如果发现 守卫过滤器 修正后的配置key名与原始输入的key名内容不相符时，表明有新增或者删除, 那么将针对新增可能的数据再做一次增补，重新获取原始数据中的对应值
        * 1.ui守卫过滤器发现 props.uiConfig 与 渲染 renderUiConfig 差集不为0时表示有差异，
@@ -180,6 +172,7 @@ export default defineComponent({
     }
     return {
       Ramda,
+      exclude,
       proxy,
       innerState,
       computedElementGroup,

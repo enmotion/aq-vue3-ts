@@ -20,8 +20,12 @@
               class="mx-5 w-full flex-grow-0 bg-gray-200 h-auto items-start"
               parent-path="a.c"
               :data="handingData"
-              :vessel-config="{type:'dialog',label:'更多设置：',trigger:`<span class='iconfont icon-setting w-20 h-20 bg-d-10 text-xs text-white p-5 b'>设置</span>`}"
-              :vessel-prop="{size:'90%'}"
+              :vessel-config="{
+                type:'dialog',
+                label:'更多设置：',
+                trigger:`<span class='iconfont icon-setting w-20 h-20 bg-d-10 text-xs text-white p-5 b'>设置</span>`,
+                prop:{width:'90%'}
+              }"
               :ui-config="uiConfigAT"
               @update:data="handingData = $event">
             </aq-custome-el-form>
@@ -29,8 +33,12 @@
               class="mx-5 w-2/12 flex-grow-1 bg-gray-200 items-start"
               parent-path="a.c"
               :data="handingData"
-              :vessel-config="{type:'drawer',label:'更多设置：',trigger:`<span class='iconfont icon-setting w-20 h-20 bg-d-10 text-xs text-white p-5 b'>设置</span>`}"
-              :vessel-prop="{size:'90%'}"
+              :vessel-config="{
+                type:'drawer',
+                label:'更多设置：',
+                trigger:`<span class='iconfont icon-setting w-20 h-20 bg-d-10 text-xs text-white p-5 b'>设置</span>`,
+                prop:{size:'40%'}
+              }"
               :ui-config="uiConfigAT"
               @update:data="handingData = $event">
             </aq-custome-el-form>
