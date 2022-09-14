@@ -148,3 +148,18 @@
   border-left: 0;
   color: #FFFFFF80;
 }
+/* drawer */
+.aq-custome-el-form-drawer .el-drawer__header {
+  margin-bottom: 0px;
+  padding: 0px;
+}
+.aq-custome-el-form-drawer .el-drawer__body {
+  padding: 10px;
+}
+/* dialog */
+.aq-custome-el-form-dialog .el-dialog__header {
+  padding: 0px;
+}
+.aq-custome-el-form-dialog .el-dialog__body {
+  padding: 10px;
+}

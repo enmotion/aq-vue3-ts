@@ -13,19 +13,29 @@
       <div class="w-4/12 bg-dark-2 border-r border-dark-2 p-10 xcol text-justify">
         {{handingData}}
       </div>
-      <div class="w-8/12 border-r border-dark-2 bg-gray-100 p-10 xrow flex-wrap items-start">
-        <aq-scroll-view class="flex-grow-1 w-full h-full">
-          <div class="xrow flex-wrap flex-grow-1 items-start">
+      <div class="w-8/12 border-r border-dark-2 bg-gray-100 p-10 xrow flex-wrap">
+        <aq-scroll-view class="flex-grow-1 w-full h-auto">
+          <div class="xrow flex-wrap h-auto flex-grow-1 items-start justify-start content-start">
             <aq-custome-el-form
-              class="mx-5 w-2/12 flex-grow-1 bg-gray-200 h-full items-start"
+              class="mx-5 w-full flex-grow-0 bg-gray-200 h-auto items-start"
               parent-path="a.c"
               :data="handingData"
-              display-type="drawer"
+              :vessel-config="{type:'dialog',label:'更多设置：',trigger:`<span class='iconfont icon-setting w-20 h-20 bg-d-10 text-xs text-white p-5 b'>设置</span>`}"
+              :vessel-prop="{size:'90%'}"
               :ui-config="uiConfigAT"
               @update:data="handingData = $event">
             </aq-custome-el-form>
             <aq-custome-el-form
-              class="flex-grow-1 w-5/12 items-start"
+              class="mx-5 w-2/12 flex-grow-1 bg-gray-200 items-start"
+              parent-path="a.c"
+              :data="handingData"
+              :vessel-config="{type:'drawer',label:'更多设置：',trigger:`<span class='iconfont icon-setting w-20 h-20 bg-d-10 text-xs text-white p-5 b'>设置</span>`}"
+              :vessel-prop="{size:'90%'}"
+              :ui-config="uiConfigAT"
+              @update:data="handingData = $event">
+            </aq-custome-el-form>
+            <aq-custome-el-form
+              class="mx-5 flex-grow-1 w-5/12 items-start"
               parent-path="b.c"
               :data="handingData" 
               :ui-config="uiConfigBT"

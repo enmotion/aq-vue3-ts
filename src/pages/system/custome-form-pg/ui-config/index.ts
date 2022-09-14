@@ -31,6 +31,7 @@ export const uiConfigA:CTF.UiConfig = {
       label:'年龄:',
       append:'px',
       component:'ElInputNumber',
+      outerClass:'w-3/12 flex-grow-1',
       binds:{
         size:'small',
         activeValue:18,
@@ -42,6 +43,7 @@ export const uiConfigA:CTF.UiConfig = {
       label:'尺寸:',
       append:'cm',
       component:'ElInputNumber',
+      outerClass:'w-3/12 flex-grow-1',
       getter:(value)=>{ return parseFloat(value) },
       setter:(value)=>{ return value + 'cm' },
       binds:{
@@ -54,6 +56,7 @@ export const uiConfigA:CTF.UiConfig = {
     'info.link':{
       label:'链接:',
       append:'internet',
+      outerClass:'w-3/12 flex-grow-1',
       component:'ElInput',
       binds:{
         size:'small'
@@ -61,6 +64,7 @@ export const uiConfigA:CTF.UiConfig = {
     },
     'info.body.eye':{
       label:'瞳色:',
+      outerClass:'w-3/12 flex-grow-1',
       component:'ElInput',
       binds:{
         size:'small'
@@ -68,6 +72,7 @@ export const uiConfigA:CTF.UiConfig = {
     },
     'info.body.skin':{
       label:'肤色:',
+      outerClass:'w-3/12 flex-grow-1 mt-10',
       component:'ElInput',
       binds:{
         // size:'small'

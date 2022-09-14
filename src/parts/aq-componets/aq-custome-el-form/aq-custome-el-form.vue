@@ -6,29 +6,69 @@
       <div class="p-10 bg-w-4">innerState:{{innerState}}</div>
       <div class="p-10 bg-d-4">computedElementGroup:{{computedElementGroup}}</div>
     </div> -->
-    <div v-if="displayType=='default'" class="w-0 p-10 flex-grow-1 flex-shrink-1 xrow flex-wrap items-start">
-      <div v-for="(item,key) in computedElementGroup" 
-        :key="key" 
-        class="xrow xwarp items-center" 
-        :class="[item.outerClass||'mb-5 last:mb-0']"
-        :style="item.outerStyle||{}">
-        <span v-if="item.label" class="w-auto whitespace-nowrap mr-5">{{item.label}}</span>
-        <component 
-          v-model="innerState[key]" 
-          :is="item.component" 
-          v-bind="item.binds||{}"
-          @change="dateUpdate(key,$event)">
-        </component>
-        <span v-if="item.append" class="w-auto whitespace-nowrap mx-5">{{item.append}}</span>
+    <div v-if="vesselConfig.type =='default'" class="xrow flex-grow-1 flex-shrink-1 flex-wrap">
+      <div class="w-0 p-10 flex-grow-1 flex-shrink-1 xrow flex-wrap items-start">
+        <div v-for="(item,key) in computedElementGroup" 
+          :key="key" 
+          class="xrow xwarp items-center" 
+          :class="[item.outerClass||'mb-5 last:mb-0']"
+          :style="item.outerStyle||{}">
+          <span v-if="item.label" class="w-auto whitespace-nowrap mr-5">{{item.label}}</span>
+          <component 
+            v-model="innerState[key]" 
+            :is="item.component" 
+            v-bind="item.binds||{}"
+            @change="dateUpdate(key,$event)">
+          </component>
+          <span v-if="item.append" class="w-auto whitespace-nowrap mx-5">{{item.append}}</span>
+        </div>
       </div>
+      <!-- <div class="xcol h-auto bg-p-10 flex-grow-0 flex-shrink-0">
+        <slot>
+          <span class="w-200 h-20"></span>
+        </slot>
+      </div> -->
     </div>
-    <div v-if="displayType=='drawer'" class="w-0 p-10 flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap items-start">
-      <span @click="isExpand = true" class=" cursor-pointer select-none">open</span>
+    <div v-if="vesselConfig.type=='dialog'" class="w-0 p-10 flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap justify-between items-center">
+      <span class="font-bold text-xs">{{vesselConfig.label}}</span>
+      <span @click="isExpand = true" class=" cursor-pointer select-none text-xs" v-html="vesselConfig.trigger||'OPEN'"></span>
+      <el-dialog
+        v-model="isExpand"
+        v-bind="Ramda.mergeAll([{
+          showClose:false,
+          width:'90%',
+          direction:'rtl',
+          customClass:'aq-custome-el-form-dialog'
+        },vesselProp])">
+        <div class="w-full p-10 flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap items-start">
+          <div v-for="(item,key) in computedElementGroup" 
+            :key="key" 
+            class="xrow xwarp items-center" 
+            :class="[item.outerClass||'mb-5 last:mb-0']"
+            :style="item.outerStyle||{}">
+            <span v-if="item.label" class="w-auto whitespace-nowrap mr-5">{{item.label}}</span>
+            <component 
+              v-model="innerState[key]" 
+              :is="item.component" 
+              v-bind="item.binds||{}"
+              @change="dateUpdate(key,$event)">
+            </component>
+            <span v-if="item.append" class="w-auto whitespace-nowrap mx-5">{{item.append}}</span>
+          </div>
+        </div>
+      </el-dialog>
+    </div>
+    <div v-if="vesselConfig.type=='drawer'" class="w-0 p-10 flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap justify-between items-center">
+      <span class="font-bold text-xs">{{vesselConfig.label}}</span>
+      <span @click="isExpand = true" class=" cursor-pointer select-none text-xs" v-html="vesselConfig.trigger||'OPEN'"></span>
       <el-drawer
         v-model="isExpand"
-        :show-close="false"
-        size="50%"
-        direction="rtl">
+        v-bind="Ramda.mergeAll([{
+          showClose:false,
+          size:'50%',
+          direction:'rtl',
+          customClass:'aq-custome-el-form-drawer'
+        },vesselProp])">
         <div class="w-full p-10 flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap items-start">
           <div v-for="(item,key) in computedElementGroup" 
             :key="key" 
@@ -46,13 +86,7 @@
           </div>
         </div>
       </el-drawer>
-    </div>
-    
-    <!-- <div class="xcol h-auto bg-p-10 flex-grow-0 flex-shrink-0">
-      <slot>
-        <span class="w-200 h-20"></span>
-      </slot>
-    </div> -->
+    </div>    
   </div>
 </template>
 
@@ -63,7 +97,7 @@ import type { PropType, ComponentPublicInstance } from "vue";
 import CTF from "./types";
 import { 
   ElInput, ElInputNumber, ElSelect, ElSwitch, ElDivider, ElSlider, 
-  ElColorPicker, ElRadioGroup, ElRadioButton, ElImage, ElDrawer
+  ElColorPicker, ElRadioGroup, ElRadioButton, ElImage, ElDrawer, ElDialog
 } from 'element-plus';
 import { useDataPluckToInnerState, useInnerStateReforgeToData } from "./use.lib";
 
@@ -71,7 +105,7 @@ export default defineComponent({
   name:'aq-custome-el-form',
   components:{ 
     ElInput, ElInputNumber, ElSelect, ElSwitch, ElDivider, ElSlider, 
-    ElColorPicker, ElRadioGroup, ElRadioButton, ElImage, ElDrawer
+    ElColorPicker, ElRadioGroup, ElRadioButton, ElImage, ElDrawer, ElDialog
   },
   props:{
     // 需要被处理加工的数据
@@ -89,9 +123,13 @@ export default defineComponent({
       type:String as PropType<string>,
       default:''
     },
-    displayType:{
-      type:String as PropType<'default'|'dialog'|'drawer'>,
-      default:'default',
+    vesselConfig:{
+      type:Object as PropType<{type:'default'|'dialog'|'drawer',label:string,trigger?:string}>,
+      default:()=>({type:'default',label:'设置:',trigger:'OPEN'}),
+    },
+    vesselProp:{
+      type:Object as PropType<any>,
+      default:()=>({})
     },
     // slot 配置
     slotOption:{
@@ -104,6 +142,7 @@ export default defineComponent({
   },
   emits:['update:data'],
   setup(props,context) {
+    const Ramda = R;
     const isExpand = ref(false);
     const { proxy } = getCurrentInstance() as { proxy: ComponentPublicInstance}; // 实例对象
     const innerState = useDataPluckToInnerState( props.uiConfig.elementGroup , R.clone(props.data)); // 内部数据
@@ -140,6 +179,7 @@ export default defineComponent({
       context.emit('update:data',R.mergeDeepRight(props.data,data))
     }
     return {
+      Ramda,
       proxy,
       innerState,
       computedElementGroup,
