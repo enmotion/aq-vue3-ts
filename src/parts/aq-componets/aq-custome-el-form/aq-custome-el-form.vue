@@ -32,7 +32,7 @@
         </div>
       </div>
     </div>
-    <div v-if="vesselConfig.type=='dialog'" class="w-0 p-10 flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap justify-between items-center">
+    <div v-if="vesselConfig.type=='dialog'" class="w-0 flex-grow-1 h-auto flex-shrink-0 xrow flex-wrap justify-between items-center">
       <span class="font-bold text-xs">{{vesselConfig.label}}</span>
       <span @click="isExpand = true" class=" cursor-pointer select-none text-xs" v-html="vesselConfig.trigger||'OPEN'"></span>
       <el-dialog
@@ -68,7 +68,7 @@
         </div>
       </el-dialog>
     </div>
-    <div v-if="vesselConfig.type=='drawer'" class="w-0 p-10 flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap justify-between items-center">
+    <div v-if="vesselConfig.type=='drawer'" class="w-0 flex-grow-1 h-auto flex-shrink-0 xrow flex-wrap justify-between items-center">
       <span class="font-bold text-xs">{{vesselConfig.label}}</span>
       <span @click="isExpand = true" class=" cursor-pointer select-none text-xs" v-html="vesselConfig.trigger||'OPEN'"></span>
       <el-drawer
@@ -162,12 +162,9 @@ export default defineComponent({
     const { proxy } = getCurrentInstance() as { proxy: ComponentPublicInstance}; // 实例对象
     let innerState = useDataPluckToInnerState( props.uiConfig.elementGroup , R.clone(props.data)); // 内部数据
     const exclude = ref(['ElSelect','aq-custome-el-form','aq-array-data']);
+    // 如果切换状态太为false时，则会重置数据
+    watch(()=>isExpand.value,function(n,o){ !n && stateReset()});
     // 组装基础的内置子组件
-    watch(()=>isExpand.value,function(n,o){
-      if(!n){
-        stateReset()
-      }
-    })
     const computedSubComponents = computed(()=>{
       return R.mergeAll([{ 
         ElButton, ElInput, ElInputNumber, ElSelect, ElSwitch, ElDivider, ElSlider, 

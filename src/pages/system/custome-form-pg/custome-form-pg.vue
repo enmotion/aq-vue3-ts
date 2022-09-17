@@ -17,27 +17,27 @@
         <aq-scroll-view class="flex-grow-1 w-full h-auto">
           <div class="xrow flex-wrap h-auto flex-grow-1 items-start justify-start content-start">
             <aq-custome-el-form
-              class="px-5 w-full flex-grow-0 bg-gray-200 h-auto items-start"
+              class="w-full p-10 flex-grow-0 bg-gray-200 h-auto items-start"
               parent-path="a.c"
               :data="handingData"
               :vessel-config="{
                 type:'dialog',
-                label:'更多设置：',
-                trigger:`<span class='iconfont icon-setting w-20 h-20 bg-d-10 text-xs text-white p-5 b'>设置</span>`,
+                label:'更多设置：弹窗',
+                trigger:`<span class='iconfont icon-setting py-5 px-10 bg-d-10 rounded-sm text-xs xrow items-center justify-center text-white whitespace-nowrap'>设置</span>`,
                 prop:{width:'90%'}
               }"
               :ui-config="uiConfigAT"
               @update:data="handingData = $event.data">
             </aq-custome-el-form>
             <aq-custome-el-form
-              class="px-5 w-2/12 flex-grow-1 bg-gray-200 items-start"
+              class="w-2/12 p-10 flex-grow-1 bg-gray-200 items-start border"
               parent-path="a.c"
               :data="handingData"
               :need-check="true"
               :vessel-config="{
                 type:'drawer',
                 label:'更多设置：',
-                trigger:`<span class='iconfont icon-setting w-20 h-20 bg-d-10 text-xs text-white p-5 b'>设置</span>`,
+                trigger:`<span class='iconfont icon-setting py-5 px-10 bg-d-10 rounded-sm text-xs xrow items-center justify-center text-white whitespace-nowrap'>设置</span>`,
                 prop:{size:'40%'}
               }"
               :ui-config="uiConfigAT"

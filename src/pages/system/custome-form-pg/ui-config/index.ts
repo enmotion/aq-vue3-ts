@@ -211,7 +211,6 @@ export const uiConfigB:CTF.UiConfig = {
       }
     },
     'info.dy':{
-      label:'颜色:',
       outerClass:'w-full h-auto items-start',
       labelClass:'flex-shrink-0 xrow text-left h-30 xrow items-center w-full',
       component:'aqMonacoEditor',
