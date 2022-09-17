@@ -1,5 +1,6 @@
 import { defineComponent, ref, reactive } from 'vue';
 import CTF from "@src/parts/aq-componets/aq-custome-el-form/types";
+const size='small';
 export const uiConfigA:CTF.UiConfig = {
   beforeUpdate:function(k,n,o,innerStateValue){
     if(k == 'name' && n == 'enmotion' && o == 'mod'){
@@ -16,7 +17,7 @@ export const uiConfigA:CTF.UiConfig = {
         label:'肤色:',
         component:'ElInput',
         binds:{
-          size:'small'
+          size:size
         }
       }
       data.info.body.skin = 'blue'
@@ -31,68 +32,96 @@ export const uiConfigA:CTF.UiConfig = {
       label:'年龄:',
       append:'px',
       component:'ElInputNumber',
-      outerClass:'w-3/12 flex-grow-1 items-center',
+      outerClass:'w-5/12 flex-grow-1 items-center',
       binds:{
-        size:'small',
+        size:size,
         controls:true,
         activeValue:18,
         inactiveValue:0,
         class:"flex-grow-1 w-0"
       }
     },
+    'divider-01':{
+      outerClass:'h-20 xrow justify-center mx-15 items-center',
+      component:"ElDivider",
+      binds:{
+        class:"flex-grow-1 w-0",
+        direction:'vertical',
+      }
+    },
     'info.body.size':{
       label:'尺寸:',
       append:'cm',
       component:'ElInputNumber',
-      outerClass:'w-3/12 flex-grow-1 items-center',
+      outerClass:'w-5/12 flex-grow-1 items-center',
       getter:(value)=>{ return parseFloat(value) },
       setter:(value)=>{ return value + 'cm' },
       binds:{
-        size:'small',
+        size:size,
         controls:false,
         activeValue:10,
         inactiveValue:0,
         class:"flex-grow-1 w-0"
       }
     },
+    'divider-02':{
+      outerClass:'w-full my-10 justify-center',
+      component:"ElDivider",
+      binds:{
+        class:"flex-grow-1 w-full",
+      }
+    },
     'info.link':{
       label:'链接:',
       append:'internet',
-      outerClass:'w-6/12 flex-grow-1 items-center',
+      outerClass:'w-5/12 flex-grow-1 items-center',
       component:'ElInput',
       binds:{
-        size:'small',
+        size:size,
         class:'flex-grow-1 w-0'
+      }
+    },
+    'divider-03':{
+      outerClass:'h-20 xrow justify-center mx-15 items-center',
+      component:"ElDivider",
+      binds:{
+        class:"flex-grow-1 w-0",
+        direction:'vertical',
       }
     },
     'info.body.eye':{
       label:'瞳色:',
-      outerClass:'mt-10 mr-20 flex-grow-1 items-center',
-      outerStyle:{width:'200px'},
+      outerClass:'w-5/12 flex-grow-1 items-center',
       component:'ElInput',
       binds:{
-        size:'small',
+        size:size,
         class:'flex-grow-1 w-0'
       }
     },
     'info.body.skin':{
       label:'肤色:',
-      outerClass:'mt-10 mr-20 items-center',
-      outerStyle:{width:'200px'},
+      outerClass:'w-5/12 flex-grow-1 items-center mt-10',
       component:'ElInput',
       binds:{
-        size:'small',
+        size:size,
         class:'flex-grow-1 w-0'
+      }
+    },
+    'divider-04':{
+      outerClass:'h-20 xrow mt-10 justify-center mx-15 items-center',
+      component:"ElDivider",
+      binds:{
+        class:"flex-grow-1 w-0",
+        direction:'vertical',
       }
     },
     'info.body.skins':{
       label:'肤色:',
-      outerClass:'mt-10 items-center',
-      outerStyle:{width:'300px'},
+      outerClass:'w-5/12 flex-grow-1 items-center mt-10',
       component:'ElInput',
       append:'cm',
       binds:{
-        size:'small',
+        size:size,
         class:'flex-grow-1 w-0'
       }
     },
@@ -137,32 +166,32 @@ export const uiConfigB:CTF.UiConfig = {
     'name':{
       label:'姓名:',
       append:'px',
-      outerClass:'w-5/12 h-20 flex-grow-1 my-5',
+      outerClass:'w-4/12 h-auto flex-grow-1 my-5 items-center',
       component:'ElInput',
       getter:(value)=>{if(value=='enmotion'){return 'bad enmotion'} return value},
       setter:(value)=>{if(value=='enmotion'){return 'bad enmotion'} return value},   
       binds:{
         class:"flex-grow-1 w-0",
-        size:'small'
+        size:size,
       }
     },    
     'divider-01':{
-      outerClass:'w-10 h-20 justify-center my-5 mx-5',
+      outerClass:'w-10 h-20 justify-center my-5 mx-5 items-center',
       component:"ElDivider",
       binds:{
-        class:"flex-grow-1 w-0",
+        class:"flex-grow-1 w-0 h-20",
         direction:'vertical',
       }
     },
     'info.body.size':{
       label:'尺寸:',
       append:'cm',
-      outerClass:'w-5/12 h-20 flex-grow-1 my-5',
+      outerClass:'w-4/12 h-auto flex-grow-1 my-5 items-center',
       component:'ElSlider',
       getter:(value)=>{ return parseFloat(value) },
       setter:(value)=>{ return value + 'cm' },
       binds:{
-        size:'small',
+        size:size,
         step:100,
         max:1000,
         min:-1000,
@@ -170,7 +199,7 @@ export const uiConfigB:CTF.UiConfig = {
       }
     },    
     'divider-02':{
-      outerClass:'w-full h-0 justify-center h-5 my-5',
+      outerClass:'w-full h-auto justify-center h-5 my-5',
       component:"ElDivider",
       binds:{
       }
@@ -178,12 +207,12 @@ export const uiConfigB:CTF.UiConfig = {
     'info.link':{
       label:'链接:',
       append:'.com',
-      outerClass:'w-full h-20 my-5',
+      outerClass:'w-full h-auto my-5 items-center',
       component:'ElInput',
       binds:{
         appends:'.com',
         class:'w-0 flex-grow-1',
-        size:'small'
+        size:size,
       }
     },
     // 'divider-03':{
@@ -194,11 +223,11 @@ export const uiConfigB:CTF.UiConfig = {
     // },
     'info.body.eye':{
       label:'瞳色:',
-      outerClass:'w-full h-20 my-5',
+      outerClass:'w-full h-auto my-5 items-center',
       component:'ElInput',
       binds:{
         class:'w-0 flex-grow-1',
-        size:'small'
+        size:size,
       }
     },
     'info.body.eyes':{

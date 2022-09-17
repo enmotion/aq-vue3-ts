@@ -99,7 +99,7 @@
                 </component>
                 <span v-if="item.append" class="w-auto whitespace-nowrap mx-5">{{item.append}}</span>
               </div>
-              <div v-if="needCheck" class="xrow items-center justify-between w-full mt-10">
+              <div v-if="needCheck" class="xrow items-center justify-between w-full pt-10 mt-10 border-t">
                 <el-button size="small" @click="stateReset">取消</el-button>
                 <el-button type="success" size="small" @click="dataUpdateByCheck">确定</el-button>
               </div>      
@@ -112,7 +112,7 @@
 
 <script lang="ts">
 import * as R from "ramda";
-import { defineComponent, ref, computed, getCurrentInstance, watch} from 'vue';
+import { defineComponent, ref, computed, getCurrentInstance, watch, nextTick} from 'vue';
 import type { PropType, ComponentPublicInstance } from "vue";
 import CTF from "./types";
 import {
@@ -213,11 +213,12 @@ export default defineComponent({
     function dataUpdateByCheck(){      
       let data = useInnerStateReforgeToData( computedElementGroup.value ,innerState.value);
       context.emit('update:data',{data:R.mergeDeepRight(props.data,data),extra:{}});
+      nextTick(function(){ isExpand.value = false })
     }
     // 重置内部数据
     function stateReset(){      
       innerState.value = useDataPluckToInnerState( props.uiConfig.elementGroup , R.clone(props.data)).value; // 内部数据
-      console.log(innerState.value)
+      nextTick(function(){ isExpand.value = false })
     }
     return {
       Ramda,
