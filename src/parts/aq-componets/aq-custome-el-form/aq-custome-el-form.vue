@@ -10,10 +10,14 @@
       <div class="w-0 p-10 flex-grow-1 flex-shrink-1 xrow flex-wrap items-start">
         <div v-for="(item,key) in computedElementGroup" 
           :key="key" 
-          class="xrow xwarp items-center" 
-          :class="[item.outerClass||'mb-5 last:mb-0']"
+          class="xrow flex-wrap" 
+          :class="[item.outerClass||'items-center mb-5 last:mb-0']"
           :style="item.outerStyle||{}">
-          <span v-if="item.label" class="w-auto whitespace-nowrap mr-5">{{item.label}}</span>
+          <span v-if="item.label" class="w-auto whitespace-nowrap mr-5" 
+            :class="[item.labelClass]" 
+            :style="[item.labelStyle]">
+            {{item.label}}
+          </span>
           <component 
             v-model="innerState[key]" 
             :is="computedSubComponents[item.component]" 
@@ -37,10 +41,14 @@
         <div class="w-full p-10 flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap items-start">
           <div v-for="(item,key) in computedElementGroup" 
             :key="key" 
-            class="xrow xwarp items-center" 
-            :class="[item.outerClass||'mb-5 last:mb-0']"
+            class="xrow flex-wrap" 
+            :class="[item.outerClass||'items-center mb-5 last:mb-0']"
             :style="item.outerStyle||{}">
-            <span v-if="item.label" class="w-auto whitespace-nowrap mr-5">{{item.label}}</span>
+            <span v-if="item.label" class="w-auto whitespace-nowrap mr-5" 
+              :class="[item.labelClass]" 
+              :style="[item.labelStyle]">
+              {{item.label}}
+            </span>
             <component 
               v-model="innerState[key]" 
               :is="computedSubComponents[item.component]" 
@@ -66,10 +74,14 @@
         <div class="w-full p-10 flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap items-start">
           <div v-for="(item,key) in computedElementGroup" 
             :key="key" 
-            class="xrow xwarp items-center" 
-            :class="[item.outerClass||'mb-5 last:mb-0']"
+            class="xrow flex-wrap" 
+            :class="[item.outerClass||'items-center mb-5 last:mb-0']"
             :style="item.outerStyle||{}">
-            <span v-if="item.label" class="w-auto whitespace-nowrap mr-5">{{item.label}}</span>
+            <span v-if="item.label" class="w-auto whitespace-nowrap mr-5" 
+              :class="[item.labelClass]" 
+              :style="[item.labelStyle]">
+              {{item.label}}
+            </span>
             <component 
               v-model="innerState[key]" 
               :is="computedSubComponents[item.component]" 

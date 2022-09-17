@@ -136,13 +136,15 @@ export const uiConfigB:CTF.UiConfig = {
       getter:(value)=>{if(value=='enmotion'){return 'bad enmotion'} return value},
       setter:(value)=>{if(value=='enmotion'){return 'bad enmotion'} return value},   
       binds:{
+        class:"flex-grow-1 w-0",
         size:'small'
       }
-    },
+    },    
     'divider-01':{
       outerClass:'w-10 h-20 justify-center my-5 mx-5',
       component:"ElDivider",
       binds:{
+        class:"flex-grow-1 w-0",
         direction:'vertical',
       }
     },
@@ -154,15 +156,15 @@ export const uiConfigB:CTF.UiConfig = {
       getter:(value)=>{ return parseFloat(value) },
       setter:(value)=>{ return value + 'cm' },
       binds:{
-        size:'large',
+        size:'small',
         step:100,
         max:1000,
         min:-1000,
-        class:"flex-grow-1 mx-5"
+        class:"flex-grow-1 w-0 mx-5"
       }
-    },
+    },    
     'divider-02':{
-      outerClass:'w-full h-10 justify-center h-5 my-5',
+      outerClass:'w-full h-0 justify-center h-5 my-5',
       component:"ElDivider",
       binds:{
       }
@@ -174,6 +176,7 @@ export const uiConfigB:CTF.UiConfig = {
       component:'ElInput',
       binds:{
         appends:'.com',
+        class:'w-0 flex-grow-1',
         size:'small'
       }
     },
@@ -188,20 +191,23 @@ export const uiConfigB:CTF.UiConfig = {
       outerClass:'w-full h-20 my-5',
       component:'ElInput',
       binds:{
+        class:'w-0 flex-grow-1',
         size:'small'
       }
     },
     'info.body.eyes':{
       label:'瞳色:',
-      outerClass:'w-full h-20 my-5',
+      outerClass:'w-full h-auto my-5 items-center',
       component:'ElColorPicker',
       binds:{
+        class:'flex-grow-1 w-0 flex-grow-1',
         showAlpha:true,
       }
     },
     'info.dy':{
-      label:'s色:',
-      outerClass:'w-full h-20 my-5',
+      label:'圣体颜色:',
+      outerClass:'w-full h-auto my-5 items-start',
+      labelClass:'flex-shrink-0 h-30 xrow items-center text-left w-full',
       component:'aqMonacoEditor',
       binds:{
         showAlpha:true,

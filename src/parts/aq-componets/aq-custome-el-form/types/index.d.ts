@@ -25,11 +25,15 @@ namespace CTF{
   // 单个组件元素界面配置信息
   export interface ElementAtom{
     component:string, // 界面组件名称
-    label?:string, // 界面组件标签名称
+    label?:string, // 界面组件标签名称   
     append?:string, // 界面组件尾标
     invisible?:boolean, // 界面组件是否隐藏
+    labelClass?:string, // 标签文字class
+    labelStyle?:StyleValue, // 标签文字style
     outerClass?:string,//容器 class 样式
     outerStyle?:StyleValue, // 容器style配置
+    appendClass?:string, // 尾标文字class
+    appendStyle?:StyleValue, // 尾标文字style
     // 在使用中，有时我们需要对值进行转化,比如值为 '18px' 但在组件中必须为 数值 18 就可以通过以下两个访问器，进行转换操作
     getter?:(v:any)=>any, // 值读取转换器 input 数值时使用
     setter?:(v:any)=>any, // 值设置转换器 output 数值时使用

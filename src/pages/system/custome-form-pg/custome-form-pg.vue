@@ -17,7 +17,7 @@
         <aq-scroll-view class="flex-grow-1 w-full h-auto">
           <div class="xrow flex-wrap h-auto flex-grow-1 items-start justify-start content-start">
             <aq-custome-el-form
-              class="mx-5 w-full flex-grow-0 bg-gray-200 h-auto items-start"
+              class="px-5 w-full flex-grow-0 bg-gray-200 h-auto items-start"
               parent-path="a.c"
               :data="handingData"
               :vessel-config="{
@@ -30,7 +30,7 @@
               @update:data="handingData = $event">
             </aq-custome-el-form>
             <aq-custome-el-form
-              class="mx-5 w-2/12 flex-grow-1 bg-gray-200 items-start"
+              class="px-5 w-2/12 flex-grow-1 bg-gray-200 items-start"
               parent-path="a.c"
               :data="handingData"
               :vessel-config="{
@@ -43,7 +43,7 @@
               @update:data="handingData = $event">
             </aq-custome-el-form>
             <aq-custome-el-form
-              class="mx-5 flex-grow-1 w-5/12 items-start"
+              class="px-5 flex-grow-1 w-5/12 items-start border-l"
               parent-path="b.c"
               :data="handingData" 
               :ui-config="uiConfigBT"
