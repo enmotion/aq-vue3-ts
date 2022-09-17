@@ -1,7 +1,8 @@
 <template>
     <div ref="loadingContainer" class="box-border h-auto flex flex-col flex-grow-1 flex-shrink-0 mask">
         <div class="flex flex-col flex-grow-1">
-            <slot></slot>
+            bbvbbb
+            <slot>aaa</slot>
         </div>
         <div v-if="isLoading" class="flex felx-col z-10 flex-grow-1 absolute w-full h-full">
             <div class="flex flex-col flex-grow-1 items-center justify-center">

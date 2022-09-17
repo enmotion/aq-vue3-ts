@@ -23,11 +23,6 @@
           <span v-if="item.append" class="w-auto whitespace-nowrap mx-5">{{item.append}}</span>
         </div>
       </div>
-      <!-- <div class="xcol h-auto bg-p-10 flex-grow-0 flex-shrink-0">
-        <slot>
-          <span class="w-200 h-20"></span>
-        </slot>
-      </div> -->
     </div>
     <div v-if="vesselConfig.type=='dialog'" class="w-0 p-10 flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap justify-between items-center">
       <span class="font-bold text-xs">{{vesselConfig.label}}</span>
@@ -139,11 +134,12 @@ export default defineComponent({
     const exclude = ref(['ElSelect','aq-custome-el-form','aq-array-data']);
     // 组装基础的内置子组件
     const computedSubComponents = computed(()=>{
-      return R.mergeAll([props.subComponents,{ 
+      return R.mergeAll([{ 
         ElInput, ElInputNumber, ElSelect, ElSwitch, ElDivider, ElSlider, 
         ElColorPicker, ElRadioGroup, ElRadioButton, ElImage, ElDrawer, ElDialog  
-      }])
+      },props.subComponents])
     })
+    console.log(computedSubComponents)
     // 根据 处理数据 ui配置 决定当前UI的显示
     const computedElementGroup = computed(()=>{
       console.log(props.data,'computedElementGroup')      

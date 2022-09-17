@@ -63,11 +63,8 @@
 <script lang="ts">
 import { defineComponent, ref,shallowRef, reactive } from 'vue';
 import * as R from "ramda";
-import { 
-  ElInput, ElInputNumber, ElSelect, ElSwitch, ElDivider, ElSlider, 
-  ElColorPicker, ElRadioGroup, ElRadioButton, ElImage, ElDrawer, ElDialog
-} from 'element-plus';
 import aqCustomeElForm from '@src/parts/aq-componets/aq-custome-el-form/aq-custome-el-form.vue';
+import aqMonacoEditor from '@src/parts/aq-componets/aq-monaco-editor/aq-monaco-editor.vue';
 import CTF from "@src/parts/aq-componets/aq-custome-el-form/types";
 import { uiConfigA, uiConfigB } from './ui-config';
 
@@ -76,10 +73,7 @@ export default defineComponent({
   components:{},
   setup(props,context) {
     const drawerOpen = ref(false);
-    const components = shallowRef({
-      ElInput, ElInputNumber, ElSelect, ElSwitch, ElDivider, ElSlider, 
-      ElRadioGroup, ElRadioButton, ElImage,
-    })
+    const components = shallowRef({ aqMonacoEditor });
     const handingData = ref({
       name:'mod',
       info:{

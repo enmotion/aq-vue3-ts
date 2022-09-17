@@ -199,5 +199,13 @@ export const uiConfigB:CTF.UiConfig = {
         showAlpha:true,
       }
     },
+    'info.dy':{
+      label:'s色:',
+      outerClass:'w-full h-20 my-5',
+      component:'aqMonacoEditor',
+      binds:{
+        showAlpha:true,
+      }
+    }
   }
 }
