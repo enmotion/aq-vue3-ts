@@ -2,7 +2,7 @@
 namespace CTF{
   export interface Data{[key:string]:any}
   export interface State{value:Data}
-  export type BeforeUpdate = (key:string, n:any, o:any, innerState:{value:Data} )=> Data
+  export type BeforeUpdate = (key:string, n:any, o:any, innerState:Data )=> Data
   export type UiGuardin = ( ui:ElementGroup, data:any )=> ElementGroup
   export type DisplayConfig={
     type:'default'|'dialog'|'drawer'

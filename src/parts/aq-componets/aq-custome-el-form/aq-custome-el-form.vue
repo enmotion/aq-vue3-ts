@@ -22,9 +22,13 @@
             v-model="innerState[key]" 
             :is="computedSubComponents[item.component]" 
             v-bind="item.binds||{}"
-            @change="dateUpdate(key,$event)">
+            @change="dataUpdate(key,$event)">
           </component>
           <span v-if="item.append" class="w-auto whitespace-nowrap mx-5">{{item.append}}</span>
+        </div>
+        <div v-if="needCheck" class="xrow items-center justify-between w-full mt-10">
+          <el-button size="small" @click="stateReset">取消</el-button>
+          <el-button type="success" size="small" @click="dataUpdateByCheck">确定</el-button>
         </div>
       </div>
     </div>
@@ -38,7 +42,7 @@
           width:'90%',
           customClass:'aq-custome-el-form-dialog',
         },vesselConfig.prop||{}])">
-        <div class="w-full p-10 flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap items-start">
+        <div class="w-full flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap items-start">
           <div v-for="(item,key) in computedElementGroup" 
             :key="key" 
             class="xrow flex-wrap" 
@@ -53,9 +57,13 @@
               v-model="innerState[key]" 
               :is="computedSubComponents[item.component]" 
               v-bind="item.binds||{}"
-              @change="dateUpdate(key,$event)">
+              @change="dataUpdate(key,$event)">
             </component>
             <span v-if="item.append" class="w-auto whitespace-nowrap mx-5">{{item.append}}</span>
+          </div>
+          <div v-if="needCheck" class="xrow items-center justify-between w-full pt-10 mt-10 border-t">
+            <el-button size="small" @click="stateReset">取消</el-button>
+            <el-button type="success" size="small" @click="dataUpdateByCheck">确定</el-button>
           </div>
         </div>
       </el-dialog>
@@ -71,26 +79,32 @@
           direction:'rtl',
           customClass:'aq-custome-el-form-drawer'
         },vesselConfig.prop||{}])">
-        <div class="w-full p-10 flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap items-start">
-          <div v-for="(item,key) in computedElementGroup" 
-            :key="key" 
-            class="xrow flex-wrap" 
-            :class="[item.outerClass||'items-center mb-5 last:mb-0']"
-            :style="item.outerStyle||{}">
-            <span v-if="item.label" class="w-auto whitespace-nowrap mr-5" 
-              :class="[item.labelClass]" 
-              :style="[item.labelStyle]">
-              {{item.label}}
-            </span>
-            <component 
-              v-model="innerState[key]" 
-              :is="computedSubComponents[item.component]" 
-              v-bind="item.binds||{}"
-              @change="dateUpdate(key,$event)">
-            </component>
-            <span v-if="item.append" class="w-auto whitespace-nowrap mx-5">{{item.append}}</span>
-          </div>
-        </div>
+          <aq-scroll-view class="h-full">
+            <div class="w-full p-10 flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap items-start content-start">
+              <div v-for="(item,key) in computedElementGroup" 
+                :key="key" 
+                class="xrow flex-wrap" 
+                :class="[item.outerClass||'items-center mb-5 last:mb-0']"
+                :style="item.outerStyle||{}">
+                <span v-if="item.label" class="w-auto whitespace-nowrap mr-5" 
+                  :class="[item.labelClass]" 
+                  :style="[item.labelStyle]">
+                  {{item.label}}
+                </span>
+                <component 
+                  v-model="innerState[key]" 
+                  :is="computedSubComponents[item.component]" 
+                  v-bind="item.binds||{}"
+                  @change="dataUpdate(key,$event)">
+                </component>
+                <span v-if="item.append" class="w-auto whitespace-nowrap mx-5">{{item.append}}</span>
+              </div>
+              <div v-if="needCheck" class="xrow items-center justify-between w-full mt-10">
+                <el-button size="small" @click="stateReset">取消</el-button>
+                <el-button type="success" size="small" @click="dataUpdateByCheck">确定</el-button>
+              </div>      
+            </div>
+          </aq-scroll-view>
       </el-drawer>
     </div>    
   </div>
@@ -98,11 +112,11 @@
 
 <script lang="ts">
 import * as R from "ramda";
-import { defineComponent, ref, computed, getCurrentInstance} from 'vue';
+import { defineComponent, ref, computed, getCurrentInstance, watch} from 'vue';
 import type { PropType, ComponentPublicInstance } from "vue";
 import CTF from "./types";
-import {  
-  ElInput, ElInputNumber, ElSelect, ElSwitch, ElDivider, ElSlider, 
+import {
+  ElButton, ElInput, ElInputNumber, ElSelect, ElSwitch, ElDivider, ElSlider, 
   ElColorPicker, ElRadioGroup, ElRadioButton, ElImage, ElDrawer, ElDialog 
 } from 'element-plus';
 import { useDataPluckToInnerState, useInnerStateReforgeToData } from "./use.lib";
@@ -128,6 +142,10 @@ export default defineComponent({
       type:Object as PropType<CTF.SubComponent>,
       default:()=>({})
     },
+    needCheck:{
+      type:Boolean,
+      default:false,
+    },
     // slot 配置
     slotOption:{
       type:Object as PropType<CTF.SlotConfig>,
@@ -142,27 +160,33 @@ export default defineComponent({
     const Ramda = R;
     const isExpand = ref(false);
     const { proxy } = getCurrentInstance() as { proxy: ComponentPublicInstance}; // 实例对象
-    const innerState = useDataPluckToInnerState( props.uiConfig.elementGroup , R.clone(props.data)); // 内部数据
+    let innerState = useDataPluckToInnerState( props.uiConfig.elementGroup , R.clone(props.data)); // 内部数据
     const exclude = ref(['ElSelect','aq-custome-el-form','aq-array-data']);
     // 组装基础的内置子组件
+    watch(()=>isExpand.value,function(n,o){
+      if(!n){
+        stateReset()
+      }
+    })
     const computedSubComponents = computed(()=>{
       return R.mergeAll([{ 
-        ElInput, ElInputNumber, ElSelect, ElSwitch, ElDivider, ElSlider, 
+        ElButton, ElInput, ElInputNumber, ElSelect, ElSwitch, ElDivider, ElSlider, 
         ElColorPicker, ElRadioGroup, ElRadioButton, ElImage, ElDrawer, ElDialog  
       },props.subComponents])
     })
-    console.log(computedSubComponents)
     // 根据 处理数据 ui配置 决定当前UI的显示
     const computedElementGroup = computed(()=>{
-      console.log(props.data,'computedElementGroup')      
+      //console.log(props.data,'computedElementGroup')      
       // 此处的入参数，必须复制，避免内部修改，影响到外部原始值的触发错误情况
       const renderElementGroup = props.uiConfig.uiGuardian ? 
       props.uiConfig.uiGuardian ( R.clone(props.uiConfig.elementGroup), R.clone(props.data) ) as CTF.ElementGroup || props.uiConfig.elementGroup :
       props.uiConfig.elementGroup;
       // 当界面配置或数据发生变化时，需要重置 innerState; 且以外部数据为准;
-      let state = useDataPluckToInnerState(renderElementGroup , props.data);
-      innerState.value = R.mergeDeepRight(innerState.value,state.value);
-      console.log(innerState.value, 'computedElementGroup end')
+      if(!props.needCheck){
+        let state = useDataPluckToInnerState(renderElementGroup , props.data);
+        innerState.value = R.mergeDeepRight(innerState.value,state.value);
+      }
+      //console.log(innerState.value, 'computedElementGroup end');
       /* 
        * 如果发现 守卫过滤器 修正后的配置key名与原始输入的key名内容不相符时，表明有新增或者删除, 那么将针对新增可能的数据再做一次增补，重新获取原始数据中的对应值
        * 1.ui守卫过滤器发现 props.uiConfig 与 渲染 renderUiConfig 差集不为0时表示有差异，
@@ -176,12 +200,27 @@ export default defineComponent({
       // }
       return renderElementGroup
     });
-    function dateUpdate( key:string|number , value:any ){
+    function dataUpdate( key:string|number , value:any ){
       let old = R.path(( key as string ).split('.'),props.data);
       let state = props.uiConfig.beforeUpdate ? 
-      props.uiConfig.beforeUpdate( (key as string), value, old, R.clone(innerState) ) : innerState;
-      let data = useInnerStateReforgeToData( computedElementGroup.value ,state);
-      context.emit('update:data',R.mergeDeepRight(props.data,data))
+      props.uiConfig.beforeUpdate( (key as string), value, old, R.clone(innerState.value) ) : innerState.value;
+      if(!props.needCheck){
+        let data = useInnerStateReforgeToData( computedElementGroup.value ,state);
+        context.emit('update:data',{data:R.mergeDeepRight(props.data,data),extra:{}})
+      }else{
+        innerState.value = state;
+        console.log(innerState.value,state)
+      }
+    }
+    // 确定按钮提交数据
+    function dataUpdateByCheck(){      
+      let data = useInnerStateReforgeToData( computedElementGroup.value ,innerState.value);
+      context.emit('update:data',{data:R.mergeDeepRight(props.data,data),extra:{}});
+    }
+    // 重置内部数据
+    function stateReset(){      
+      innerState.value = useDataPluckToInnerState( props.uiConfig.elementGroup , R.clone(props.data)).value; // 内部数据
+      console.log(innerState.value)
     }
     return {
       Ramda,
@@ -191,7 +230,9 @@ export default defineComponent({
       computedElementGroup,
       computedSubComponents,
       isExpand,
-      dateUpdate
+      stateReset,
+      dataUpdateByCheck,
+      dataUpdate
     }
   },
 })

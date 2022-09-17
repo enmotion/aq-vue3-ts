@@ -41,6 +41,10 @@
   min-width: 30px;
   white-space: nowrap;
 }
+.aq-custome-el-form .el-input-number.is-without-controls .el-input__wrapper {
+  padding-left: 0px;
+  padding-right: 0px;
+}
 
 .aq-custome-el-form .el-input-number.is-without-controls .el-input__inner {
   padding-left: 5px;

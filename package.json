@@ -37,6 +37,7 @@
     "vue": "^3.2.25",
     "vue-router": "^4.0.16",
     "vuex": "^4.0.2",
+    "wc-epic-spinners": "^1.0.2",
     "x2js": "^3.4.2"
   },
   "devDependencies": {

@@ -13,13 +13,13 @@ export function useDataPluckToInnerState( config:CTF.ElementGroup , data:{[key:s
   return innerState
 }
 // 将内部状态数据 还原成加工后数据
-export function useInnerStateReforgeToData( config:CTF.ElementGroup, innerState:CTF.State ){
+export function useInnerStateReforgeToData( config:CTF.ElementGroup, innerStateValue:CTF.Data ){
   // console.log('useInnerStateReforgeToData')
   let data:{[key:string]:any}={};
-  R.keys(innerState.value).map((key)=>{
+  R.keys(innerStateValue).map((key)=>{
     data = R.assocPath( 
       (key as string).split('.') , 
-      config[key]?.setter ? (config[key].setter as (v:any)=>any)(innerState.value[key]) : innerState.value[key] , 
+      config[key]?.setter ? (config[key].setter as (v:any)=>any)(innerStateValue[key]) : innerStateValue[key] , 
       data
     );
   })

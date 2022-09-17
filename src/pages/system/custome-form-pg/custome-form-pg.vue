@@ -27,12 +27,13 @@
                 prop:{width:'90%'}
               }"
               :ui-config="uiConfigAT"
-              @update:data="handingData = $event">
+              @update:data="handingData = $event.data">
             </aq-custome-el-form>
             <aq-custome-el-form
               class="px-5 w-2/12 flex-grow-1 bg-gray-200 items-start"
               parent-path="a.c"
               :data="handingData"
+              :need-check="true"
               :vessel-config="{
                 type:'drawer',
                 label:'更多设置：',
@@ -40,7 +41,7 @@
                 prop:{size:'40%'}
               }"
               :ui-config="uiConfigAT"
-              @update:data="handingData = $event">
+              @update:data="handingData =  $event.data">
             </aq-custome-el-form>
             <aq-custome-el-form
               class="px-5 flex-grow-1 w-5/12 items-start border-l"
@@ -48,7 +49,7 @@
               :data="handingData" 
               :ui-config="uiConfigBT"
               :sub-components="components"
-              @update:data="handingData = $event">
+              @update:data="handingData =  $event.data">
             </aq-custome-el-form>
           </div>
         </aq-scroll-view>

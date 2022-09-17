@@ -1,11 +1,11 @@
 import { defineComponent, ref, reactive } from 'vue';
 import CTF from "@src/parts/aq-componets/aq-custome-el-form/types";
 export const uiConfigA:CTF.UiConfig = {
-  beforeUpdate:function(k,n,o,innerState){
+  beforeUpdate:function(k,n,o,innerStateValue){
     if(k == 'name' && n == 'enmotion' && o == 'mod'){
-      innerState.value['info.age'] = o
+      innerStateValue['info.age'] = o
     }
-    return innerState
+    return innerStateValue
   },
   uiGuardian:function(ui,data){
     if(data.info.age>20){
@@ -31,74 +31,80 @@ export const uiConfigA:CTF.UiConfig = {
       label:'年龄:',
       append:'px',
       component:'ElInputNumber',
-      outerClass:'w-3/12 flex-grow-1',
+      outerClass:'w-3/12 flex-grow-1 items-center',
       binds:{
         size:'small',
+        controls:true,
         activeValue:18,
         inactiveValue:0,
-        class:"flex-grow-1"
+        class:"flex-grow-1 w-0"
       }
     },
     'info.body.size':{
       label:'尺寸:',
       append:'cm',
       component:'ElInputNumber',
-      outerClass:'w-3/12 flex-grow-1',
+      outerClass:'w-3/12 flex-grow-1 items-center',
       getter:(value)=>{ return parseFloat(value) },
       setter:(value)=>{ return value + 'cm' },
       binds:{
         size:'small',
+        controls:false,
         activeValue:10,
         inactiveValue:0,
-        class:"flex-grow-1"
+        class:"flex-grow-1 w-0"
       }
     },
     'info.link':{
       label:'链接:',
       append:'internet',
-      outerClass:'w-6/12 flex-grow-1',
+      outerClass:'w-6/12 flex-grow-1 items-center',
       component:'ElInput',
       binds:{
-        size:'small'
+        size:'small',
+        class:'flex-grow-1 w-0'
       }
     },
     'info.body.eye':{
       label:'瞳色:',
-      outerClass:'mt-10 mr-20',
+      outerClass:'mt-10 mr-20 flex-grow-1 items-center',
       outerStyle:{width:'200px'},
       component:'ElInput',
       binds:{
-        size:'small'
+        size:'small',
+        class:'flex-grow-1 w-0'
       }
     },
     'info.body.skin':{
       label:'肤色:',
-      outerClass:'mt-10 mr-20',
+      outerClass:'mt-10 mr-20 items-center',
       outerStyle:{width:'200px'},
       component:'ElInput',
       binds:{
-        size:'small'
+        size:'small',
+        class:'flex-grow-1 w-0'
       }
     },
     'info.body.skins':{
       label:'肤色:',
-      outerClass:'mt-10',
+      outerClass:'mt-10 items-center',
       outerStyle:{width:'300px'},
       component:'ElInput',
       append:'cm',
       binds:{
-        size:'small'
+        size:'small',
+        class:'flex-grow-1 w-0'
       }
     },
   }
 }
 export const uiConfigB:CTF.UiConfig = {
-  beforeUpdate:function(k,n,o,innerState){
+  beforeUpdate:function(k,n,o,innerStateValue){
     if(k == 'name' && n == 'enmotion' && o == 'mod'){
-      innerState.value['info.age'] = 0
-      innerState.value['info.body.size'] = 0
+      innerStateValue['info.age'] = 0
+      innerStateValue['info.body.size'] = 0
     }
-    return innerState
+    return innerStateValue
   },
   uiGuardian:function(ui,data){
     if(data.info.age>40){
@@ -205,9 +211,9 @@ export const uiConfigB:CTF.UiConfig = {
       }
     },
     'info.dy':{
-      label:'圣体颜色:',
-      outerClass:'w-full h-auto my-5 items-start',
-      labelClass:'flex-shrink-0 h-30 xrow items-center text-left w-full',
+      label:'颜色:',
+      outerClass:'w-full h-auto items-start',
+      labelClass:'flex-shrink-0 xrow text-left h-30 xrow items-center w-full',
       component:'aqMonacoEditor',
       binds:{
         showAlpha:true,
