@@ -37,8 +37,7 @@
         v-bind="Ramda.mergeAll([{
           showClose:false,
           width:'90%',
-          direction:'rtl',
-          customClass:'aq-custome-el-form-dialog'
+          customClass:'aq-custome-el-form-dialog',
         },vesselConfig.prop||{}])">
         <div class="w-full p-10 flex-grow-1 h-auto flex-shrink-1 xrow flex-wrap items-start">
           <div v-for="(item,key) in computedElementGroup" 
