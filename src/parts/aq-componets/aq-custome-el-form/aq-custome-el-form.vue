@@ -16,7 +16,7 @@
           <span v-if="item.label" class="w-auto whitespace-nowrap mr-5">{{item.label}}</span>
           <component 
             v-model="innerState[key]" 
-            :is="item.component" 
+            :is="computedSubComponents[item.component]" 
             v-bind="item.binds||{}"
             @change="dateUpdate(key,$event)">
           </component>
@@ -48,7 +48,7 @@
             <span v-if="item.label" class="w-auto whitespace-nowrap mr-5">{{item.label}}</span>
             <component 
               v-model="innerState[key]" 
-              :is="item.component" 
+              :is="computedSubComponents[item.component]" 
               v-bind="item.binds||{}"
               @change="dateUpdate(key,$event)">
             </component>
@@ -77,7 +77,7 @@
             <span v-if="item.label" class="w-auto whitespace-nowrap mr-5">{{item.label}}</span>
             <component 
               v-model="innerState[key]" 
-              :is="item.component" 
+              :is="computedSubComponents[item.component]" 
               v-bind="item.binds||{}"
               @change="dateUpdate(key,$event)">
             </component>
@@ -94,18 +94,14 @@ import * as R from "ramda";
 import { defineComponent, ref, computed, getCurrentInstance} from 'vue';
 import type { PropType, ComponentPublicInstance } from "vue";
 import CTF from "./types";
-import { 
+import {  
   ElInput, ElInputNumber, ElSelect, ElSwitch, ElDivider, ElSlider, 
-  ElColorPicker, ElRadioGroup, ElRadioButton, ElImage, ElDrawer, ElDialog
+  ElColorPicker, ElRadioGroup, ElRadioButton, ElImage, ElDrawer, ElDialog 
 } from 'element-plus';
 import { useDataPluckToInnerState, useInnerStateReforgeToData } from "./use.lib";
 
 export default defineComponent({
   name:'aq-custome-el-form',
-  components:{ 
-    ElInput, ElInputNumber, ElSelect, ElSwitch, ElDivider, ElSlider, 
-    ElColorPicker, ElRadioGroup, ElRadioButton, ElImage, ElDrawer, ElDialog
-  },
   props:{
     // 需要被处理加工的数据
     data:{
@@ -120,6 +116,10 @@ export default defineComponent({
     vesselConfig:{
       type:Object as PropType<CTF.DisplayConfig>,
       default:()=>({type:'default',label:'设置:',trigger:'OPEN'}),
+    },
+    subComponents:{
+      type:Object as PropType<CTF.SubComponent>,
+      default:()=>({})
     },
     // slot 配置
     slotOption:{
@@ -136,8 +136,14 @@ export default defineComponent({
     const isExpand = ref(false);
     const { proxy } = getCurrentInstance() as { proxy: ComponentPublicInstance}; // 实例对象
     const innerState = useDataPluckToInnerState( props.uiConfig.elementGroup , R.clone(props.data)); // 内部数据
-    const exclude = ref(['ElSelect','aq-custome-el-form','aq-array-data'])
-
+    const exclude = ref(['ElSelect','aq-custome-el-form','aq-array-data']);
+    // 组装基础的内置子组件
+    const computedSubComponents = computed(()=>{
+      return R.mergeAll([props.subComponents,{ 
+        ElInput, ElInputNumber, ElSelect, ElSwitch, ElDivider, ElSlider, 
+        ElColorPicker, ElRadioGroup, ElRadioButton, ElImage, ElDrawer, ElDialog  
+      }])
+    })
     // 根据 处理数据 ui配置 决定当前UI的显示
     const computedElementGroup = computed(()=>{
       console.log(props.data,'computedElementGroup')      
@@ -175,6 +181,7 @@ export default defineComponent({
       proxy,
       innerState,
       computedElementGroup,
+      computedSubComponents,
       isExpand,
       dateUpdate
     }

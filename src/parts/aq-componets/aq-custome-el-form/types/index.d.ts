@@ -16,6 +16,9 @@ namespace CTF{
     elementGroup:ElementGroup
   }
   // 多组件配置结构
+  export interface SubComponent{
+    [key:string]:any
+  }
   export interface ElementGroup{
     [key:string]:ElementAtom
   }

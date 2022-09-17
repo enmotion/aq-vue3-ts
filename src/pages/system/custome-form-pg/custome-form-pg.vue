@@ -47,6 +47,7 @@
               parent-path="b.c"
               :data="handingData" 
               :ui-config="uiConfigBT"
+              :sub-components="components"
               @update:data="handingData = $event">
             </aq-custome-el-form>
           </div>
@@ -60,18 +61,25 @@
 </style>
 
 <script lang="ts">
-import { defineComponent, ref, reactive } from 'vue';
+import { defineComponent, ref,shallowRef, reactive } from 'vue';
 import * as R from "ramda";
-import { ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton, ElSlider, ElDrawer, ElColorPicker } from "element-plus";
+import { 
+  ElInput, ElInputNumber, ElSelect, ElSwitch, ElDivider, ElSlider, 
+  ElColorPicker, ElRadioGroup, ElRadioButton, ElImage, ElDrawer, ElDialog
+} from 'element-plus';
 import aqCustomeElForm from '@src/parts/aq-componets/aq-custome-el-form/aq-custome-el-form.vue';
 import CTF from "@src/parts/aq-componets/aq-custome-el-form/types";
 import { uiConfigA, uiConfigB } from './ui-config';
 
 export default defineComponent({
   name:'custome-form',
-  components:{ ElSwitch, ElSelect, ElOption, ElInputNumber, ElButton ,aqCustomeElForm ,ElDrawer, ElColorPicker},
+  components:{},
   setup(props,context) {
     const drawerOpen = ref(false);
+    const components = shallowRef({
+      ElInput, ElInputNumber, ElSelect, ElSwitch, ElDivider, ElSlider, 
+      ElRadioGroup, ElRadioButton, ElImage,
+    })
     const handingData = ref({
       name:'mod',
       info:{
@@ -89,6 +97,7 @@ export default defineComponent({
     return {
       drawerOpen,
       handingData,
+      components,
       uiConfigAT,
       uiConfigBT
     }
