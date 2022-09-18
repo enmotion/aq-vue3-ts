@@ -27,6 +27,7 @@ export const uiConfigA:CTF.UiConfig = {
     }
     return ui
   },
+  extra:{updata:true},
   elementGroup:{
     'info.age':{
       label:'年龄:',
@@ -209,6 +210,7 @@ export const uiConfigB:CTF.UiConfig = {
       append:'.com',
       outerClass:'w-full h-auto my-5 items-center',
       component:'ElInput',
+      extra:{updata:true},
       binds:{
         appends:'.com',
         class:'w-0 flex-grow-1',

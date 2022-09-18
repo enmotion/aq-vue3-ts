@@ -203,7 +203,8 @@ export default defineComponent({
       props.uiConfig.beforeUpdate( (key as string), value, old, R.clone(innerState.value) ) : innerState.value;
       if(!props.needCheck){
         let data = useInnerStateReforgeToData( computedElementGroup.value ,state);
-        context.emit('update:data',{data:R.mergeDeepRight(props.data,data),extra:{}})
+        console.log({data:R.mergeDeepRight(props.data,data),extra:computedElementGroup.value[key].extra||{}})
+        context.emit('update:data',{data:R.mergeDeepRight(props.data,data),extra:computedElementGroup.value[key].extra})
       }else{
         innerState.value = state;
         console.log(innerState.value,state)
@@ -212,7 +213,8 @@ export default defineComponent({
     // 确定按钮提交数据
     function dataUpdateByCheck(){      
       let data = useInnerStateReforgeToData( computedElementGroup.value ,innerState.value);
-      context.emit('update:data',{data:R.mergeDeepRight(props.data,data),extra:{}});
+      console.log({data:R.mergeDeepRight(props.data,data),extra:props.uiConfig.extra||{}});
+      context.emit('update:data',{data:R.mergeDeepRight(props.data,data),extra:props.uiConfig.extra||{}});
       nextTick(function(){ isExpand.value = false })
     }
     // 重置内部数据

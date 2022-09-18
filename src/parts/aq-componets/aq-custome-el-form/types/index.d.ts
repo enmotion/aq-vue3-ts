@@ -13,6 +13,7 @@ namespace CTF{
   export interface UiConfig{
     beforeUpdate?:BeforeUpdate
     uiGuardian?:UiGuardin // ui 守卫 根据处理数据的变化，对UI配置进行及时调整
+    extra?:any // 更新数值时，需要顺带附加的信息
     elementGroup:ElementGroup
   }
   // 多组件配置结构
@@ -37,6 +38,7 @@ namespace CTF{
     // 在使用中，有时我们需要对值进行转化,比如值为 '18px' 但在组件中必须为 数值 18 就可以通过以下两个访问器，进行转换操作
     getter?:(v:any)=>any, // 值读取转换器 input 数值时使用
     setter?:(v:any)=>any, // 值设置转换器 output 数值时使用
+    extra?:any,// 更新数值时，需要顺带附加的信息
     binds:{ // 组件绑定数据
       class?:string, // 组件的class
       style?:StyleValue,//组件的样式
