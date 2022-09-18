@@ -4,7 +4,7 @@ const size='small';
 export const uiConfigA:CTF.UiConfig = {
   beforeUpdate:function(k,n,o,innerStateValue){
     if(k == 'name' && n == 'enmotion' && o == 'mod'){
-      innerStateValue['info.age'] = o
+      innerStateValue['name'] = 'mod.enmotion'
     }
     return innerStateValue
   },
@@ -29,6 +29,18 @@ export const uiConfigA:CTF.UiConfig = {
   },
   extra:{updata:true},
   elementGroup:{
+    'name':{
+      label:'姓名:',
+      append:'px',
+      outerClass:'w-full h-auto flex-grow-1 my-5 items-center',
+      component:'ElInput',
+      getter:(value)=>{if(value=='bad enmotion'){return 'enmotion'} return value},
+      setter:(value)=>{if(value=='enmotion'){return 'bad enmotion'} return value},   
+      binds:{
+        class:"flex-grow-1 w-0",
+        size:size,
+      }
+    },    
     'info.age':{
       label:'年龄:',
       append:'px',
@@ -77,11 +89,6 @@ export const uiConfigA:CTF.UiConfig = {
       append:'internet',
       outerClass:'w-5/12 flex-grow-1 items-center',
       component:'ElInput',
-      getter:(value)=>{
-        if(value == 'mod'){
-          return 'mod2'
-        }
-      },
       binds:{
         size:size,
         class:'flex-grow-1 w-0'
@@ -135,7 +142,8 @@ export const uiConfigA:CTF.UiConfig = {
 }
 export const uiConfigB:CTF.UiConfig = {
   beforeUpdate:function(k,n,o,innerStateValue){
-    if(k == 'name' && n == 'enmotion' && o == 'mod'){
+    if(k == 'name' && n.length > 5){
+      // innerStateValue['name']=o
       innerStateValue['info.age'] = 0
       innerStateValue['info.body.size'] = 0
     }
@@ -174,7 +182,7 @@ export const uiConfigB:CTF.UiConfig = {
       append:'px',
       outerClass:'w-4/12 h-auto flex-grow-1 my-5 items-center',
       component:'ElInput',
-      getter:(value)=>{if(value=='enmotion'){return 'bad enmotion'} return value},
+      getter:(value)=>{if(value=='bad enmotion'){return 'enmotion'} return value},
       setter:(value)=>{if(value=='enmotion'){return 'bad enmotion'} return value},   
       binds:{
         class:"flex-grow-1 w-0",
