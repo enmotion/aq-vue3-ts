@@ -77,6 +77,11 @@ export const uiConfigA:CTF.UiConfig = {
       append:'internet',
       outerClass:'w-5/12 flex-grow-1 items-center',
       component:'ElInput',
+      getter:(value)=>{
+        if(value == 'mod'){
+          return 'mod2'
+        }
+      },
       binds:{
         size:size,
         class:'flex-grow-1 w-0'
