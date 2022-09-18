@@ -178,7 +178,7 @@ export default defineComponent({
       const renderElementGroup = props.uiConfig.uiGuardian ? 
       props.uiConfig.uiGuardian ( R.clone(props.uiConfig.elementGroup), R.clone(props.data) ) as CTF.ElementGroup || props.uiConfig.elementGroup :
       props.uiConfig.elementGroup;
-      // 当界面配置或数据发生变化时，需要重置 innerState; 且以外部数据为准;
+      // 当界面配置或数据发生变化时,且更新模式非确认后更新时，需要重置 innerState; 且以外部数据为准;
       if(!props.needCheck){
         let state = useDataPluckToInnerState(renderElementGroup , props.data);
         innerState.value = R.mergeDeepRight(innerState.value,state.value);
