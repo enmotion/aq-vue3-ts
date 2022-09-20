@@ -28,6 +28,7 @@ export default {
     logout(context:any):void{
       context.commit('setToken',{}); // 清空用户的 token
       context.commit('setUserInfo',{});  // 清空用户的 基本信息
+      context.commit('menu/clearTags',{},{root:true});
     }
   }
 }

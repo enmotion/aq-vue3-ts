@@ -5,6 +5,7 @@ export const uiConfigA:CTF.UiConfig = {
   beforeUpdate:function(k,n,o,innerStateValue){
     if(k == 'name' && n == 'enmotion' && o == 'mod'){
       innerStateValue['name'] = 'mod.enmotion'
+      innerStateValue['info.link']='mod.enmotion'
     }
     return innerStateValue
   },

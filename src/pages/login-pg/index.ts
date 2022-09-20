@@ -1,4 +1,5 @@
 import { RouteRecordRaw } from "vue-router";
+import { nextTick } from "vue";
 import store from "@src/store";
 const router : RouteRecordRaw ={
   path: '/login', // 全系统默认抵达页面, 故路由配置为空路径
@@ -12,8 +13,12 @@ const router : RouteRecordRaw ={
   },
   component: () => import('./login.vue'),
   beforeEnter:function(){
-    console.log('back to login')
-    store.dispatch('user/logout');
+    console.log('back to login');
+    nextTick(()=>{
+      setTimeout(()=>{
+        store.dispatch('user/logout');
+      },100)
+    })
   }
 }
 export default router;

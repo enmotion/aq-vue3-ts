@@ -26,6 +26,7 @@ export default(({ mode } : { mode : any })=>{
     },
     logLevel: 'info',// 'info' | 'warn' | 'error' | 'silent' 调整控制台输出的级别，默认为 'info'
     server: {
+      host:'0.0.0.0', // 默认情况下 vite 不允许通过 ip 地址访问，只能通过 localhost。只需要修改 vite.config.ts，将 host 改为 0.0.0.0
       port:3000,
       // open: true, // 在服务器启动时自动在浏览器中打开应用程序。当此值为字符串时，会被用作 URL 的路径
       proxy: {

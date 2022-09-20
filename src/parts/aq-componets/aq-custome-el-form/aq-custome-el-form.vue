@@ -27,8 +27,8 @@
           <span v-if="item.append" class="w-auto whitespace-nowrap mx-5">{{item.append}}</span>
         </div>
         <div v-if="needCheck" class="xrow items-center justify-between w-full mt-10">
-          <el-button size="small" @click="stateReset">取消</el-button>
-          <el-button type="success" size="small" @click="dataUpdateByCheck">确定</el-button>
+          <el-button size="small" @click="stateReset(false)">取消</el-button>
+          <el-button type="success" size="small" @click="dataUpdateByCheck(false)">确定</el-button>
         </div>
       </div>
     </div>
@@ -62,8 +62,8 @@
             <span v-if="item.append" class="w-auto whitespace-nowrap mx-5">{{item.append}}</span>
           </div>
           <div v-if="needCheck" class="xrow items-center justify-between w-full pt-10 mt-10 border-t">
-            <el-button size="small" @click="stateReset">取消</el-button>
-            <el-button type="success" size="small" @click="dataUpdateByCheck">确定</el-button>
+            <el-button size="small" @click="stateReset(false)">取消</el-button>
+            <el-button type="success" size="small" @click="dataUpdateByCheck(false)">确定</el-button>
           </div>
         </div>
       </el-dialog>
@@ -100,8 +100,8 @@
                 <span v-if="item.append" class="w-auto whitespace-nowrap mx-5">{{item.append}}</span>
               </div>
               <div v-if="needCheck" class="xrow items-center justify-between w-full pt-10 mt-10 border-t">
-                <el-button size="small" @click="stateReset">取消</el-button>
-                <el-button type="success" size="small" @click="dataUpdateByCheck">确定</el-button>
+                <el-button size="small" @click="stateReset(false)">取消</el-button>
+                <el-button type="success" size="small" @click="dataUpdateByCheck(false)">确定</el-button>
               </div>      
             </div>
           </aq-scroll-view>
@@ -162,8 +162,8 @@ export default defineComponent({
     const { proxy } = getCurrentInstance() as { proxy: ComponentPublicInstance}; // 实例对象
     let innerState = useDataPluckToInnerState( props.uiConfig.elementGroup , R.clone(props.data)); // 内部数据
     const exclude = ref(['ElSelect','aq-custome-el-form','aq-array-data']);
-    // 如果切换状态太为false时，则会重置数据
-    watch(()=>isExpand.value,function(n,o){ !n && stateReset()});
+    // 如果切换状态太为true时，则会重置数据
+    watch(()=>isExpand.value,function(n,o){ n && stateReset(n)});
     // 组装基础的内置子组件
     const computedSubComponents = computed(()=>{
       return R.mergeAll([{ 
@@ -173,7 +173,7 @@ export default defineComponent({
     })
     // 根据 处理数据 ui配置 决定当前UI的显示
     const computedElementGroup = computed(()=>{
-      //console.log(props.data,'computedElementGroup')      
+      // console.log(props.data,'computedElementGroup')      
       // 此处的入参数，必须复制，避免内部修改，影响到外部原始值的触发错误情况
       const renderElementGroup = props.uiConfig.uiGuardian ? 
       props.uiConfig.uiGuardian ( R.clone(props.uiConfig.elementGroup), R.clone(props.data) ) as CTF.ElementGroup || props.uiConfig.elementGroup :
@@ -211,16 +211,16 @@ export default defineComponent({
       }
     }
     // 确定按钮提交数据
-    function dataUpdateByCheck(){      
-      let data = useInnerStateReforgeToData( computedElementGroup.value ,innerState.value);
-      console.log({data:R.mergeDeepRight(props.data,data),extra:props.uiConfig.extra||{}});
-      context.emit('update:data',{data:R.mergeDeepRight(props.data,data),extra:props.uiConfig.extra||{}});
-      nextTick(function(){ isExpand.value = false })
+    function dataUpdateByCheck(expand:boolean=false){      
+      let data = useInnerStateReforgeToData( computedElementGroup.value, innerState.value );
+      console.log( {data:R.mergeDeepRight(props.data,data), extra:props.uiConfig.extra||{}} );
+      context.emit('update:data',{data:R.mergeDeepRight(props.data,data), extra:props.uiConfig.extra||{}});
+      nextTick(function(){ isExpand.value = expand })
     }
     // 重置内部数据
-    function stateReset(){      
+    function stateReset(expand:boolean=false){      
       innerState.value = useDataPluckToInnerState( props.uiConfig.elementGroup , R.clone(props.data)).value; // 内部数据
-      nextTick(function(){ isExpand.value = false })
+      nextTick(function(){ isExpand.value = expand })
     }
     return {
       Ramda,

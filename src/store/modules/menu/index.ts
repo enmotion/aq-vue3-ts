@@ -3,8 +3,8 @@ import type { ActionContext } from "vuex";
 import { useRoute } from "vue-router";
 import type { Menu, MenuRecord } from "./types"; //引入用户模型描述
 import type { TagRecordRaw } from "@typ/public/mainPage";
-import catcher from "@src/store/persistent";
-console.log('menu inited')
+import catcher from "@src/store/persistent"; // 引入本地缓存库
+
 export default {
   namespaced: true,
   state:{
@@ -42,18 +42,19 @@ export default {
       {label:'SaaS管理', value:'saas-manager', icon:'icon-flow',children:[]},
       {label:'常用菜单', value:'menu-manager', icon:'icon-flow',children:[]},
     ] as Menu[],
-    sysMenu:[
+    sysMenu:[ 
       // {label:'统计面板', icon:'icon-target', value:'dash-board'},
       {label:'重置密码', icon:'icon-pw', value:'reset-pw'},
       {label:'切换租户', icon:'icon-flow', value:'org-list'},
       {label:'退出登录', icon:'icon-sys', value:'login'},
     ] as Menu[],
-    tagMenu:catcher.$data.tagMenu as TagRecordRaw[],// [{label:'统计面板',value:'dash-board',static:true}]
+    tagMenu: catcher.$data.tagMenu as TagRecordRaw[],
     mainNavigateValue: catcher.$data.mainNavigateValue as string,
   }, 
   getters:{
     getMainNavigateValue(state:{mainNavigateValue:string,appMenu:Menu[]}):string{
-      return state.mainNavigateValue ||state.appMenu[0].value;
+      // 当前主菜单位置，如果主菜单标记不在一级导航中，则会回归成0索引位的值
+      return R.pluck('value',state.appMenu).includes(state.mainNavigateValue)? state.mainNavigateValue : state.appMenu[0].value;
     },
     getAppMenu(state:{appMenu:Menu[]}):Menu[]{
       return state.appMenu;
@@ -92,21 +93,30 @@ export default {
     tagInsert(state:{tagMenu:TagRecordRaw[]},tagItem:TagRecordRaw):void{
       if(!R.pluck('value',state.tagMenu).includes(tagItem.value)){
         state.tagMenu.push(tagItem);
-        catcher.$data.tagMenu = state.tagMenu
+        catcher.$data.tagMenu = state.tagMenu;
       }
     },
     tagRemove(state:{tagMenu:TagRecordRaw[]},index:number){
       state.tagMenu.splice(index,1);
-      catcher.$data.tagMenu = state.tagMenu
+      catcher.$data.tagMenu = state.tagMenu;
+    },
+    clearTags(state:{tagMenu:TagRecordRaw[]}){
+      state.tagMenu = [];
+      catcher.$data.tagMenu = state.tagMenu;
     }
   },
   actions:{
     removeTagitemFromTagMenu(context:any,tagItem:TagRecordRaw):TagRecordRaw{
       const tags = context.getters.getTagMenu;
+      console.log(tags,tagItem);
       const index = R.findIndex(R.propEq('value',tagItem.value))(tags);
       const result = tags[index+1]||tags[index-1];
+      console.log(result,index);
       context.commit('tagRemove',index);
       return result;
+    },
+    clearTagItems(context:any):void{
+
     }
   }
 }
